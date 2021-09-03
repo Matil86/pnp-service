@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

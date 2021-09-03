@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.interfaces.I5ECharacterClass;
 import lombok.Data;
@@ -13,9 +13,9 @@ class GeneFunkClass implements I5ECharacterClass {
     @Id
     String name;
 
-    int level = 1;
+    Integer level = 1;
 
-    public void increaseLevel(int level) {
+    public void increaseLevel(Integer level) {
         this.level += level;
     }
 }

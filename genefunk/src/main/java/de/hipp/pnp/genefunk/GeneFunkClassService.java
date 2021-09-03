@@ -1,13 +1,11 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class GeneFunkClassService {
 
     final GeneFunkClassRepository repository;

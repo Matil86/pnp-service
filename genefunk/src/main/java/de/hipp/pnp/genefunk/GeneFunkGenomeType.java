@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import javax.persistence.Id;
 

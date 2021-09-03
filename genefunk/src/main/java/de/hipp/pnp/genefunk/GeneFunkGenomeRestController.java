@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.constants.UrlConstants;
 import org.springframework.web.bind.annotation.GetMapping;

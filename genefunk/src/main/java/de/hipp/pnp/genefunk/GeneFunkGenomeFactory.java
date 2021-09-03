@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.constants.AttributeConstants;
 import org.springframework.stereotype.Component;

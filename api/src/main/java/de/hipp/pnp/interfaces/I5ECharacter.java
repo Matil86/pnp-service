@@ -8,7 +8,7 @@ public interface I5ECharacter {
 
     String getLastName();
 
-    int getLevel();
+    Integer getLevel();
 
     I5ECharacterRace getRace();
 

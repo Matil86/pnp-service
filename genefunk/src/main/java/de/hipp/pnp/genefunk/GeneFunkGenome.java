@@ -1,4 +1,4 @@
-package de.hip.pnp.genefunk;
+package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.Feature5e;
 import de.hipp.pnp.interfaces.I5ECharacterRace;

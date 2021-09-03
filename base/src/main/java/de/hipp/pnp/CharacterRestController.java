@@ -14,10 +14,10 @@ import static de.hipp.pnp.constants.UrlConstants.CHARACTERURL;
 @RequestMapping(CHARACTERURL)
 public class CharacterRestController {
 
-    final I5ECharacterService characterService;
+    final I5ECharacterService<?> characterService;
 
-    public CharacterRestController(I5ECharacterService service) {
-        this.characterService = service;
+    public CharacterRestController(I5ECharacterService<?> characterService) {
+        this.characterService = characterService;
     }
 
     @GetMapping

@@ -12,16 +12,16 @@ import static de.hipp.pnp.constants.UrlConstants.CHARACTERURL;
 
 @RestController
 @RequestMapping(CHARACTERURL)
-public class CharacterRestController {
+public class CharacterRestController<T extends I5ECharacter> {
 
-    final I5ECharacterService<?> characterService;
+    final I5ECharacterService<T> characterService;
 
-    public CharacterRestController(I5ECharacterService<?> characterService) {
+    public CharacterRestController(I5ECharacterService<T> characterService) {
         this.characterService = characterService;
     }
 
     @GetMapping
-    public List getAllCharacters() {
+    public List<T> getAllCharacters() {
         return characterService.getAllCharacters();
     }
 

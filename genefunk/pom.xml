@@ -22,5 +22,10 @@
             <groupId>de.hipp.pnp</groupId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>base</artifactId>
+            <groupId>de.hipp.pnp</groupId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

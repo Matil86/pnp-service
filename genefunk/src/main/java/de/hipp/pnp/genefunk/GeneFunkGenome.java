@@ -1,5 +1,6 @@
 package de.hipp.pnp.genefunk;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.hipp.pnp.Feature5e;
 import de.hipp.pnp.interfaces.I5ECharacterRace;
 import lombok.Data;
@@ -13,11 +14,10 @@ import javax.persistence.ManyToMany;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
 @Data
-@SuppressWarnings("JpaAttributeTypeInspection")
 class GeneFunkGenome implements I5ECharacterRace {
 
     @Enumerated(EnumType.ORDINAL)
@@ -28,12 +28,13 @@ class GeneFunkGenome implements I5ECharacterRace {
 
     String description;
 
-    Map<String, Object> attributes = new HashMap<>();
+    @JsonIgnore
+    HashMap<String, Integer> attributes = new HashMap<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     List<Feature5e> features = new ArrayList<>();
 
-    public void addAttributeChange(String key, Object value) {
+    public void addAttributeChange(String key, Integer value) {
         attributes.put(key, value);
     }
 

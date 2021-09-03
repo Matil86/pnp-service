@@ -1,16 +1,19 @@
 package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.Attribute5e;
+import de.hipp.pnp.constants.AttributeConstants;
 import de.hipp.pnp.interfaces.I5ECharacter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
 public class GeneFunkCharacter implements I5ECharacter {
     @Id
@@ -22,23 +25,17 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     Integer level = 1;
 
-    @OneToOne
     Attribute5e strength;
-    @OneToOne
     Attribute5e dexterity;
-    @OneToOne
     Attribute5e constitution;
-    @OneToOne
     Attribute5e intelligence;
-    @OneToOne
     Attribute5e wisdom;
-    @OneToOne
     Attribute5e charisma;
 
     @OneToOne
     GeneFunkGenome race;
 
-    @ManyToMany
+    @OneToMany
     List<GeneFunkClass> characterClasses = new ArrayList<>();
 
     public Integer getId() {
@@ -140,5 +137,66 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     public void setCharacterClasses(List<GeneFunkClass> characterClasses) {
         this.characterClasses = characterClasses;
+    }
+
+    void initialize() {
+        applyBaseValues(this.getRace().getAttributes());
+    }
+
+     void applyBaseValues(Map<String, Integer> attributeChanges) {
+        setMaxValues(attributeChanges);
+        if (attributeChanges.containsKey(AttributeConstants.STRENGTH)) {
+            this.strength.modifyValue(attributeChanges.get(AttributeConstants.STRENGTH));
+        }
+
+        if (attributeChanges.containsKey(AttributeConstants.DEXTERITY)) {
+            this.dexterity.modifyValue(attributeChanges.get(AttributeConstants.DEXTERITY));
+        }
+
+        if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION)) {
+            this.constitution.modifyValue(attributeChanges.get(AttributeConstants.CONSTITUTION));
+        }
+
+        if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE)) {
+            this.intelligence.modifyValue(attributeChanges.get(AttributeConstants.INTELLIGENCE));
+        }
+
+        if (attributeChanges.containsKey(AttributeConstants.WISDOM)) {
+            this.wisdom.modifyValue(attributeChanges.get(AttributeConstants.WISDOM));
+        }
+
+        if (attributeChanges.containsKey(AttributeConstants.CHARISMA)) {
+            this.charisma.modifyValue(attributeChanges.get(AttributeConstants.CHARISMA));
+        }
+    }
+
+    void setMaxValues(Map<String, Integer> attributeChanges) {
+        if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
+            this.strength.setMax(attributeChanges.get(AttributeConstants.STRENGTH_MAX));
+        }
+        if (attributeChanges.containsKey(AttributeConstants.DEXTERITY_MAX)) {
+            this.dexterity.setMax(attributeChanges.get(AttributeConstants.DEXTERITY_MAX));
+        }
+        if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION_MAX)) {
+            this.constitution.setMax(attributeChanges.get(AttributeConstants.CONSTITUTION_MAX));
+        }
+        if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE_MAX)) {
+            this.intelligence.setMax(attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX));
+        }
+        if (attributeChanges.containsKey(AttributeConstants.WISDOM_MAX)) {
+            this.wisdom.setMax(attributeChanges.get(AttributeConstants.WISDOM_MAX));
+        }
+        if (attributeChanges.containsKey(AttributeConstants.CHARISMA_MAX)) {
+            this.charisma.setMax(attributeChanges.get(AttributeConstants.CHARISMA_MAX));
+        }
+    }
+
+    void addClass(GeneFunkClass addClass) {
+        int index = this.characterClasses.indexOf(addClass);
+        if (index != -1) {
+            this.characterClasses.get(index).increaseLevel(1);
+        } else {
+            this.characterClasses.add(addClass);
+        }
     }
 }

@@ -7,13 +7,16 @@ import java.util.Random;
 
 public class DiceRoller {
 
+    private DiceRoller(){
+
+    }
+
     public static int roll(int numberOfDice, int diceSides) {
         int returnValue = 0;
         int min = 1;
 
         for (int i = 0; i < numberOfDice; i++) {
-            Random random = new Random();
-            returnValue += random.nextInt(diceSides - min + 1) + min;
+            returnValue += new Random().nextInt(diceSides - min + 1) + min;
         }
 
         return returnValue;

@@ -10,5 +10,5 @@ public interface I5ECharacterRace {
 
     void setDescription(String description);
 
-    void addAttributeChange(String key, Object value);
+    void addAttributeChange(String key, Integer value);
 }

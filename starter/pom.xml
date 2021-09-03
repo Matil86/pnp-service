@@ -30,8 +30,8 @@
     <dependencies>
         <dependency>
             <groupId>de.hipp.pnp</groupId>
-            <artifactId>de.hipp.pnp.base</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

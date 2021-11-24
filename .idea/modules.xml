@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/genefunk-starter/genefunk-starter.iml" filepath="$PROJECT_DIR$/genefunk-starter/genefunk-starter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/pnp-service.iml" filepath="$PROJECT_DIR$/.idea/pnp-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/starter/starter.iml" filepath="$PROJECT_DIR$/starter/starter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
     </modules>
   </component>
 </project>

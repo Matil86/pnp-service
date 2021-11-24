@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api" />
         <module name="genefunk" />
-        <module name="ui" />
         <module name="starter" />
         <module name="genefunk-starter" />
         <module name="base" />

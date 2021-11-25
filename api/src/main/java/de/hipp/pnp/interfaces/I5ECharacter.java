@@ -1,6 +1,6 @@
 package de.hipp.pnp.interfaces;
 
-import java.util.List;
+import java.util.Set;
 
 public interface I5ECharacter {
 
@@ -12,6 +12,6 @@ public interface I5ECharacter {
 
     I5ECharacterRace getRace();
 
-    List<? extends I5ECharacterClass> getCharacterClasses();
+    Set<? extends I5ECharacterClass> getCharacterClasses();
 
 }

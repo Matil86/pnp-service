@@ -4,14 +4,15 @@ import de.hipp.pnp.Attribute5e;
 import de.hipp.pnp.constants.AttributeConstants;
 import de.hipp.pnp.interfaces.I5ECharacter;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
@@ -35,8 +36,8 @@ public class GeneFunkCharacter implements I5ECharacter {
     @OneToOne
     GeneFunkGenome race;
 
-    @OneToMany
-    List<GeneFunkClass> characterClasses = new ArrayList<>();
+    @ElementCollection(targetClass = GeneFunkClass.class, fetch = FetchType.EAGER)
+    Set<GeneFunkClass> characterClasses = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -131,11 +132,11 @@ public class GeneFunkCharacter implements I5ECharacter {
     }
 
     @Override
-    public List<GeneFunkClass> getCharacterClasses() {
+    public Set<GeneFunkClass> getCharacterClasses() {
         return characterClasses;
     }
 
-    public void setCharacterClasses(List<GeneFunkClass> characterClasses) {
+    public void setCharacterClasses(Set<GeneFunkClass> characterClasses) {
         this.characterClasses = characterClasses;
     }
 
@@ -192,9 +193,9 @@ public class GeneFunkCharacter implements I5ECharacter {
     }
 
     void addClass(GeneFunkClass addClass) {
-        int index = this.characterClasses.indexOf(addClass);
-        if (index != -1) {
-            this.characterClasses.get(index).increaseLevel(1);
+        boolean index = this.characterClasses.contains(addClass);
+        if (index) {
+            this.characterClasses.stream().filter((value) -> value.equals(addClass)).forEach((charClass) -> charClass.increaseLevel(1));
         } else {
             this.characterClasses.add(addClass);
         }

@@ -4,11 +4,13 @@ import de.hipp.pnp.Attribute5e;
 import de.hipp.pnp.DiceRoller;
 import de.hipp.pnp.interfaces.I5ECharacterService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
 
 @Service
+@Transactional
 public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCharacter> {
 
     final GeneFunkCharacterRepository repository;
@@ -49,7 +51,7 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
         character.setRace((GeneFunkGenome) pickRandom(genomes));
         character.addClass((GeneFunkClass) pickRandom(classes));
         character.initialize();
-        return repository.save(character);
+        return repository.saveAndFlush(character);
     }
 
     private <X> Object pickRandom(List<X> list) {

@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ class GeneFunkGenome implements I5ECharacterRace {
     @JsonIgnore
     HashMap<String, Integer> attributes = new HashMap<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     List<Feature5e> features = new ArrayList<>();
 
     public void addAttributeChange(String key, Integer value) {

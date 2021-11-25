@@ -1,6 +1,7 @@
 package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.constants.AttributeConstants;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class GeneFunkGenomeFactory {
         genomes.add(initializeCanary());
         genomes.add(initializeCoelhomortos());
         genomes.add(initializeCompanions());
+        Hibernate.initialize(genomes);
         return genomes;
     }
 

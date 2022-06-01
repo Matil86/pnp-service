@@ -23,7 +23,7 @@ public class GeneFunkCharacter implements I5ECharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    int gameTypes = E5EGameTypes.GENEFUNK.getValue();
+    Integer gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
 

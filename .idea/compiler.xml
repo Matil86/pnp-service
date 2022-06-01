@@ -10,7 +10,8 @@
         <module name="genefunk" />
         <module name="starter" />
         <module name="genefunk-starter" />
-        <module name="kafka-base" />
+        <module name="kafka-consumer" />
+        <module name="kafka-producer" />
         <module name="api" />
         <module name="genefunk-bootstrap" />
         <module name="base" />
@@ -24,7 +25,8 @@
       <module name="genefunk" options="-parameters" />
       <module name="genefunk-bootstrap" options="-parameters" />
       <module name="genefunk-starter" options="-parameters" />
-      <module name="kafka-base" options="-parameters" />
+      <module name="kafka-consumer" options="-parameters" />
+      <module name="kafka-producer" options="-parameters" />
       <module name="starter" options="-parameters" />
     </option>
   </component>

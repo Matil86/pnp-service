@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>genefunk</artifactId>
+    <artifactId>kafka-producer</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -18,18 +18,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
             <artifactId>api</artifactId>
             <groupId>de.hipp.pnp</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>base</artifactId>
-            <groupId>de.hipp.pnp</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.hipp.pnp</groupId>
-            <artifactId>kafka-consumer</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

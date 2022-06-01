@@ -1,8 +1,6 @@
 
 y
 Igenefunk/src/main/java/de/hipp/pnp/genefunk/GeneFunkGenomeRepository.java,9\e\9ea760d95f8ceda65c65f43d07141c853a646b38
-@
-genefunk/pom.xml,c\0\c0d6497a433bfdfbd60474a67cd70aa7140b4123
 ;
 api/pom.xml,f\e\fe5c43214168bd8de1d8afa275215a8e9b9de634
 t
@@ -15,8 +13,6 @@ v
 Fbase/src/main/java/de/hipp/pnp/api/converter/Attribute5eConverter.java,9\f\9f1c3a5b9288076ff9b118dd07abb168cf781a42
 o
 ?genefunk/src/main/java/de/hipp/pnp/genefunk/GeneFunkGenome.java,2\2\22214cae3abe7fb523d8cc988c147be62ab05880
-y
-Igenefunk/src/main/java/de/hipp/pnp/genefunk/GeneFunkCharacterService.java,e\5\e5b194cd1b36b07873a19299382d30859619290f
 n
 >genefunk/src/main/java/de/hipp/pnp/genefunk/GeneFunkClass.java,0\a\0a5354dda3a85f11285cbf9517215a672b174fe3
 J
@@ -39,11 +35,7 @@ o
 ?base/src/main/java/de/hipp/pnp/api/converter/BaseConverter.java,8\2\824fca6f0d1f060819b4bc497a76cea9a35e9164
 }
 Mgenefunk/src/main/java/de/hipp/pnp/genefunk/GeneFunkGenomeRestController.java,d\1\d186bc87a153c39efe1d75feeaabe61c5bf6f504
-z
-Jgenefunk-starter/src/main/java/de/hipp/pnp/GeneFunkServiceApplication.java,0\b\0b9b3c30082f53beaffc428e2a77a1129ad4c859
 b
 2base/src/main/java/de/hipp/pnp/api/DiceRoller.java,8\1\819e7de7514bbaa64abc1458290e7a5a4da75765
 a
 1base/src/main/java/de/hipp/pnp/api/Feature5e.java,8\d\8d45ae849a30816ce33d1eb7021f9dfce2ebf44f
-Œ
-\genefunk-bootstrap/src/main/java/de/hipp/pnp/genefunk/GenefunkLocalisationConfiguration.java,2\0\20fe6240433086b7239e7fb3b35eb319b16ca341

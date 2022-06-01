@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kafka-base</artifactId>
+    <artifactId>kafka-consumer</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -20,11 +20,6 @@
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
-            <artifactId>api</artifactId>
-            <groupId>de.hipp.pnp</groupId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

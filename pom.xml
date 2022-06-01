@@ -22,7 +22,8 @@
         <module>genefunk</module>
         <module>genefunk-starter</module>
         <module>genefunk-bootstrap</module>
-        <module>kafka-base</module>
+        <module>kafka-producer</module>
+        <module>kafka-consumer</module>
     </modules>
 
     <dependencies>

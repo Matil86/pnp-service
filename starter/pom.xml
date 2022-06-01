@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>de.hipp.pnp</groupId>
-            <artifactId>kafka-base</artifactId>
+            <artifactId>kafka-producer</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

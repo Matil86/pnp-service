@@ -16,6 +16,7 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
     final GeneFunkCharacterRepository repository;
     final GeneFunkGenomeService genomeService;
     final GeneFunkClassService classService;
+    private final Random random = new Random();
 
     public GeneFunkCharacterService(
             GeneFunkCharacterRepository repository,
@@ -59,7 +60,7 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
     }
 
     private <X> Object pickRandom(List<X> list) {
-        int randomInt = new Random().nextInt(list.size());
+        int randomInt = random.nextInt(list.size());
         return list.get(Math.max(randomInt, 0));
     }
 }

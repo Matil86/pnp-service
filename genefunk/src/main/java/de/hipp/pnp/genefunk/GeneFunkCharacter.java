@@ -206,7 +206,7 @@ public class GeneFunkCharacter implements I5ECharacter {
     void addClass(GeneFunkClass addClass) {
         boolean index = this.characterClasses.contains(addClass);
         if (index) {
-            this.characterClasses.stream().filter((value) -> value.equals(addClass)).forEach((charClass) -> charClass.increaseLevel(1));
+            this.characterClasses.stream().filter(value -> value.equals(addClass)).forEach(charClass -> charClass.increaseLevel(1));
         } else {
             this.characterClasses.add(addClass);
         }

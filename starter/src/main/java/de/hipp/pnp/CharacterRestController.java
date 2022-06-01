@@ -13,7 +13,7 @@ import static de.hipp.pnp.api.constants.UrlConstants.CHARACTERURL;
 
 @RestController
 @RequestMapping(CHARACTERURL)
-public class CharacterRestController<T extends I5ECharacter> {
+public class CharacterRestController {
 
     final CharacterServiceProducer5E characterService;
 

@@ -22,7 +22,7 @@ import java.util.Set;
 class GeneFunkGenome implements I5ECharacterRace {
 
     @Enumerated(EnumType.ORDINAL)
-    GeneFunkGenomeType genomeType = GeneFunkGenomeType.Engineered;
+    GeneFunkGenomeType genomeType = GeneFunkGenomeType.ENGINEERED;
 
     @Id
     String name;

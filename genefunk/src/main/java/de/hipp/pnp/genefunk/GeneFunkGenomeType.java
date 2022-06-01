@@ -4,7 +4,7 @@ import javax.persistence.Id;
 
 enum GeneFunkGenomeType {
     UNKNOWN(-1),
-    Engineered(0),
+    ENGINEERED(0),
     MUTT(1),
     OPTIMIZED(2),
     TRANSHUMAN(3);

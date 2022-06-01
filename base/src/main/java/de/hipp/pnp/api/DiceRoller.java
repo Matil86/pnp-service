@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class DiceRoller {
 
+    private static Random random = new Random();
     private DiceRoller(){
 
     }
@@ -16,7 +17,7 @@ public class DiceRoller {
         int min = 1;
 
         for (int i = 0; i < numberOfDice; i++) {
-            returnValue += new Random().nextInt(diceSides - min + 1) + min;
+            returnValue += random.nextInt(diceSides - min + 1) + min;
         }
 
         return returnValue;

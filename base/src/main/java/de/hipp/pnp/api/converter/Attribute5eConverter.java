@@ -1,6 +1,6 @@
-package de.hipp.pnp.converter;
+package de.hipp.pnp.api.converter;
 
-import de.hipp.pnp.Attribute5e;
+import de.hipp.pnp.api.Attribute5e;
 
 import javax.persistence.Converter;
 

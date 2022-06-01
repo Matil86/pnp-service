@@ -1,25 +1,24 @@
 package de.hipp.pnp.genefunk;
 
+import de.hipp.pnp.abstracts.Bootstrap;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Component
-class GeneFunkClassFactory {
+class GeneFunkClassBootstrap extends Bootstrap {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
-
-    public Collection<? extends GeneFunkClass> initiateClasses() {
+    @Override
+    protected void initialize() {
         List<GeneFunkClass> returnList = new ArrayList<>();
         returnList.add(this.initiateBiohacker());
         returnList.add(this.initiateGunfighter());
         Hibernate.initialize(returnList);
-        return returnList;
     }
 
 

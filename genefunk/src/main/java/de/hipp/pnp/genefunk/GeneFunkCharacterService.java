@@ -1,7 +1,7 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.Attribute5e;
-import de.hipp.pnp.DiceRoller;
+import de.hipp.pnp.api.Attribute5e;
+import de.hipp.pnp.api.DiceRoller;
 import de.hipp.pnp.interfaces.I5ECharacterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,7 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
         character.setRace((GeneFunkGenome) pickRandom(genomes));
         character.addClass((GeneFunkClass) pickRandom(classes));
         character.initialize();
-        return repository.saveAndFlush(character);
+        return repository.save(character);
     }
 
     private <X> Object pickRandom(List<X> list) {

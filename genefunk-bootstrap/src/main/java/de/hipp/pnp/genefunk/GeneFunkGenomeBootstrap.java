@@ -1,6 +1,7 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.constants.AttributeConstants;
+import de.hipp.pnp.abstracts.Bootstrap;
+import de.hipp.pnp.api.constants.AttributeConstants;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
@@ -8,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class GeneFunkGenomeFactory {
-    public List<GeneFunkGenome> initiateAllGenomes() {
+public class GeneFunkGenomeBootstrap  extends Bootstrap {
 
+    @Override
+    protected void initialize() {
         List<GeneFunkGenome> genomes = new ArrayList<>();
         genomes.add(initializeCanary());
         genomes.add(initializeCoelhomortos());
         genomes.add(initializeCompanions());
         Hibernate.initialize(genomes);
-        return genomes;
     }
 
     private GeneFunkGenome initializeCompanions() {

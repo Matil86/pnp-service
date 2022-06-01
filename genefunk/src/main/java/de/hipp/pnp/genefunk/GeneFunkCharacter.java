@@ -1,13 +1,14 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.Attribute5e;
-import de.hipp.pnp.constants.AttributeConstants;
+import de.hipp.pnp.api.Attribute5e;
+import de.hipp.pnp.api.constants.AttributeConstants;
 import de.hipp.pnp.interfaces.I5ECharacter;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Entity
 public class GeneFunkCharacter implements I5ECharacter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     String firstName;
@@ -26,11 +27,17 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     Integer level = 1;
 
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e strength;
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e dexterity;
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e constitution;
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e intelligence;
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e wisdom;
+    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e charisma;
 
     @OneToOne

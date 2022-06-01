@@ -21,6 +21,7 @@
         <module>starter</module>
         <module>genefunk</module>
         <module>genefunk-starter</module>
+        <module>genefunk-bootstrap</module>
     </modules>
 
     <dependencies>

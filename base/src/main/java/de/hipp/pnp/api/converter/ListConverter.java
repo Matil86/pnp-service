@@ -1,4 +1,4 @@
-package de.hipp.pnp.converter;
+package de.hipp.pnp.api.converter;
 
 import javax.persistence.Converter;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package de.hipp.pnp;
+package de.hipp.pnp.api;
 
 import java.util.ArrayList;
 import java.util.Collections;

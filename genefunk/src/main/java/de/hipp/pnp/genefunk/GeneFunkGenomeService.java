@@ -2,7 +2,6 @@ package de.hipp.pnp.genefunk;
 
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,11 +9,9 @@ import java.util.List;
 public class GeneFunkGenomeService {
 
     final GeneFunkGenomeRepository repository;
-    final GeneFunkGenomeFactory genomeFactory;
 
-    public GeneFunkGenomeService(GeneFunkGenomeRepository repository, GeneFunkGenomeFactory genomeFactory) {
+    public GeneFunkGenomeService(GeneFunkGenomeRepository repository) {
         this.repository = repository;
-        this.genomeFactory = genomeFactory;
     }
 
     public void save(Collection<? extends GeneFunkGenome> genomes) {
@@ -23,10 +20,5 @@ public class GeneFunkGenomeService {
 
     public List<GeneFunkGenome> getAllGenomes() {
         return repository.findAll();
-    }
-
-    @PostConstruct
-    private void populateData() {
-        this.save(genomeFactory.initiateAllGenomes());
     }
 }

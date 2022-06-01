@@ -1,6 +1,6 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.constants.UrlConstants;
+import de.hipp.pnp.api.constants.UrlConstants;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

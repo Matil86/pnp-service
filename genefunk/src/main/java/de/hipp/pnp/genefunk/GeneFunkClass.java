@@ -13,7 +13,7 @@ import javax.persistence.Id;
 class GeneFunkClass implements I5ECharacterClass {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     long id;
 
     String name;

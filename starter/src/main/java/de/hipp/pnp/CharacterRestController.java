@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static de.hipp.pnp.constants.UrlConstants.CHARACTERURL;
+import static de.hipp.pnp.api.constants.UrlConstants.CHARACTERURL;
 
 @RestController
 @RequestMapping(CHARACTERURL)

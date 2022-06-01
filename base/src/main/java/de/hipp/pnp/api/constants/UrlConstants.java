@@ -1,4 +1,4 @@
-package de.hipp.pnp.constants;
+package de.hipp.pnp.api.constants;
 
 public class UrlConstants {
 
@@ -11,4 +11,5 @@ public class UrlConstants {
     public static final String CHARACTERURL = BASEURL + "character";
     public static final String GENEFUNKGENOMERURL = GENEFUNKBASEURL + "/genome";
     public static final String GENEFUNKCLASSURL = GENEFUNKBASEURL + "/class";
+    public static final String LOCALIZEURL=BASEURL + "localize";
 }

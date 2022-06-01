@@ -1,5 +1,6 @@
 package de.hipp.pnp.genefunk;
 
+import de.hipp.pnp.E5EGameTypes;
 import de.hipp.pnp.api.Attribute5e;
 import de.hipp.pnp.api.constants.AttributeConstants;
 import de.hipp.pnp.interfaces.I5ECharacter;
@@ -22,6 +23,7 @@ public class GeneFunkCharacter implements I5ECharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    int gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
 
@@ -52,6 +54,11 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public int getGameType() {
+        return gameTypes;
     }
 
     @Override

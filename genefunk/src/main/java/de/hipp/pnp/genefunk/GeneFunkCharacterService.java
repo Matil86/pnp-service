@@ -3,7 +3,6 @@ package de.hipp.pnp.genefunk;
 import de.hipp.pnp.api.Attribute5e;
 import de.hipp.pnp.api.DiceRoller;
 import de.hipp.pnp.interfaces.I5ECharacterService;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,6 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
     }
 
     @Override
-    @KafkaListener(id = "pnp", topics = "GENEFUNK")
     public GeneFunkCharacter generate() {
         return this.generate(1);
     }

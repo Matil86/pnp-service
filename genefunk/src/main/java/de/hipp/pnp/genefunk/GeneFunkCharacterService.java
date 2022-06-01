@@ -50,8 +50,12 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
         character.setIntelligence(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
         character.setWisdom(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
         character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setRace((GeneFunkGenome) pickRandom(genomes));
-        character.addClass((GeneFunkClass) pickRandom(classes));
+        if (!genomes.isEmpty()) {
+            character.setRace((GeneFunkGenome) pickRandom(genomes));
+        }
+        if (!classes.isEmpty()) {
+            character.addClass((GeneFunkClass) pickRandom(classes));
+        }
         character.initialize();
         return repository.save(character);
     }

@@ -5,6 +5,7 @@ import de.hipp.pnp.api.Feature5e;
 import de.hipp.pnp.interfaces.I5ECharacterRace;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,6 +27,7 @@ class GeneFunkGenome implements I5ECharacterRace {
     @Id
     String name;
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     @JsonIgnore

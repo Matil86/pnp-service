@@ -3,6 +3,7 @@ package de.hipp.pnp.api;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,6 +14,7 @@ public class Feature5e {
 
     @Id
     String label;
+    @Column(columnDefinition = "TEXT")
     String description;
     int availableAtLevel = 0;
 

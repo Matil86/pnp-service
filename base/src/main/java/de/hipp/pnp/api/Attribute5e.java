@@ -5,16 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.io.Serializable;
 
 
 @Data
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Attribute5e {
+public class Attribute5e implements Serializable {
 
 
     @JsonIgnore
@@ -22,7 +19,6 @@ public class Attribute5e {
     Integer value = 0;
     Integer max = 20;
     Integer modifier = 0;
-    private Long id;
 
     public Attribute5e(Integer baseValue) {
         this.baseValue = baseValue;
@@ -71,13 +67,4 @@ public class Attribute5e {
         this.max = max;
     }
 
-    @Id
-    @GeneratedValue
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

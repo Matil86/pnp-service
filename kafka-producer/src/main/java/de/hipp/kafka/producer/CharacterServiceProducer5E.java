@@ -37,6 +37,7 @@ public class CharacterServiceProducer5E {
                 if (producerRecord != null) {
                     Object data = producerRecord.value();
                     cache.put(uuid,data);
+                    log.info(String.valueOf(data));
                 }
             }
 

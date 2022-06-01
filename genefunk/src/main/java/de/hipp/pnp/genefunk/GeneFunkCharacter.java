@@ -29,17 +29,11 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     Integer level = 1;
 
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e strength;
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e dexterity;
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e constitution;
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e intelligence;
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e wisdom;
-    @OneToOne(targetEntity = Attribute5e.class,fetch = FetchType.EAGER)
     Attribute5e charisma;
 
     @OneToOne
@@ -155,6 +149,9 @@ public class GeneFunkCharacter implements I5ECharacter {
     }
 
     void initialize() {
+        if(this.getRace() == null){
+            return;
+        }
         applyBaseValues(this.getRace().getAttributes());
     }
 

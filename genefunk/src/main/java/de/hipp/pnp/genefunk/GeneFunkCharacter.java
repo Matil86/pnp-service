@@ -1,13 +1,15 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.Attribute5e;
-import de.hipp.pnp.constants.AttributeConstants;
+import de.hipp.pnp.E5EGameTypes;
+import de.hipp.pnp.api.Attribute5e;
+import de.hipp.pnp.api.constants.AttributeConstants;
 import de.hipp.pnp.interfaces.I5ECharacter;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.util.HashSet;
@@ -18,9 +20,10 @@ import java.util.Set;
 @Entity
 public class GeneFunkCharacter implements I5ECharacter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    Integer gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
 
@@ -45,6 +48,11 @@ public class GeneFunkCharacter implements I5ECharacter {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public int getGameType() {
+        return gameTypes;
     }
 
     @Override
@@ -141,6 +149,9 @@ public class GeneFunkCharacter implements I5ECharacter {
     }
 
     void initialize() {
+        if(this.getRace() == null){
+            return;
+        }
         applyBaseValues(this.getRace().getAttributes());
     }
 
@@ -195,7 +206,7 @@ public class GeneFunkCharacter implements I5ECharacter {
     void addClass(GeneFunkClass addClass) {
         boolean index = this.characterClasses.contains(addClass);
         if (index) {
-            this.characterClasses.stream().filter((value) -> value.equals(addClass)).forEach((charClass) -> charClass.increaseLevel(1));
+            this.characterClasses.stream().filter(value -> value.equals(addClass)).forEach(charClass -> charClass.increaseLevel(1));
         } else {
             this.characterClasses.add(addClass);
         }

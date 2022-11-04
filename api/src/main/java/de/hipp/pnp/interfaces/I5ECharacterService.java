@@ -2,9 +2,9 @@ package de.hipp.pnp.interfaces;
 
 import java.util.List;
 
-public interface I5ECharacterService<t extends I5ECharacter> {
+public interface I5ECharacterService<T extends I5ECharacter> {
 
-    public List<t> getAllCharacters();
+    public List<T> getAllCharacters();
 
-    public t generate();
+    public T generate();
 }

@@ -14,16 +14,32 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <start-class>GeneFunkServiceApplication</start-class>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
-            <artifactId>starter</artifactId>
             <groupId>de.hipp.pnp</groupId>
+            <artifactId>base</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>genefunk</artifactId>
             <groupId>de.hipp.pnp</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hipp.pnp</groupId>
+            <artifactId>genefunk-bootstrap</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

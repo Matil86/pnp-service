@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    bootstrap-servers: "172.17.136.199:9092"
+    consumer:
+      group-id: "pnp"
+      auto-offset-reset: earliest

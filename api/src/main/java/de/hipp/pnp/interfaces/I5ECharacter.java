@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface I5ECharacter {
 
+    int getGameType();
+
     String getFirstName();
 
     String getLastName();

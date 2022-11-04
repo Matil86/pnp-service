@@ -1,7 +1,7 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.Attribute5e;
-import de.hipp.pnp.DiceRoller;
+import de.hipp.pnp.api.Attribute5e;
+import de.hipp.pnp.api.DiceRoller;
 import de.hipp.pnp.interfaces.I5ECharacterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,7 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
     final GeneFunkCharacterRepository repository;
     final GeneFunkGenomeService genomeService;
     final GeneFunkClassService classService;
+    private final Random random = new Random();
 
     public GeneFunkCharacterService(
             GeneFunkCharacterRepository repository,
@@ -48,14 +49,18 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
         character.setIntelligence(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
         character.setWisdom(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
         character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setRace((GeneFunkGenome) pickRandom(genomes));
-        character.addClass((GeneFunkClass) pickRandom(classes));
+        if (!genomes.isEmpty()) {
+            character.setRace((GeneFunkGenome) pickRandom(genomes));
+        }
+        if (!classes.isEmpty()) {
+            character.addClass((GeneFunkClass) pickRandom(classes));
+        }
         character.initialize();
-        return repository.saveAndFlush(character);
+        return repository.save(character);
     }
 
     private <X> Object pickRandom(List<X> list) {
-        int randomInt = new Random().nextInt(list.size());
+        int randomInt = random.nextInt(list.size());
         return list.get(Math.max(randomInt, 0));
     }
 }

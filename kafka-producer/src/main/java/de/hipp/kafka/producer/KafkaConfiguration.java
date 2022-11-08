@@ -20,7 +20,7 @@ import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_
 @Configuration
 public class KafkaConfiguration {
 
-    @Value("${spring.kafka.producer.bootstrap-servers:172.17.136.199:9092} ")
+    @Value("${spring.kafka.producer.bootstrap-servers} ")
     String serverAdress;
 
     @Bean

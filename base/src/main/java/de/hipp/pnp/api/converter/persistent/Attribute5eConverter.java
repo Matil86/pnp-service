@@ -1,4 +1,4 @@
-package de.hipp.pnp.api.converter;
+package de.hipp.pnp.api.converter.persistent;
 
 import de.hipp.pnp.api.Attribute5e;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package de.hipp.pnp.api.converter;
+package de.hipp.pnp.api.converter.persistent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +13,7 @@ abstract class BaseConverter<Y> implements AttributeConverter<Y, String> {
 
     ObjectMapper objectMapper = new ObjectMapper();
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
     Y type;
 
     @Override
@@ -45,5 +46,10 @@ abstract class BaseConverter<Y> implements AttributeConverter<Y, String> {
         }
 
         return valueInfo;
+    }
+
+    public BaseConverter<Y> setType(Y type) {
+        this.type = type;
+        return this;
     }
 }

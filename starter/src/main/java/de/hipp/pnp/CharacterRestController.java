@@ -1,5 +1,6 @@
 package de.hipp.pnp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import de.hipp.kafka.producer.CharacterServiceProducer5E;
 import de.hipp.pnp.interfaces.I5ECharacter;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,8 @@ public class CharacterRestController {
     }
 
     @GetMapping("/generate")
-    public I5ECharacter generateCharacter(@RequestParam(value = "gameType", defaultValue = "1") int gameType ) {
+    public I5ECharacter generateCharacter(@RequestParam(value = "gameType", defaultValue = "1") int gameType )
+        throws JsonProcessingException {
         return characterService.generate(gameType);
     }
 

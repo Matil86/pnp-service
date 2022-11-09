@@ -1,16 +1,15 @@
 package de.hipp.pnp;
 
+import static de.hipp.pnp.base.fivee.constants.UrlConstants.CHARACTERURL;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.hipp.kafka.producer.CharacterServiceProducer5E;
-import de.hipp.pnp.interfaces.I5ECharacter;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacter;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-import static de.hipp.pnp.api.constants.UrlConstants.CHARACTERURL;
 
 @RestController
 @RequestMapping(CHARACTERURL)

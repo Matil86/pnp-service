@@ -1,6 +1,6 @@
-package de.hipp.pnp.api.converter.persistent;
+package de.hipp.pnp.base.fivee.converter.persistent;
 
-import de.hipp.pnp.api.Feature5e;
+import de.hipp.pnp.base.fivee.Feature5e;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Converter;

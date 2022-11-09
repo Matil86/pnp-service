@@ -1,4 +1,4 @@
-package de.hipp.pnp.abstracts;
+package de.hipp.pnp.api.fivee.abstracts;
 
 public abstract class Bootstrap {
 

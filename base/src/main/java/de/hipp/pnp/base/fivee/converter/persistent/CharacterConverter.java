@@ -1,8 +1,8 @@
-package de.hipp.pnp.api.converter.persistent;
+package de.hipp.pnp.base.fivee.converter.persistent;
 
-import de.hipp.pnp.interfaces.I5ECharacter;
-import de.hipp.pnp.interfaces.I5ECharacterClass;
-import de.hipp.pnp.interfaces.I5ECharacterRace;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacter;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacterClass;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacterRace;
 import java.util.Set;
 import javax.persistence.Converter;
 import org.springframework.stereotype.Component;

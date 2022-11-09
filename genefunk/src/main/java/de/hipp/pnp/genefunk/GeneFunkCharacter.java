@@ -1,9 +1,9 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.E5EGameTypes;
-import de.hipp.pnp.api.Attribute5e;
-import de.hipp.pnp.api.constants.AttributeConstants;
-import de.hipp.pnp.interfaces.I5ECharacter;
+import de.hipp.pnp.api.fivee.E5EGameTypes;
+import de.hipp.pnp.base.fivee.Attribute5e;
+import de.hipp.pnp.base.fivee.constants.AttributeConstants;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacter;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;

@@ -1,8 +1,7 @@
 package de.hipp.pnp.genefunk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.hipp.pnp.E5EGameTypes;
-import de.hipp.pnp.interfaces.I5ECharacter;
+import de.hipp.pnp.api.fivee.DefaultMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,8 @@ public class GeneFunkCharakterListener {
     @KafkaListener(id = "pnp", topics = "GENEFUNK_generate")
     @SendTo("GENEFUNK_generate")
     public GeneFunkCharacter listen(String character) throws IOException {
-        I5ECharacter parsedChar = mapper.readValue(character.getBytes(StandardCharsets.UTF_8),
-            GeneFunkCharacter.class);
+        DefaultMessage<GeneFunkCharacter> parsedChar = mapper.readValue(character.getBytes(StandardCharsets.UTF_8),
+            DefaultMessage.class);
         log.info(String.valueOf(parsedChar));
         return service.generate(1);
     }

@@ -1,4 +1,4 @@
-package de.hipp.pnp.api;
+package de.hipp.pnp.base.fivee;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

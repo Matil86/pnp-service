@@ -1,4 +1,4 @@
-package de.hipp.pnp.api.constants;
+package de.hipp.pnp.base.fivee.constants;
 
 public class AttributeConstants {
     public static final String STRENGTH = "STR";

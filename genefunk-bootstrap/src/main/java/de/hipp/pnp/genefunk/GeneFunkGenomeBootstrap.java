@@ -1,7 +1,7 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.abstracts.Bootstrap;
-import de.hipp.pnp.api.constants.AttributeConstants;
+import de.hipp.pnp.api.fivee.abstracts.Bootstrap;
+import de.hipp.pnp.base.fivee.constants.AttributeConstants;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 

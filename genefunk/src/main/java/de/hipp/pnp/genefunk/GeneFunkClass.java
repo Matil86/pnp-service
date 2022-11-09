@@ -1,6 +1,6 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.interfaces.I5ECharacterClass;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacterClass;
 import lombok.Data;
 
 import javax.persistence.Entity;

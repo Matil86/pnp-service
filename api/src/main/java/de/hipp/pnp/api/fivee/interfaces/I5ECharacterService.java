@@ -1,4 +1,4 @@
-package de.hipp.pnp.interfaces;
+package de.hipp.pnp.api.fivee.interfaces;
 
 import java.util.List;
 

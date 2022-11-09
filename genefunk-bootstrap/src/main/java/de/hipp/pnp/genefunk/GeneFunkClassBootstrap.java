@@ -1,6 +1,6 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.abstracts.Bootstrap;
+import de.hipp.pnp.api.fivee.abstracts.Bootstrap;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

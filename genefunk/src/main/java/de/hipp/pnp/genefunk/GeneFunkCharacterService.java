@@ -1,8 +1,8 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.api.Attribute5e;
-import de.hipp.pnp.api.DiceRoller;
-import de.hipp.pnp.interfaces.I5ECharacterService;
+import de.hipp.pnp.base.fivee.Attribute5e;
+import de.hipp.pnp.base.fivee.DiceRoller;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

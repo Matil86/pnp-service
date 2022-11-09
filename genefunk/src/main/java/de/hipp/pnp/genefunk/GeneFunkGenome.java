@@ -1,8 +1,8 @@
 package de.hipp.pnp.genefunk;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.hipp.pnp.api.Feature5e;
-import de.hipp.pnp.interfaces.I5ECharacterRace;
+import de.hipp.pnp.base.fivee.Feature5e;
+import de.hipp.pnp.api.fivee.interfaces.I5ECharacterRace;
 import lombok.Data;
 
 import javax.persistence.Column;

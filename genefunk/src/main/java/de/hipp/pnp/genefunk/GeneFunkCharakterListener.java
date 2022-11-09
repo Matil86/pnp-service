@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component;
 public class GeneFunkCharakterListener {
 
     private final GeneFunkCharacterService service;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
-    public GeneFunkCharakterListener(GeneFunkCharacterService service) {
+    public GeneFunkCharakterListener(GeneFunkCharacterService service, ObjectMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @KafkaListener(topics = "GENEFUNK_generate")

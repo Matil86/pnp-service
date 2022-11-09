@@ -3,7 +3,6 @@ package de.hipp.kafka.producer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.hipp.pnp.api.fivee.DefaultMessage;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.interfaces.I5ECharacter;
@@ -13,19 +12,20 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class CharacterServiceProducer5E {
 
-  private final KafkaTemplate<String, Object> template;
+  private final ReplyingKafkaTemplate<String, Object,List<String>> template;
   private final HashMap<String, Object> cache = new HashMap<>();
-  ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper mapper;
 
-  public CharacterServiceProducer5E(KafkaTemplate<String, Object> template) {
+  public CharacterServiceProducer5E(ReplyingKafkaTemplate<String, Object,List<String>> template, ObjectMapper mapper) {
     this.template = template;
+    this.mapper = mapper;
   }
 
   public String generate(int gameType) {

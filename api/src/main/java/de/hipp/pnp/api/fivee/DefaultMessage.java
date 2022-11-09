@@ -1,38 +1,17 @@
 package de.hipp.pnp.api.fivee;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
+@Getter
+@Setter
 public class DefaultMessage<T> {
 
   private String action;
   private T payload;
   private String detailMessage;
+  private String uuid;
 
-  public String getAction() {
-    return action;
-  }
-
-  public DefaultMessage<T> setAction(String action) {
-    this.action = action;
-    return this;
-  }
-
-  public T getPayload() {
-    return payload;
-  }
-
-  public DefaultMessage<T> setPayload(T payload) {
-    this.payload = payload;
-    return this;
-  }
-
-  public String getDetailMessage() {
-    return detailMessage;
-  }
-
-  public DefaultMessage<T> setDetailMessage(String detailMessage) {
-    this.detailMessage = detailMessage;
-    return this;
-  }
 }

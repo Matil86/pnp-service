@@ -1,59 +1,56 @@
 package de.hipp.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.hipp.pnp.api.fivee.DefaultMessage;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.interfaces.I5ECharacter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Component
 @Slf4j
 public class CharacterServiceProducer5E {
 
-    private final KafkaTemplate<String,Object> template;
-    private final HashMap<String, Object> cache = new HashMap<>();
-    ObjectMapper mapper = new ObjectMapper();
+  private final KafkaTemplate<String, Object> template;
+  private final HashMap<String, Object> cache = new HashMap<>();
+  ObjectMapper mapper = new ObjectMapper();
 
-    public CharacterServiceProducer5E(KafkaTemplate<String, Object> template) {
-        this.template = template;
+  public CharacterServiceProducer5E(KafkaTemplate<String, Object> template) {
+    this.template = template;
+  }
+
+  public String generate(int gameType) {
+    String uuid = UUID.randomUUID().toString();
+    E5EGameTypes gameTypes = E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK);
+    var message = new DefaultMessage<I5ECharacter>();
+    message.setAction("generate");
+    message.setUuid(uuid);
+    this.template.send(gameTypes.name() + "_generate", message);
+    return uuid;
+  }
+
+  @KafkaListener(id = "pnp", topics = "generate_finished")
+  public void populateCache(String message) throws JsonProcessingException {
+    log.info("-----------------------------------------");
+    log.info(message);
+    log.info("-----------------------------------------");
+    DefaultMessage<JSONPObject> mappedMessage = mapper.readValue(message, new TypeReference<>() {});
+    if (Objects.nonNull(mappedMessage) && Objects.nonNull(mappedMessage.getUuid())
+        && Objects.nonNull(mappedMessage.getPayload())) {
+      cache.put(mappedMessage.getUuid(), mappedMessage.getPayload());
     }
+  }
 
-    public I5ECharacter generate(int gameType) throws JsonProcessingException {
-        String uuid = UUID.randomUUID().toString();
-        E5EGameTypes gameTypes = E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK) ;
-        ListenableFuture<SendResult<String, Object>> result = this.template.send(gameTypes.name() + "_generate",mapper.writeValueAsString(new DefaultMessage<I5ECharacter>().setAction("generate")));
-        result.addCallback(new ListenableFutureCallback<>() {
-            @Override
-            public void onSuccess(SendResult<String, Object> result) {
-                ProducerRecord<String, Object> producerRecord = result.getProducerRecord();
-                if (producerRecord != null) {
-                    Object data = producerRecord.value();
-                    cache.put(uuid, data);
-                    log.info(String.valueOf(data));
-                }
-            }
-
-            @SneakyThrows
-            @Override
-            public void onFailure(Throwable ex) {
-                throw ex;
-            }
-        });
-        return null;
-    }
-
-    public List<Object> getAllCharacters() {
-        return List.copyOf(cache.values());
-    }
+  public List<Object> getAllCharacters() {
+    return List.copyOf(cache.values());
+  }
 }

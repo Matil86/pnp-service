@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface I5ECharacterService<T extends I5ECharacter> {
 
-    public List<T> getAllCharacters();
+  public List<T> getAllCharacters();
 
-    public T generate();
+  public T generate();
 }

@@ -1,20 +1,19 @@
 package de.hipp.pnp.api.fivee.interfaces;
 
-import java.io.Serializable;
 import java.util.Set;
 
-public interface I5ECharacter extends Serializable {
+public interface I5ECharacter {
 
-    int getGameType();
+  int getGameType();
 
-    String getFirstName();
+  String getFirstName();
 
-    String getLastName();
+  String getLastName();
 
-    Integer getLevel();
+  Integer getLevel();
 
-    I5ECharacterRace getRace();
+  I5ECharacterRace getRace();
 
-    Set<? extends I5ECharacterClass> getCharacterClasses();
+  Set<? extends I5ECharacterClass> getCharacterClasses();
 
 }

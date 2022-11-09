@@ -2,13 +2,13 @@ package de.hipp.pnp.api.fivee.interfaces;
 
 public interface I5ECharacterRace {
 
-    String getName();
+  String getName();
 
-    void setName(String name);
+  void setName(String name);
 
-    String getDescription();
+  String getDescription();
 
-    void setDescription(String description);
+  void setDescription(String description);
 
-    void addAttributeChange(String key, Integer value);
+  void addAttributeChange(String key, Integer value);
 }

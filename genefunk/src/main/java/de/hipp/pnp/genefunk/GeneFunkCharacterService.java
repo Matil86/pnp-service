@@ -2,7 +2,7 @@ package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.base.fivee.Attribute5e;
 import de.hipp.pnp.base.fivee.DiceRoller;
-import de.hipp.pnp.api.fivee.interfaces.I5ECharacterService;
+import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,7 @@ import java.util.Random;
 
 @Service
 @Transactional
-public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCharacter> {
+public class GeneFunkCharacterService implements FiveECharacterService<GeneFunkCharacter> {
 
     final GeneFunkCharacterRepository repository;
     final GeneFunkGenomeService genomeService;

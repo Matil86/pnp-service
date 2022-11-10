@@ -19,7 +19,4 @@ class GeneFunkClass extends BaseCharacterClass {
 
     Integer level = 1;
 
-    public void increaseLevel(Integer level) {
-        this.level += level;
-    }
 }

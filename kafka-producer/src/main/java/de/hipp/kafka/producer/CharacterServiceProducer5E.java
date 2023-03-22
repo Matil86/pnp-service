@@ -1,56 +1,56 @@
 package de.hipp.kafka.producer;
 
-import de.hipp.pnp.E5EGameTypes;
-import de.hipp.pnp.interfaces.I5ECharacter;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
-import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.hipp.pnp.api.fivee.DefaultMessage;
+import de.hipp.pnp.api.fivee.E5EGameTypes;
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class CharacterServiceProducer5E {
 
-    private final KafkaTemplate<String,Object> template;
-    private final HashMap<String, Object> cache = new HashMap<>();
+  private final ReplyingKafkaTemplate<String, Object,List<String>> template;
+  private final HashMap<String, Object> cache = new HashMap<>();
+  private final ObjectMapper mapper;
 
-    public CharacterServiceProducer5E(KafkaTemplate<String, Object> template) {
-        this.template = template;
+  public CharacterServiceProducer5E(ReplyingKafkaTemplate<String, Object,List<String>> template, ObjectMapper mapper) {
+    this.template = template;
+    this.mapper = mapper;
+  }
+
+  public String generate(int gameType) {
+    String uuid = UUID.randomUUID().toString();
+    E5EGameTypes gameTypes = E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK);
+    var message = new DefaultMessage<BaseCharacter>();
+    message.setAction("generate");
+    message.setUuid(uuid);
+    this.template.send(gameTypes.name() + "_generate", message);
+    return uuid;
+  }
+
+  @KafkaListener(id = "pnp", topics = "generate_finished")
+  public void populateCache(String message) throws JsonProcessingException {
+    var mappedMessage = mapper.readValue(message, new TypeReference<DefaultMessage>() {}); //NOSONAR
+    if (Objects.nonNull(mappedMessage) && Objects.nonNull(mappedMessage.getUuid())
+        && Objects.nonNull(mappedMessage.getPayload())) {
+      log.info("------------------Adding to Cache-----------------------");
+      log.info(message);
+      log.info("--------------------------------------------------------");
+      cache.put(mappedMessage.getUuid(), mappedMessage.getPayload());
     }
+  }
 
-    public I5ECharacter generate(int gameType){
-        String uuid = UUID.randomUUID().toString();
-        E5EGameTypes gameTypes = E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK) ;
-        ListenableFuture<SendResult<String, Object>> result = this.template.send(gameTypes.name(), "generateCharacter");
-        result.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
-            @Override
-            public void onSuccess(SendResult<String, Object> result) {
-                ProducerRecord<String, Object> producerRecord = result.getProducerRecord();
-                if (producerRecord != null) {
-                    Object data = producerRecord.value();
-                    cache.put(uuid,data);
-                    log.info(String.valueOf(data));
-                }
-            }
-
-            @SneakyThrows
-            @Override
-            public void onFailure(Throwable ex) {
-                throw ex;
-            }
-        });
-        return null;
-    }
-
-    public List<Object> getAllCharacters() {
-        return List.copyOf(cache.values());
-    }
+  public List<Object> getAllCharacters() {
+    return List.copyOf(cache.values());
+  }
 }

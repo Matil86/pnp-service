@@ -1,24 +1,19 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.E5EGameTypes;
-import de.hipp.pnp.api.Attribute5e;
-import de.hipp.pnp.api.constants.AttributeConstants;
-import de.hipp.pnp.interfaces.I5ECharacter;
-
-import javax.persistence.ElementCollection;
+import de.hipp.pnp.api.fivee.E5EGameTypes;
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
+import de.hipp.pnp.base.fivee.Attribute5e;
+import de.hipp.pnp.base.fivee.constants.AttributeConstants;
+import java.util.Map;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
-public class GeneFunkCharacter implements I5ECharacter {
+public class GeneFunkCharacter extends BaseCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -39,9 +34,6 @@ public class GeneFunkCharacter implements I5ECharacter {
     @OneToOne
     GeneFunkGenome race;
 
-    @ElementCollection(targetClass = GeneFunkClass.class, fetch = FetchType.EAGER)
-    Set<GeneFunkClass> characterClasses = new HashSet<>();
-
     public Integer getId() {
         return id;
     }
@@ -60,6 +52,7 @@ public class GeneFunkCharacter implements I5ECharacter {
         return firstName;
     }
 
+    @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -69,6 +62,7 @@ public class GeneFunkCharacter implements I5ECharacter {
         return lastName;
     }
 
+    @Override
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -78,6 +72,7 @@ public class GeneFunkCharacter implements I5ECharacter {
         return level;
     }
 
+    @Override
     public void setLevel(Integer level) {
         this.level = level;
     }
@@ -138,16 +133,7 @@ public class GeneFunkCharacter implements I5ECharacter {
     public void setRace(GeneFunkGenome race) {
         this.race = race;
     }
-
-    @Override
-    public Set<GeneFunkClass> getCharacterClasses() {
-        return characterClasses;
-    }
-
-    public void setCharacterClasses(Set<GeneFunkClass> characterClasses) {
-        this.characterClasses = characterClasses;
-    }
-
+    
     void initialize() {
         if(this.getRace() == null){
             return;

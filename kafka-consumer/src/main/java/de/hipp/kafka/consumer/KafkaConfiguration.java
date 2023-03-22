@@ -12,6 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 import java.util.Map;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 
 @Configuration
@@ -24,8 +25,10 @@ public class KafkaConfiguration {
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(
-                Map.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, serverAdress,
-                        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class
+                Map.of(
+                    ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, serverAdress,
+                    ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class,
+                    ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonSerializer.class
                 ));
     }
 

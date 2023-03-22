@@ -1,8 +1,9 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.api.Attribute5e;
-import de.hipp.pnp.api.DiceRoller;
-import de.hipp.pnp.interfaces.I5ECharacterService;
+import de.hipp.pnp.base.fivee.Attribute5e;
+import de.hipp.pnp.base.fivee.DiceRoller;
+import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +12,7 @@ import java.util.Random;
 
 @Service
 @Transactional
-public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCharacter> {
+public class GeneFunkCharacterService implements FiveECharacterService<GeneFunkCharacter> {
 
     final GeneFunkCharacterRepository repository;
     final GeneFunkGenomeService genomeService;
@@ -34,25 +35,41 @@ public class GeneFunkCharacterService implements I5ECharacterService<GeneFunkCha
 
     @Override
     public GeneFunkCharacter generate() {
-        return this.generate(1);
+        return this.generate(new GeneFunkCharacter());
     }
 
-    public GeneFunkCharacter generate(int level) {
+    public GeneFunkCharacter generate(GeneFunkCharacter character) {
         List<GeneFunkGenome> genomes = genomeService.getAllGenomes();
         List<GeneFunkClass> classes = classService.getAllClasses();
 
-        GeneFunkCharacter character = new GeneFunkCharacter();
-        character.setLevel(level);
-        character.setStrength(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setDexterity(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setConstitution(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setIntelligence(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setWisdom(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
-        if (!genomes.isEmpty()) {
+        if (Objects.isNull(character)) {
+            character = new GeneFunkCharacter();
+        }
+        if (Objects.isNull(character.getLevel())) {
+            character.setLevel(1);
+        }
+        if (Objects.isNull(character.getStrength())) {
+            character.setStrength(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (Objects.isNull(character.getDexterity())) {
+            character.setDexterity(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (Objects.isNull(character.getConstitution())) {
+            character.setConstitution(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (Objects.isNull(character.getIntelligence())) {
+            character.setIntelligence(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (Objects.isNull(character.getWisdom())) {
+            character.setWisdom(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (Objects.isNull(character.getCharisma())) {
+            character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        }
+        if (!genomes.isEmpty() && Objects.isNull(character.getRace())) {
             character.setRace((GeneFunkGenome) pickRandom(genomes));
         }
-        if (!classes.isEmpty()) {
+        if (!classes.isEmpty() && Objects.isNull(character.getCharacterClasses())) {
             character.addClass((GeneFunkClass) pickRandom(classes));
         }
         character.initialize();

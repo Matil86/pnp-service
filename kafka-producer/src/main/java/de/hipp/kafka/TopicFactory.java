@@ -1,6 +1,6 @@
 package de.hipp.kafka;
 
-import de.hipp.pnp.E5EGameTypes;
+import de.hipp.pnp.api.fivee.E5EGameTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.kafka.config.TopicBuilder;

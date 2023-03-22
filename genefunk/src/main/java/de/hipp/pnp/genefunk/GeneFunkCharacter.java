@@ -5,11 +5,11 @@ import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
 import de.hipp.pnp.base.fivee.Attribute5e;
 import de.hipp.pnp.base.fivee.constants.AttributeConstants;
 import java.util.Map;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @SuppressWarnings("JpaAttributeTypeInspection")
 @Entity

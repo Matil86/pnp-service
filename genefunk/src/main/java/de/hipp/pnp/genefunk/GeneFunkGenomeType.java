@@ -1,6 +1,6 @@
 package de.hipp.pnp.genefunk;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 
 enum GeneFunkGenomeType {
     UNKNOWN(-1),

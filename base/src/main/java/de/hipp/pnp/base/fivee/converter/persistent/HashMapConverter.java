@@ -2,7 +2,7 @@ package de.hipp.pnp.base.fivee.converter.persistent;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 import org.springframework.stereotype.Component;
 
 @Converter(autoApply = true)

@@ -1,7 +1,7 @@
 package de.hipp.pnp.base.fivee.converter.persistent;
 
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 import org.springframework.stereotype.Component;
 
 @Converter(autoApply = true)

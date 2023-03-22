@@ -1,7 +1,7 @@
 package de.hipp.pnp.genefunk;
 
 import de.hipp.pnp.base.fivee.converter.persistent.CharacterConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.Converter;
 import org.springframework.stereotype.Component;
 
 @Converter(autoApply = true)

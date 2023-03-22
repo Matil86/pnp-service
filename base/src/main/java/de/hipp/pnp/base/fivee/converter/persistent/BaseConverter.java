@@ -3,7 +3,7 @@ package de.hipp.pnp.base.fivee.converter.persistent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

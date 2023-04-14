@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rabbitmq</artifactId>
+    <artifactId>rabbitmq-producer</artifactId>
 
     <dependencies>
         <dependency>

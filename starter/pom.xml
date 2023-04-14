@@ -32,12 +32,7 @@
         </dependency>
         <dependency>
             <groupId>de.hipp.pnp</groupId>
-            <artifactId>kafka-producer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.hipp.pnp</groupId>
-            <artifactId>rabbitmq</artifactId>
+            <artifactId>rabbitmq-producer</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

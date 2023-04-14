@@ -22,9 +22,10 @@
         <module>genefunk</module>
         <module>genefunk-starter</module>
         <module>genefunk-bootstrap</module>
-        <module>kafka-producer</module>
-        <module>kafka-consumer</module>
-        <module>rabbitmq</module>
+        <!--        <module>kafka-producer</module>
+                <module>kafka-consumer</module>-->
+        <module>rabbitmq-producer</module>
+        <module>rabbitmq-consumer</module>
     </modules>
 
     <properties>

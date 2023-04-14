@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>de.hipp.pnp</groupId>
-            <artifactId>kafka-consumer</artifactId>
+            <artifactId>rabbitmq-consumer</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

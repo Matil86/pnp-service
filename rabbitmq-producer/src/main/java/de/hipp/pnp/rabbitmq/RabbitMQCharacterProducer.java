@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +55,6 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 
 	@Override
 	public List<Object> getAllCharacters() {
-		return null;
+		return Collections.emptyList();
 	}
 }

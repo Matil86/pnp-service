@@ -1,36 +1,38 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.api.fivee.abstracts.Bootstrap;
-import org.hibernate.Hibernate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Slf4j
 @Component
-class GeneFunkClassBootstrap extends Bootstrap {
+class GeneFunkClassBootstrap {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
-    @Override
-    protected void initialize() {
-        List<GeneFunkClass> returnList = new ArrayList<>();
-        returnList.add(this.initiateBiohacker());
-        returnList.add(this.initiateGunfighter());
-        Hibernate.initialize(returnList);
-    }
+	private final GeneFunkClassRepository repository;
+
+	GeneFunkClassBootstrap(GeneFunkClassRepository repository) {
+		this.repository = repository;
+		initialize();
+	}
+
+	protected void initialize() {
+		if (this.repository.findByName("Biohacker") == null) {
+			this.repository.save(this.initiateBiohacker());
+		}
+		if (this.repository.findByName("Gunfighter") == null) {
+			this.repository.save(this.initiateGunfighter());
+		}
+	}
 
 
-    private GeneFunkClass initiateBiohacker() {
-        GeneFunkClass biohacker = new GeneFunkClass();
-        biohacker.setName("Biohacker");
-        return biohacker;
-    }
+	private GeneFunkClass initiateBiohacker() {
+		GeneFunkClass biohacker = new GeneFunkClass();
+		biohacker.setName("Biohacker");
+		return biohacker;
+	}
 
-    private GeneFunkClass initiateGunfighter() {
-        GeneFunkClass biohacker = new GeneFunkClass();
-        biohacker.setName("Gunfighter");
-        return biohacker;
-    }
+	private GeneFunkClass initiateGunfighter() {
+		GeneFunkClass biohacker = new GeneFunkClass();
+		biohacker.setName("Gunfighter");
+		return biohacker;
+	}
 }

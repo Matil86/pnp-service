@@ -1,31 +1,37 @@
 package de.hipp.pnp.genefunk;
 
-import de.hipp.pnp.api.fivee.abstracts.Bootstrap;
+import de.hipp.pnp.base.fivee.Feature5e;
 import de.hipp.pnp.base.fivee.constants.AttributeConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
-public class GeneFunkGenomeBootstrap extends Bootstrap {
+public class GeneFunkGenomeBootstrap {
 
-	@Override
+	public static final String COMPANION = "Companion";
+	public static final String COELHOMORTOS = "Coelhomortos";
+	public static final String CANARY = "Canary";
+	private final GeneFunkGenomeRepository repository;
+	private final GeneFunkFeatureRepository featureRepository;
+
+	public GeneFunkGenomeBootstrap(GeneFunkGenomeRepository repository, GeneFunkFeatureRepository featureRepository) {
+		this.repository = repository;
+		this.featureRepository = featureRepository;
+		initialize();
+	}
+
 	protected void initialize() {
-		log.info(this.getClass().getName() + " initialized");
-		List<GeneFunkGenome> genomes = new ArrayList<>();
-		genomes.add(initializeCanary());
-		genomes.add(initializeCoelhomortos());
-		genomes.add(initializeCompanions());
-		Hibernate.initialize(genomes);
+		this.repository.save(this.initializeCompanions());
+		this.repository.save(this.initializeCoelhomortos());
+		this.repository.save(this.initializeCanary());
 	}
 
 	private GeneFunkGenome initializeCompanions() {
 		GeneFunkGenome companion = new GeneFunkGenome();
-		companion.setName("Companion");
+		companion.setName(COMPANION);
 		companion.setDescription("companion.description");
 
 		companion.addAttributeChange(AttributeConstants.INTELLIGENCE, 2);
@@ -33,16 +39,17 @@ public class GeneFunkGenomeBootstrap extends Bootstrap {
 		companion.addAttributeChange(AttributeConstants.WISDOM, 2);
 		companion.addAttributeChange(AttributeConstants.WISDOM_MAX, 22);
 
-		companion.addFeature("chemicalDependence.label", "chemicalDependence.description");
-		companion.addFeature("enchanting.label", "enchanting.description");
-		companion.addFeature("performanceArtist.label", "performanceArtist.description");
-		companion.addFeature("pheromones.label", "pheromones.description");
+		companion.addFeature(getFeature("chemicalDependence.label", "chemicalDependence.description"));
+		companion.addFeature(getFeature("enchanting.label", "enchanting.description"));
+		companion.addFeature(getFeature("performanceArtist.label", "performanceArtist.description"));
+		companion.addFeature(getFeature("pheromones.label", "pheromones.description"));
+
 		return companion;
 	}
 
 	private GeneFunkGenome initializeCoelhomortos() {
 		GeneFunkGenome coelhomortos = new GeneFunkGenome();
-		coelhomortos.setName("Coelhomortos");
+		coelhomortos.setName(COELHOMORTOS);
 		coelhomortos.setDescription("coelhomortos.description");
 
 		coelhomortos.addAttributeChange(AttributeConstants.STRENGTH, 3);
@@ -50,17 +57,18 @@ public class GeneFunkGenomeBootstrap extends Bootstrap {
 		coelhomortos.addAttributeChange(AttributeConstants.DEXTERITY, 3);
 		coelhomortos.addAttributeChange(AttributeConstants.DEXTERITY_MAX, 22);
 
-		coelhomortos.addFeature("athleticism.label", "athleticism.description");
-		coelhomortos.addFeature("blindLoyalty.label", "blindLoyalty.description");
-		coelhomortos.addFeature("dangerSense.label", "dangerSense.description");
-		coelhomortos.addFeature("pactTactics.label", "pactTactics.description");
-		coelhomortos.addFeature("preyInstincts.label", "preyInstincts.description");
+		coelhomortos.addFeature(getFeature("athleticism.label", "athleticism.description"));
+		coelhomortos.addFeature(getFeature("blindLoyalty.label", "blindLoyalty.description"));
+		coelhomortos.addFeature(getFeature("dangerSense.label", "dangerSense.description"));
+		coelhomortos.addFeature(getFeature("pactTactics.label", "pactTactics.description"));
+		coelhomortos.addFeature(getFeature("preyInstincts.label", "preyInstincts.description"));
+
 		return coelhomortos;
 	}
 
 	private GeneFunkGenome initializeCanary() {
 		GeneFunkGenome canary = new GeneFunkGenome();
-		canary.setName("Canary");
+		canary.setName(CANARY);
 		canary.setDescription("canary.description");
 
 		canary.addAttributeChange(AttributeConstants.STRENGTH, 4);
@@ -68,12 +76,17 @@ public class GeneFunkGenomeBootstrap extends Bootstrap {
 		canary.addAttributeChange(AttributeConstants.CONSTITUTION_MAX, 24);
 		canary.addAttributeChange(AttributeConstants.STRENGTH_MAX, 24);
 
-		canary.addFeature("healingFactor.label", "healingFactor.description");
-		canary.addFeature("toxicResilience.label", "toxicResilience.description");
-		canary.addFeature("toughAsNails.label", "toughAsNails.description");
-		canary.addFeature("bioluminescence.label", "bioluminescence.description");
-		canary.addFeature("musk.label", "musk.description");
+		canary.addFeature(getFeature("healingFactor.label", "healingFactor.description"));
+		canary.addFeature(getFeature("toxicResilience.label", "toxicResilience.description"));
+		canary.addFeature(getFeature("toughAsNails.label", "toughAsNails.description"));
+		canary.addFeature(getFeature("bioluminescence.label", "bioluminescence.description"));
+		canary.addFeature(getFeature("musk.label", "musk.description"));
 		return canary;
 	}
 
+
+	private Feature5e getFeature(String label, String description) {
+		Optional<Feature5e> itemFound = this.featureRepository.findByLabel(label);
+		return itemFound.orElseGet(() -> featureRepository.saveAndFlush(new Feature5e(label, description)));
+	}
 }

@@ -15,10 +15,10 @@ class GeneFunkClassBootstrap {
 	}
 
 	protected void initialize() {
-		if (this.repository.findByName("Biohacker") == null) {
+		if (this.repository.findByName("Biohacker").isEmpty()) {
 			this.repository.save(this.initiateBiohacker());
 		}
-		if (this.repository.findByName("Gunfighter") == null) {
+		if (this.repository.findByName("Gunfighter").isEmpty()) {
 			this.repository.save(this.initiateGunfighter());
 		}
 	}

@@ -10,22 +10,33 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQProducerConfiguration {
 
-	static final String TOPIC_EXCHANGE_NAME = "CREATE_GENEFUNK";
+	static final String TOPIC_EXCHANGE_CHARACTER_CREATION = "characterGeneration";
+	static final String QUEUE_GET_ALL_CHARACTERS = "GET_ALL_GENEFUNK";
 
-	static final String QUEUE_NAME = "characterGeneration";
+	static final String QUEUE_CREATE_GENEFUNK = "CREATE_GENEFUNK";
 
 	@Bean
-	Queue queue() {
-		return new Queue(QUEUE_NAME, true);
+	Queue createGeneFunkQueue() {
+		return new Queue(QUEUE_CREATE_GENEFUNK, false);
 	}
 
 	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange(TOPIC_EXCHANGE_NAME);
+	Queue getAllGeneFunkQueue() {
+		return new Queue(QUEUE_GET_ALL_CHARACTERS, false);
 	}
 
 	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(exchange.getName());
+	TopicExchange topicExchange() {
+		return new TopicExchange(TOPIC_EXCHANGE_CHARACTER_CREATION);
+	}
+
+	@Bean
+	Binding createGeneFunkCharacterBinding(Queue createGeneFunkQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(createGeneFunkQueue).to(exchange).with(exchange.getName());
+	}
+
+	@Bean
+	Binding createGetAllCharactersBindung(Queue getAllGeneFunkQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(getAllGeneFunkQueue).to(exchange).with(exchange.getName());
 	}
 }

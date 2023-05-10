@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConsumerConfiguration {
 
-	static final String QUEUE_NAME = "characterGeneration";
+	static final String QUEUE_GET_ALL_CHARACTERS = "GET_ALL_GENEFUNK";
+
+	static final String QUEUE_CREATE_GENEFUNK = "CREATE_GENEFUNK";
 
 
 	@Bean
@@ -17,7 +19,7 @@ public class RabbitMQConsumerConfiguration {
 			ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.setQueueNames(QUEUE_NAME);
+		container.setQueueNames(QUEUE_CREATE_GENEFUNK, QUEUE_GET_ALL_CHARACTERS);
 		container.setMessageListener(listenerAdapter);
 		return container;
 	}

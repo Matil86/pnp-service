@@ -49,7 +49,6 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 
 	private void prepareTemplate(String exchangeName) {
 		log.debug("preparing Template for : {}", exchangeName);
-		template.setExchange(exchangeName);
 		template.setRoutingKey(exchangeName);
 	}
 

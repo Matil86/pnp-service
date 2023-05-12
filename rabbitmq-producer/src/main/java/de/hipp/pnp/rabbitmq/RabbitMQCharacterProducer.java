@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -29,9 +27,13 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 	@Override
 	public String generate(int gameType) {
 		log.debug("message to produce received");
-		var exchangeName = "CREATE_" + E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK);
+		var routingKey = "CREATE_" + E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK);
 
-		prepareTemplate(exchangeName);
+		return sendMessageForRoutingKey(routingKey);
+	}
+
+	private String sendMessageForRoutingKey(String routingKey) {
+		prepareTemplate(routingKey);
 		DefaultMessage<BaseCharacter> message = new DefaultMessage<>();
 		message.setUuid(UUID.randomUUID().toString());
 
@@ -53,7 +55,10 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 	}
 
 	@Override
-	public List<Object> getAllCharacters() {
-		return Collections.emptyList();
+	public String getAllCharacters() {
+
+		log.debug("message to produce received");
+		var routingKey = "GET_ALL_" + E5EGameTypes.GENEFUNK;
+		return sendMessageForRoutingKey(routingKey);
 	}
 }

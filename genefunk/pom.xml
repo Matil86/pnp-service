@@ -22,10 +22,5 @@
             <groupId>de.hipp.pnp</groupId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>de.hipp.pnp</groupId>
-            <artifactId>rabbitmq-consumer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

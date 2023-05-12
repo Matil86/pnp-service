@@ -23,7 +23,6 @@
         <module>genefunk-starter</module>
         <module>genefunk-bootstrap</module>
         <module>rabbitmq-producer</module>
-        <module>rabbitmq-consumer</module>
     </modules>
 
     <properties>

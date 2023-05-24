@@ -1,5 +1,7 @@
 package de.hipp.pnp.genefunk;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
 import de.hipp.pnp.base.fivee.Attribute5e;
@@ -13,8 +15,8 @@ import jakarta.persistence.OneToOne;
 import java.util.HashSet;
 import java.util.Map;
 
-@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
+@JsonSerialize
 public class GeneFunkCharacter extends BaseCharacter {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -136,6 +138,7 @@ public class GeneFunkCharacter extends BaseCharacter {
 		this.race = race;
 	}
 
+	@JsonIgnore
 	void initialize() {
 		if (this.getRace() == null) {
 			return;
@@ -143,6 +146,7 @@ public class GeneFunkCharacter extends BaseCharacter {
 		applyBaseValues(this.getRace().getAttributes());
 	}
 
+	@JsonIgnore
 	void applyBaseValues(Map<String, Integer> attributeChanges) {
 		setMaxValues(attributeChanges);
 		if (attributeChanges.containsKey(AttributeConstants.STRENGTH)) {
@@ -170,6 +174,7 @@ public class GeneFunkCharacter extends BaseCharacter {
 		}
 	}
 
+	@JsonIgnore
 	void setMaxValues(Map<String, Integer> attributeChanges) {
 		if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
 			this.strength.setMax(attributeChanges.get(AttributeConstants.STRENGTH_MAX));
@@ -191,6 +196,7 @@ public class GeneFunkCharacter extends BaseCharacter {
 		}
 	}
 
+	@JsonIgnore
 	void addClass(GeneFunkClass addClass) {
 		if (this.characterClasses == null) {
 			this.characterClasses = new HashSet<>();

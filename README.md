@@ -8,7 +8,7 @@ GENEFUNK (WIP)
 
 Thinks to do:
 
-- Abfrage aller erstellen Charaktere
+- HTTPS aktivieren
 - Speichern Service
 - Übertragung des Contents für GENEFUNK
 - Integration von einem Weiteren System

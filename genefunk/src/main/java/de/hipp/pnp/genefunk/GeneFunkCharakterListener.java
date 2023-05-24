@@ -25,22 +25,22 @@ public class GeneFunkCharakterListener {
 	}
 
 	@RabbitListener(queues = "GET_ALL_GENEFUNK")
-	public String getAllCharacters(String character) throws IOException {
+	public String getAllGenefunkCharacters(String character) throws IOException {
 		var message = mapper.readValue(character, new TypeReference<DefaultMessage<List<GeneFunkCharacter>>>() {
 		});
 		List<GeneFunkCharacter> genChars = service.getAllCharacters();
 		message.setAction("finished");
 		message.setPayload(genChars);
-		return mapper.writeValueAsString(message);
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 	}
 
 	@RabbitListener(queues = "CREATE_GENEFUNK")
-	protected String handleMessage(String character) throws JsonProcessingException {
+	protected String createGenefunkCharacter(String character) throws JsonProcessingException {
 		var message = mapper.readValue(character, new TypeReference<DefaultMessage<GeneFunkCharacter>>() {
 		});
 		GeneFunkCharacter genChar = service.generate(message.getPayload());
 		message.setAction("finished");
 		message.setPayload(genChar);
-		return mapper.writeValueAsString(message);
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 	}
 }

@@ -32,6 +32,14 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 		return sendMessageForRoutingKey(routingKey);
 	}
 
+	@Override
+	public String getAllCharacters() {
+
+		log.debug("message to produce received");
+		var routingKey = "GET_ALL_" + E5EGameTypes.GENEFUNK;
+		return sendMessageForRoutingKey(routingKey);
+	}
+
 	private String sendMessageForRoutingKey(String routingKey) {
 		prepareTemplate(routingKey);
 		DefaultMessage<BaseCharacter> message = new DefaultMessage<>();
@@ -52,13 +60,5 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 	private void prepareTemplate(String exchangeName) {
 		log.debug("preparing Template for : {}", exchangeName);
 		template.setRoutingKey(exchangeName);
-	}
-
-	@Override
-	public String getAllCharacters() {
-
-		log.debug("message to produce received");
-		var routingKey = "GET_ALL_" + E5EGameTypes.GENEFUNK;
-		return sendMessageForRoutingKey(routingKey);
 	}
 }

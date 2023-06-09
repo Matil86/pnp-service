@@ -25,6 +25,7 @@
                         <env>
                             <BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
                         </env>
+                        <builder>dashaun/builder:tiny</builder>
                     </image>
                 </configuration>
                 <executions>

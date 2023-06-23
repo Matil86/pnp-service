@@ -47,7 +47,7 @@ jobs:
 
   deploy-base:
     needs:
-      - test
+      - build
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -82,7 +82,7 @@ jobs:
 
   deploy-genefunk:
     needs:
-      - test
+      - build
     permissions:
       contents: 'read'
       id-token: 'write'

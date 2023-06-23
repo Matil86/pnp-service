@@ -42,21 +42,21 @@ jobs:
           cache: maven
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file starter/pom.xml
-    build-image-genefunk:
 
-      runs-on: ubuntu-latest
-      needs: test
+  build-genefunk:
+    runs-on: ubuntu-latest
+    needs: test
 
-      steps:
-        - uses: actions/checkout@v3
-        - name: Set up GraalVM 22.3.2
-          uses: graalvm/setup-graalvm@v1
-          with:
-            java-version: '17.0.7'
-            distribution: 'graalvm'
-            cache: maven
-        - name: Build with Spring Boot Native
-          run: mvn package -Pnative --file genefunk-starter/pom.xml
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up GraalVM 22.3.2
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17.0.7'
+          distribution: 'graalvm'
+          cache: maven
+      - name: Build with Spring Boot Native
+        run: mvn package -Pnative --file genefunk-starter/pom.xml
 
   deploy-base:
     needs:

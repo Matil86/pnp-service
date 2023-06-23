@@ -44,7 +44,7 @@ jobs:
 
   deploy-base:
     needs:
-      - build
+      - build-image
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -79,7 +79,7 @@ jobs:
 
   deploy-genefunk:
     needs:
-      - build
+      - build-image
     permissions:
       contents: 'read'
       id-token: 'write'

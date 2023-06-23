@@ -27,7 +27,7 @@ jobs:
       - name: Test with Maven
         run: mvn -B verify -U
 
-  build-image-base:
+  build-base:
 
     runs-on: ubuntu-latest
     needs: test
@@ -60,7 +60,7 @@ jobs:
 
   deploy-base:
     needs:
-      - build-image-base
+      - build-base
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -88,7 +88,7 @@ jobs:
 
   deploy-genefunk:
     needs:
-      - build-image-genefunk
+      - build-genefunk
     permissions:
       contents: 'read'
       id-token: 'write'

@@ -27,7 +27,7 @@ jobs:
       - name: Test with Maven
         run: mvn -B verify -U
 
-  build-image:
+  build-image-base:
 
     runs-on: ubuntu-latest
     needs: test
@@ -41,11 +41,26 @@ jobs:
           distribution: 'graalvm'
           cache: maven
       - name: Build with Spring Boot Native
-        run: mvn package -Pnative --file pom.xml
+        run: mvn package -Pnative --file starter/pom.xml
+    build-image-genefunk:
+
+      runs-on: ubuntu-latest
+      needs: test
+
+      steps:
+        - uses: actions/checkout@v3
+        - name: Set up GraalVM 22.3.2
+          uses: graalvm/setup-graalvm@v1
+          with:
+            java-version: '17.0.7'
+            distribution: 'graalvm'
+            cache: maven
+        - name: Build with Spring Boot Native
+          run: mvn package -Pnative --file genefunk-starter/pom.xml
 
   deploy-base:
     needs:
-      - build-image
+      - build-image-base
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -73,7 +88,7 @@ jobs:
 
   deploy-genefunk:
     needs:
-      - build-image
+      - build-image-genefunk
     permissions:
       contents: 'read'
       id-token: 'write'

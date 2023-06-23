@@ -37,7 +37,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '17'
-          version: '22.3.r17-grl'
+          version: '22.3.2'
           cache: maven
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file pom.xml

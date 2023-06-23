@@ -12,23 +12,6 @@ on:
     branches: [ "master" ,"live" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
 
   test:
     runs-on: ubuntu-latest
@@ -44,7 +27,25 @@ jobs:
       - name: Test with Maven
         run: mvn -B verify -U
 
-  deploy:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Spring Boot Native
+        run: mvn package -Pnative --file pom.xml
+
+      - name: Update dependency graph
+        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+
+  deploy-base:
     needs:
       - test
     permissions:
@@ -70,15 +71,39 @@ jobs:
       #   with:
       #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Deploy to Cloud Run
-        id: deploy
+      - name: Deploy to Base Service Cloud Run
+        id: deploy_base
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: ${{ env.BASE_SERVICE }}
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
-          source: ./starter
+          source: ./starter/target/starter
 
-      # If required, use the Cloud Run url output in later steps
-      - name: Show Output
-        run: echo ${{ steps.deploy.outputs.url }}
+  deploy-genefunk:
+    needs:
+      - test
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    if: github.ref == 'refs/heads/live'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+
+      - name: Deploy to Genefunk Service Cloud Run
+        id: deploy_genefunk
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: ${{ env.GENEFUNK_SERVICE }}
+          region: ${{ env.REGION }}
+          # NOTE: If required, update to the appropriate source folder
+          source: ./genefunk/target/genefunk

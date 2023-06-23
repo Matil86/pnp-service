@@ -2,7 +2,8 @@ name: Java CI with Maven and Deploy to Cloud Run if on live branch
 
 env:
   PROJECT_ID: character-generator-service
-  BASE_SERVICE: pnp-character-generator-service
+  BASE_SERVICE: character-generator-service
+  GENEFUNK_SERVICE: genefunk-generator-service
   REGION: europe-west3
 
 on:

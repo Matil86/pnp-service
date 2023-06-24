@@ -91,7 +91,7 @@ jobs:
           service: ${{ env.BASE_SERVICE }}
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
-          source: ./starter/target/starter
+          image: ./starter/target/starter
 
   deploy-genefunk:
     needs:
@@ -119,4 +119,4 @@ jobs:
           service: ${{ env.GENEFUNK_SERVICE }}
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
-          source: ./genefunk/target/genefunk
+          image: ./genefunk/target/genefunk

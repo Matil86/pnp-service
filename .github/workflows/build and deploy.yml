@@ -92,6 +92,7 @@ jobs:
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
           image: ./starter/target/starter
+          flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
   deploy-genefunk:
     needs:
@@ -107,7 +108,7 @@ jobs:
 
       - name: Google Auth
         id: auth
-        uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
@@ -120,3 +121,4 @@ jobs:
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
           image: ./genefunk/target/genefunk
+          flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'

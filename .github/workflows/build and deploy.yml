@@ -34,14 +34,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: package with Maven
-        run: mvn package -U
       - name: Set up GraalVM 22.3.2
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '17.0.7'
           distribution: 'graalvm'
           cache: maven
+      - name: package with Maven
+        run: mvn package -U
+      
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file starter/pom.xml
 
@@ -51,16 +52,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: package with Maven
-        run: mvn package -U
-     
       - name: Set up GraalVM 22.3.2
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '17.0.7'
           distribution: 'graalvm'
           cache: maven
+
+      - name: package with Maven
+        run: mvn package -U
+      
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file genefunk-starter/pom.xml
 

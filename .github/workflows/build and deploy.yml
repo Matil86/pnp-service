@@ -84,14 +84,16 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
+      - name: Maven Deploy
+        run: mvn deploy -Dpackaging=docker-native \ -Djib.to.image=gcr.io/hippComputing/${{env.BASE_SERVICE }}:latest -Dfile=./starter/target/starter
+
       - name: Deploy to Base Service Cloud Run
         id: deploy_base
         uses: 'google-github-actions/deploy-cloudrun@v0'
         with:
           service: ${{ env.BASE_SERVICE }}
           region: ${{ env.REGION }}
-          # NOTE: If required, update to the appropriate source folder
-          image: ./starter/target/starter
+          image: gcr.io/hippComputing/${{env.BASE_SERVICE }}:latest
           flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
   deploy-genefunk:

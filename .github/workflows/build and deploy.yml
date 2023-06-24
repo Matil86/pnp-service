@@ -86,7 +86,7 @@ jobs:
 
       - name: Deploy to Base Service Cloud Run
         id: deploy_base
-        uses: 'google-github-actions/deploy-cloudrun@v1'
+        uses: 'google-github-actions/deploy-cloudrun@v0'
         with:
           service: ${{ env.BASE_SERVICE }}
           region: ${{ env.REGION }}
@@ -107,7 +107,7 @@ jobs:
 
       - name: Google Auth
         id: auth
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v0'
         with:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'

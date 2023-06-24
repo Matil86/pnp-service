@@ -41,8 +41,8 @@ jobs:
           distribution: 'graalvm'
           cache: maven
       - name: package with Maven
-        run: mvn package -U
-      
+        run: mvn install -U
+
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file starter/pom.xml
 
@@ -60,8 +60,8 @@ jobs:
           cache: maven
 
       - name: package with Maven
-        run: mvn package -U
-      
+        run: mvn install -U
+
       - name: Build with Spring Boot Native
         run: mvn package -Pnative --file genefunk-starter/pom.xml
 

@@ -5,6 +5,7 @@ env:
   BASE_SERVICE: character-generator-service
   GENEFUNK_SERVICE: genefunk-generator-service
   REGION: europe-west3
+  VERSION: 1.0.0-SNAPSHOT
 
 on:
   push:
@@ -85,7 +86,7 @@ jobs:
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
       - name: Docker Tag
-        run: docker tag  ${{env.BASE_SERVICE }}:0.0.1-SNAPSHOT $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+        run: docker tag  ./starter/target/starter:${{ env.VERSION }} $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
       - name: Docker Push
         run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
 
@@ -118,10 +119,10 @@ jobs:
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
       - name: Docker Tag
-        run: docker tag  ${{env.BASE_SERVICE }}:0.0.1-SNAPSHOT $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+        run: docker tag  ./genefunk-starter/target/genefunk-starter:${{ env.VERSION }} $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.GENEFUNK_SERVICE }}:latest
       - name: Docker Push
-        run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
-            
+        run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.GENEFUNK_SERVICE }}:latest
+
       - name: Deploy to Genefunk Service Cloud Run
         id: deploy_genefunk
         uses: 'google-github-actions/deploy-cloudrun@v1'
@@ -129,5 +130,5 @@ jobs:
           service: ${{ env.GENEFUNK_SERVICE }}
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
-          image: ./genefunk/target/genefunk
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.GENEFUNK_SERVICE }}:latest
           flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'

@@ -84,8 +84,10 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
-      - name: Maven Deploy
-        run: mvn deploy -Dpackaging=docker-native \ -Djib.to.image=gcr.io/hippComputing/${{env.BASE_SERVICE }}:latest -Dfile=./starter/target/starter
+      - name: Docker Tag
+        run: docker tag  ${{env.BASE_SERVICE }}:0.0.1-SNAPSHOT $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+      - name: Docker Push
+        run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
 
       - name: Deploy to Base Service Cloud Run
         id: deploy_base
@@ -93,7 +95,7 @@ jobs:
         with:
           service: ${{ env.BASE_SERVICE }}
           region: ${{ env.REGION }}
-          image: gcr.io/hippComputing/${{env.BASE_SERVICE }}:latest
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
           flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
   deploy-genefunk:
@@ -115,6 +117,11 @@ jobs:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
+      - name: Docker Tag
+        run: docker tag  ${{env.BASE_SERVICE }}:0.0.1-SNAPSHOT $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+      - name: Docker Push
+        run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+            
       - name: Deploy to Genefunk Service Cloud Run
         id: deploy_genefunk
         uses: 'google-github-actions/deploy-cloudrun@v1'

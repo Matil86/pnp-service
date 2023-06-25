@@ -86,7 +86,7 @@ jobs:
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
 
       - name: Docker Tag
-        run: docker tag  ./starter/target/starter:${{ env.VERSION }} $REGION-docker.pkg.dev/$PROJECT_ID/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
+        run: docker tag  ./starter/target/starter:${{ env.VERSION }} ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
       - name: Docker Push
         run: docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/spring-boot-native-repository/${{env.BASE_SERVICE }}:latest
 

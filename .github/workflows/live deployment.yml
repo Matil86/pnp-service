@@ -1,0 +1,24 @@
+name: Java CI with Maven and Deploy to Cloud Run if on live branch
+
+on:
+  push:
+    branches: [ "live" ]
+
+jobs:
+
+
+  pipeline-base:
+    uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
+    with:
+      build_image: character-generator-service
+      service_name: character-generator-service
+      pom_folder: starter
+    secrets: inherit
+
+  pipeline-genefunk:
+    uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
+    with:
+      build_image: genefunk-generator-service
+      service_name: genefunk-generator-service
+      pom_folder: genefunk-starter
+    secrets: inherit

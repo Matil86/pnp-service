@@ -1,4 +1,4 @@
-name: Java CI with Maven and Deploy to Cloud Run if on live branch
+name: Build Spring Boot Native Image and deploy it to Cloud Run for live branch
 
 on:
   push:

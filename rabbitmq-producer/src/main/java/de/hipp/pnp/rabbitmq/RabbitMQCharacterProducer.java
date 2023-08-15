@@ -53,8 +53,7 @@ public class RabbitMQCharacterProducer implements FiveECharacterProducer {
 			log.error("couldn't send message: {}", message, e);
 		}
 		log.debug("Response was => {}", responseObject);
-		assert responseObject != null;
-		return String.valueOf(responseObject.getPayload());
+		return responseObject == null ? null : String.valueOf(responseObject.getPayload());
 	}
 
 	private void prepareTemplate(String exchangeName) {

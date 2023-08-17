@@ -57,6 +57,7 @@ public class RabbitMQProducerConfiguration {
 		ccf.setAddresses(host + ":5672");
 		ccf.setUsername(username);
 		ccf.setPassword(password);
+		ccf.setVirtualHost(username);
 		ccf.setAddressShuffleMode(AbstractConnectionFactory.AddressShuffleMode.INORDER);
 		return ccf;
 	}

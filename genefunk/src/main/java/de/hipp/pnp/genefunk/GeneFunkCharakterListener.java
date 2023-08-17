@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hipp.pnp.api.fivee.DefaultMessage;
+import de.hipp.pnp.api.fivee.E5EGameTypes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class GeneFunkCharakterListener {
 		this.mapper = mapper;
 	}
 
-	@RabbitListener(queues = "GET_ALL_GENEFUNK")
+	@RabbitListener(queues = "GET_ALL_CHARACTERS")
 	public String getAllGenefunkCharacters(String character) throws IOException {
 		var message = mapper.readValue(character, new TypeReference<DefaultMessage<List<GeneFunkCharacter>>>() {
 		});
@@ -34,10 +35,13 @@ public class GeneFunkCharakterListener {
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message);
 	}
 
-	@RabbitListener(queues = "CREATE_GENEFUNK")
+	@RabbitListener(queues = "CREATE_CHARACTER")
 	protected String createGenefunkCharacter(String character) throws JsonProcessingException {
 		var message = mapper.readValue(character, new TypeReference<DefaultMessage<GeneFunkCharacter>>() {
 		});
+		if (!message.getAction().equals(E5EGameTypes.GENEFUNK.name())) {
+			return null;
+		}
 		GeneFunkCharacter genChar = service.generate(message.getPayload());
 		message.setAction("finished");
 		message.setPayload(genChar);

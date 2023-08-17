@@ -22,7 +22,6 @@
         <module>genefunk</module>
         <module>genefunk-starter</module>
         <module>genefunk-bootstrap</module>
-        <module>rabbitmq-producer</module>
     </modules>
 
     <properties>

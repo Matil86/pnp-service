@@ -1,6 +1,5 @@
 package de.hipp.pnp;
 
-import de.hipp.pnp.api.fivee.interfaces.FiveECharacterProducer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +11,9 @@ import static de.hipp.pnp.base.fivee.constants.UrlConstants.CHARACTERURL;
 @RequestMapping(CHARACTERURL)
 public class CharacterRestController {
 
-	final FiveECharacterProducer characterService;
+	final RabbitMQCharacterProducer characterService;
 
-	public CharacterRestController(FiveECharacterProducer characterService) {
+	public CharacterRestController(RabbitMQCharacterProducer characterService) {
 		this.characterService = characterService;
 	}
 

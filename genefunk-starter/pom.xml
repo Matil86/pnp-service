@@ -40,8 +40,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.hipp.pnp</groupId>
             <artifactId>base</artifactId>
+            <groupId>de.hipp.pnp</groupId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

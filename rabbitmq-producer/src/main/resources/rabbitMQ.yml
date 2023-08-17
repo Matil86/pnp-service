@@ -1,1 +1,5 @@
-spring.rabbitmq.host=${RABBITMQ_HOST}
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}

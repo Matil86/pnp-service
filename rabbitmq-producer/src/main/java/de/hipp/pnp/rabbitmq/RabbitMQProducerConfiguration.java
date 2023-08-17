@@ -17,6 +17,10 @@ public class RabbitMQProducerConfiguration {
 
 	@Value("${spring.rabbitmq.host}")
 	String host;
+	@Value("${spring.rabbitmq.username}")
+	String username;
+	@Value("${spring.rabbitmq.password}")
+	String password;
 	static final String TOPIC_EXCHANGE_CHARACTER_CREATION = "characterGeneration";
 	static final String QUEUE_GET_ALL_CHARACTERS = "GET_ALL_GENEFUNK";
 
@@ -51,6 +55,8 @@ public class RabbitMQProducerConfiguration {
 	public CachingConnectionFactory ccf() {
 		CachingConnectionFactory ccf = new CachingConnectionFactory();
 		ccf.setAddresses(host + ":5672");
+		ccf.setUsername(username);
+		ccf.setPassword(password);
 		ccf.setAddressShuffleMode(AbstractConnectionFactory.AddressShuffleMode.INORDER);
 		return ccf;
 	}

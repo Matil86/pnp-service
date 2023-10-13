@@ -15,6 +15,15 @@ jobs:
       pom_folder: starter
     secrets: inherit
 
+
+  pipeline-data:
+    uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
+    with:
+      build_image: data-service
+      service_name: data-service
+      pom_folder: data-starter
+    secrets: inherit
+
   pipeline-genefunk:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     with:

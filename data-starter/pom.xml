@@ -39,7 +39,7 @@
     </build>
     <dependencies>
         <dependency>
-            <artifactId>base</artifactId>
+            <artifactId>starter</artifactId>
             <groupId>de.hipp.pnp</groupId>
             <version>${project.version}</version>
         </dependency>

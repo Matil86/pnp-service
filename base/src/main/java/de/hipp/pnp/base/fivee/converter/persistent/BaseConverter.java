@@ -2,53 +2,54 @@ package de.hipp.pnp.base.fivee.converter.persistent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import jakarta.persistence.AttributeConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class BaseConverter<Y> implements AttributeConverter<Y, String> {
+import java.io.IOException;
 
-  ObjectMapper objectMapper = new ObjectMapper();
-  Logger logger = LoggerFactory.getLogger(this.getClass());
+public abstract class BaseConverter<Y> implements AttributeConverter<Y, String> {
 
-  Y type;
+	ObjectMapper objectMapper = new ObjectMapper();
+	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Override
-  public String convertToDatabaseColumn(Y customerInfo) {
+	Y type;
 
-    String customerInfoJson = null;
-    try {
-      customerInfoJson = objectMapper.writeValueAsString(customerInfo);
-    } catch (final JsonProcessingException e) {
-      logger.error("JSON writing error", e);
-    }
+	@Override
+	public String convertToDatabaseColumn(Y customerInfo) {
 
-    return customerInfoJson;
-  }
+		String customerInfoJson = null;
+		try {
+			customerInfoJson = objectMapper.writeValueAsString(customerInfo);
+		} catch (final JsonProcessingException e) {
+			logger.error("JSON writing error", e);
+		}
 
-  @Override
-  public Y convertToEntityAttribute(String customerInfoJSON) {
+		return customerInfoJson;
+	}
 
-    Y valueInfo = null;
-    if (Strings.isBlank(customerInfoJSON)) {
-      return null;
-    }
-    try {
-      valueInfo = objectMapper.readValue(
-          customerInfoJSON,
-          objectMapper.getTypeFactory().constructType(type.getClass())
-      );
-    } catch (final IOException e) {
-      logger.error("JSON reading error", e);
-    }
+	@Override
+	public Y convertToEntityAttribute(String customerInfoJSON) {
 
-    return valueInfo;
-  }
+		Y valueInfo = null;
+		if (Strings.isBlank(customerInfoJSON)) {
+			return null;
+		}
+		try {
+			valueInfo = objectMapper.readValue(
+					customerInfoJSON,
+					objectMapper.getTypeFactory().constructType(type.getClass())
+			);
+		} catch (final IOException e) {
+			logger.error("JSON reading error", e);
+		}
 
-  public BaseConverter<Y> setType(Y type) {
-    this.type = type;
-    return this;
-  }
+		return valueInfo;
+	}
+
+	public BaseConverter<Y> setType(Y type) {
+		this.type = type;
+		return this;
+	}
 }

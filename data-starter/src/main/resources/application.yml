@@ -1,1 +1,24 @@
-SERVER_PORT: 0
+server:
+  port: ${SERVER_PORT}
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto:update
+    database: h2
+    open-in-view: false
+  profiles:
+    include:
+      - genefunk-crb-classes
+      - genefunk-crb-locale
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./data/database;AUTO_SERVER=TRUE
+    username: sa
+    password: sa
+  data:
+    jpa:
+      repositories:
+        enabled: true

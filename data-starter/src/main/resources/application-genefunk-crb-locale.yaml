@@ -1,5 +1,5 @@
 locale:
-  en-US:
+  enUS:
     genefunk:
       canary:
         label: "Canary"

@@ -1,14 +1,6 @@
 locale:
   enUS:
     genefunk:
-      canary:
-        label: "Canary"
-        description: "Despite its gentle sounding name, the Canary genome is made of the toughest stuff there is. This Hexie designed genome was developed for working in deep mines doing heavy manual labor and is one of the earliest genomes that is still in production. The oppressed laborers of the Canary genome were quite numerous among the transgenic uprisings in China. Canaries have been designed to possess excellentdurability to better survive the harsh conditions present in deep mines and other blue-collar jobs where safetyregulations may have been lacking. Be it an injury from factory machinery or poisonous gas, the Canary genome can handle it much better than unmodified humans. While many do find employment in dangerous mining or oil rig labor, others have found their talents useful in alternate fields, such as professional fighting,stunt acting, the military, or hired muscle."
-      coelhomortos:
-        label: "Coelhomortos"
-        description: "A result of the golden age of animal hybrid genomes and enhanced sports, the rabbit like Coelhomortos genome was illegally developed in the Bosque Oscuro, deep in the Amazon basin. At the time of their creation, an underground market for transgenic blood sports was booming, and the Coelhomortos were engineered to be prey for more predatory genomes in a brutal game of capture the flag. They are designed to work well as a team and are fast, agile, and alert. Earlier Coelhomortos incarnations tended to get uniformly slaughtered in the sport, but later production lines were toughened up to make the events more sporting, and since then, they have developed a fierce reputation. Such blood sports are rare in 2090, but the Coelhomortos genome is still popular for more mainstream athletics and are fan-favorites in many of the traditional team sports. Their short lifespan lends itself to a more reckless lifestyle full of risk and adventure"
-      companion:
-        description: "The companion genome was designed for sex work, entertainment, social manipulation, and media communication. The great seductive powers of this genome enable them to induce cooperation and manipulate others. Their beauty is enough to drive men and women mad with desire. Even those not attracted to them are overwhelmed by their amazing presence and charm. This genome has seen extensive use in highclass brothels, exotic dancing, the media, music, acting, and even politics."
       athleticism:
         label: "Athleticism"
         description: "You gain proficiency in the Athletics and Acrobatics skills."
@@ -18,9 +10,17 @@ locale:
       blindLoyalty:
         label: "Blind Loyalty"
         description: "You have absolute devotion to a small group you identify as your pack and will put yourself in harms way to protect any one of them, even if you think itï¿½s hopeless. This group is almost always your cadre"
+      canary:
+        label: "Canary"
+        description: "Despite its gentle sounding name, the Canary genome is made of the toughest stuff there is. This Hexie designed genome was developed for working in deep mines doing heavy manual labor and is one of the earliest genomes that is still in production. The oppressed laborers of the Canary genome were quite numerous among the transgenic uprisings in China. Canaries have been designed to possess excellentdurability to better survive the harsh conditions present in deep mines and other blue-collar jobs where safetyregulations may have been lacking. Be it an injury from factory machinery or poisonous gas, the Canary genome can handle it much better than unmodified humans. While many do find employment in dangerous mining or oil rig labor, others have found their talents useful in alternate fields, such as professional fighting,stunt acting, the military, or hired muscle."
       chemicalDependence:
         label: "Chemical Dependence"
         description: "In addition to regular food, you must consume a nutrient supplement called Median every day. Failure to get this supplement counts as not eating at all. This supplement is available in most cities and is covered by your lifestyle (see Chapter 8: Completing Contracts), but it might be a problem doing long term camping, and costs ?25 per day for field rations."
+      coelhomortos:
+        label: "Coelhomortos"
+        description: "A result of the golden age of animal hybrid genomes and enhanced sports, the rabbit like Coelhomortos genome was illegally developed in the Bosque Oscuro, deep in the Amazon basin. At the time of their creation, an underground market for transgenic blood sports was booming, and the Coelhomortos were engineered to be prey for more predatory genomes in a brutal game of capture the flag. They are designed to work well as a team and are fast, agile, and alert. Earlier Coelhomortos incarnations tended to get uniformly slaughtered in the sport, but later production lines were toughened up to make the events more sporting, and since then, they have developed a fierce reputation. Such blood sports are rare in 2090, but the Coelhomortos genome is still popular for more mainstream athletics and are fan-favorites in many of the traditional team sports. Their short lifespan lends itself to a more reckless lifestyle full of risk and adventure"
+      companion:
+        description: "The companion genome was designed for sex work, entertainment, social manipulation, and media communication. The great seductive powers of this genome enable them to induce cooperation and manipulate others. Their beauty is enough to drive men and women mad with desire. Even those not attracted to them are overwhelmed by their amazing presence and charm. This genome has seen extensive use in highclass brothels, exotic dancing, the media, music, acting, and even politics."
       dangerSense:
         label: "Danger Sense"
         description: "A mixture of excellent peripheral vision and other sensory tweaks leaves you with an excellent sense for danger. You gain the following benefits: You gain a +5 bonus to initiative You canï¿½t be surprised while you are conscious Other people donï¿½t gain advantage on attack rolls against you as a result of being hidden from you."

@@ -13,7 +13,7 @@ import java.util.Map;
 @Getter
 @Slf4j
 @Configuration
-@ConfigurationProperties(prefix = "locale")
+@ConfigurationProperties(prefix = "languagekeys")
 public class LanguageKeyConfiguration {
-	private Map<String, Map<String, LanguageKey>> enUS = new HashMap<>();
+	private Map<String, Map<String, Map<String, LanguageKey>>> locale = new HashMap<>();
 }

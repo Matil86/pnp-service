@@ -43,5 +43,10 @@
             <groupId>de.hipp.pnp</groupId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>data</artifactId>
+            <groupId>de.hipp.pnp</groupId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

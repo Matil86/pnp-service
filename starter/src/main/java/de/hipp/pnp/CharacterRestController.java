@@ -1,5 +1,8 @@
 package de.hipp.pnp;
 
+import de.hipp.pnp.rabbitmq.CharacterProducer;
+import de.hipp.pnp.rabbitmq.DataProducer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -7,25 +10,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static de.hipp.pnp.base.fivee.constants.UrlConstants.CHARACTERURL;
 
+@Slf4j
 @RestController
 @RequestMapping(CHARACTERURL)
 public class CharacterRestController {
 
-	final RabbitMQCharacterProducer characterService;
+    final CharacterProducer characterProducer;
+    final DataProducer dataProducer;
 
-	public CharacterRestController(RabbitMQCharacterProducer characterService) {
-		this.characterService = characterService;
-	}
+    public CharacterRestController(CharacterProducer characterProducer, DataProducer dataProducer) {
+        this.characterProducer = characterProducer;
+        this.dataProducer = dataProducer;
+    }
 
-	@GetMapping
-	public String getAllCharacters() {
-		return characterService.getAllCharacters();
-	}
+    @GetMapping
+    public String getAllCharacters() {
+        log.info(dataProducer.getAllLanguageKeys().toString());
+        return characterProducer.getAllCharacters();
+    }
 
-	@GetMapping("/generate")
-	public String generateCharacter(
-			@RequestParam(value = "gameType", defaultValue = "1") int gameType) {
-		return characterService.generate(gameType);
-	}
+    @GetMapping("/generate")
+    public String generateCharacter(
+            @RequestParam(value = "gameType", defaultValue = "1") int gameType) {
+        return characterProducer.generate(gameType);
+    }
 
 }

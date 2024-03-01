@@ -1,13 +1,13 @@
 package de.hipp.pnp.genefunk;
 
+import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService;
 import de.hipp.pnp.base.fivee.Attribute5e;
 import de.hipp.pnp.base.fivee.DiceRoller;
-import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService;
-import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -66,8 +66,8 @@ public class GeneFunkCharacterService implements FiveECharacterService<GeneFunkC
         if (Objects.isNull(character.getCharisma())) {
             character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
         }
-        if (!genomes.isEmpty() && Objects.isNull(character.getRace())) {
-            character.setRace((GeneFunkGenome) pickRandom(genomes));
+        if (!genomes.isEmpty() && Objects.isNull(character.getGenome())) {
+            character.setGenome((GeneFunkGenome) pickRandom(genomes));
         }
         if (!classes.isEmpty() && Objects.isNull(character.getCharacterClasses())) {
             character.addClass((GeneFunkClass) pickRandom(classes));

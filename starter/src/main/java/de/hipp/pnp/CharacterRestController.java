@@ -25,7 +25,6 @@ public class CharacterRestController {
 
     @GetMapping
     public String getAllCharacters() {
-        log.info(dataProducer.getAllLanguageKeys().toString());
         return characterProducer.getAllCharacters();
     }
 

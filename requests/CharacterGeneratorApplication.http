@@ -1,9 +1,9 @@
-GET {{host}}/character
+GET {{host}}/resource/character
 
 <> 2024-03-01T151849.200.txt
 
 ###
-GET {{host}}/character/generate?gameType=1
+GET {{host}}/resource/character/generate?gameType=1
 
 <> 2024-03-01T151906.200.txt
 

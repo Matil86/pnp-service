@@ -18,13 +18,14 @@
     <modules>
         <module>api</module>
         <module>base</module>
-        <module>starter</module>
+        <module>character-generator-starter</module>
         <module>genefunk</module>
         <module>genefunk-starter</module>
         <module>genefunk-bootstrap</module>
         <module>data-starter</module>
         <module>data</module>
         <module>security</module>
+        <module>security-starter</module>
     </modules>
 
     <properties>

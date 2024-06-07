@@ -1,12 +1,12 @@
 package de.hipp.pnp.security;
 
-enum Roles {
+public enum Role {
     USER("USER"),
     ADMIN("ADMIN");
 
     private final String value;
 
-    Roles(String value) {
+    Role(String value) {
         this.value = value;
     }
 

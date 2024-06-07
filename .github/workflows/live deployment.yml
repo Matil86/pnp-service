@@ -12,7 +12,7 @@ jobs:
     with:
       build_image: character-generator-service
       service_name: character-generator-service
-      pom_folder: starter
+      pom_folder: character-generator-starter
     secrets: inherit
 
 
@@ -22,6 +22,14 @@ jobs:
       build_image: data-service
       service_name: data-service
       pom_folder: data-starter
+    secrets: inherit
+
+  pipeline-security:
+    uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
+    with:
+      build_image: security-service
+      service_name: security-service
+      pom_folder: security-starter
     secrets: inherit
 
   pipeline-genefunk:

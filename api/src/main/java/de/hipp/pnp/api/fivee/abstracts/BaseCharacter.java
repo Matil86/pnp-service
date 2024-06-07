@@ -1,6 +1,5 @@
 package de.hipp.pnp.api.fivee.abstracts;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +20,6 @@ public class BaseCharacter {
     private String firstName;
     private String lastName;
     private Integer level;
-    @JsonAlias("genome")
-    private BaseCharacterRace race;
     protected Set<BaseCharacterClass> characterClasses;
 
     @Override

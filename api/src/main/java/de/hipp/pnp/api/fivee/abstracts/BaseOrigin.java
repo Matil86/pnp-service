@@ -13,13 +13,13 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class BaseCharacterRace {
-	private String name;
-	private String description;
-	private Map<String, Integer> attributes = new HashMap<>();
+public abstract class BaseOrigin {
+    private String name;
+    private String description;
+    private Map<String, Integer> attributes = new HashMap<>();
 
-	@JsonIgnore
-	public void addAttributeChange(String key, Integer value) {
-		attributes.put(key, value);
-	}
+    @JsonIgnore
+    public void addAttributeChange(String key, Integer value) {
+        attributes.put(key, value);
+    }
 }

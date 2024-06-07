@@ -8,6 +8,7 @@ GENEFUNK (WIP)
 
 Thinks to do:
 
+- OAuth2
 - HTTPS aktivieren
 - Speichern Service
 - Übertragung des Contents für GENEFUNK

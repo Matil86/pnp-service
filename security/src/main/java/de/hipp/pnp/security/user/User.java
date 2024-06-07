@@ -1,7 +1,6 @@
 package de.hipp.pnp.security.user;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.hipp.pnp.security.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +25,6 @@ public class User {
     String name;
     String externalIdentifer;
     String mail;
-    Role role;
+    String role;
 
 }

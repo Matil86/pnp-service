@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
 import de.hipp.pnp.base.fivee.Attribute5e;
-import de.hipp.pnp.base.fivee.constants.AttributeConstants;
+import de.hipp.pnp.base.constants.AttributeConstants;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +29,7 @@ public class GeneFunkCharacter extends BaseCharacter {
     Integer gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
+    String userId;
 
     Integer level = 1;
 

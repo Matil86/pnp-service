@@ -1,19 +1,26 @@
 package de.hipp.pnp;
 
+import de.hipp.pnp.base.dto.Customer;
+import de.hipp.pnp.base.rabbitmq.UserInfoProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,8 +29,10 @@ import java.util.Set;
 @Slf4j
 public class SecurityConfiguration {
 
-    public SecurityConfiguration() {
+    private final UserInfoProducer userInfoProducer;
 
+    public SecurityConfiguration(UserInfoProducer userInfoProducer) {
+        this.userInfoProducer = userInfoProducer;
     }
 
     @Bean
@@ -59,6 +68,15 @@ public class SecurityConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.debug(false);
+    }
+
+    @Bean
+    public CorsConfiguration corsConfiguration() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        return corsConfiguration;
     }
 
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
@@ -104,5 +122,18 @@ public class SecurityConfiguration {
 
             return mappedAuthorities;
         };
+    }
+
+    @Bean
+    public Customer customer() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return null;
+        }
+        DefaultOidcUser user = (DefaultOidcUser) auth.getPrincipal();
+        if (user == null) {
+            return null;
+        }
+        return userInfoProducer.getCustomerInfoFor(user.getName());
     }
 }

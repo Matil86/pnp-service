@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
-import de.hipp.pnp.api.fivee.DefaultMessage;
+import de.hipp.pnp.api.rabbitMq.DefaultMessage;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
-import de.hipp.pnp.base.fivee.constants.RoutingKeys;
+import de.hipp.pnp.base.constants.RoutingKeys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -38,7 +38,7 @@ public class GeneFunkCharakterListener {
     public String getAllGenefunkCharacters(String character) throws IOException {
         var message = mapper.readValue(character, new TypeReference<DefaultMessage<List<GeneFunkCharacter>>>() {
         });
-        List<GeneFunkCharacter> payload = service.getAllCharacters();
+        List<GeneFunkCharacter> payload = service.getAllCharacters(message.getHeader().getExternalId());
         message.setAction("finished");
         message.setPayload(payload);
         log.info("{} finished with {}", RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY, payload);
@@ -52,7 +52,7 @@ public class GeneFunkCharakterListener {
         if (!message.getAction().equals(E5EGameTypes.GENEFUNK.name())) {
             return null;
         }
-        GeneFunkCharacter payload = service.generate(message.getPayload());
+        GeneFunkCharacter payload = service.generate(message.getPayload(), message.getHeader().getExternalId());
         message.setAction("finished");
         message.setPayload(payload);
         log.info("{} finished with {}", RoutingKeys.CREATE_CHARACTER_ROUTING_KEY, payload);

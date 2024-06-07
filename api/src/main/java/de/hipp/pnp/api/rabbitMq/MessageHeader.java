@@ -1,5 +1,6 @@
-package de.hipp.pnp.api.fivee;
+package de.hipp.pnp.api.rabbitMq;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,8 @@ import org.springframework.stereotype.Component;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DefaultMessage<T> {
-
-    private String action;
-    private T payload;
-    private String detailMessage;
-    private String uuid;
-
+@JsonSerialize
+public class MessageHeader {
+    String externalId;
+    String[] roles;
 }

@@ -51,12 +51,17 @@ public class UserService {
         newUser.setVorname(attributes.get("given_name").toString());
         newUser.setName(attributes.get("name").toString());
         newUser.setExternalIdentifer(attributes.get("sub").toString());
-        newUser.setRole(isAdmin ? Role.ADMIN : Role.USER);
+        newUser.setRole(isAdmin ? Role.ADMIN.toString() : Role.USER.toString());
         userRepository.save(newUser);
         return newUser;
     }
 
     public void updateUser(User maskedUser) {
         userRepository.save(maskedUser);
+    }
+
+    public User getUserByExternalId(String externalUserId) {
+        var user = userRepository.getUserByExternalIdentifer(externalUserId);
+        return user;
     }
 }

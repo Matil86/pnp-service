@@ -1,4 +1,4 @@
-package de.hipp.pnp.base.fivee.constants;
+package de.hipp.pnp.base.constants;
 
 public class UrlConstants {
 

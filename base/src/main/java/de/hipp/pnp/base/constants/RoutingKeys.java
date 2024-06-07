@@ -1,4 +1,4 @@
-package de.hipp.pnp.base.fivee.constants;
+package de.hipp.pnp.base.constants;
 
 public class RoutingKeys {
 
@@ -7,4 +7,5 @@ public class RoutingKeys {
     public static final String GET_ALL_LANGUAGE_KEYS_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS";
     public static final String GET_ALL_LANGUAGE_KEYS_BY_GAME_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS_BY_GAME";
     public static final String GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE";
+    public static final String GET_INTERNAL_USER = "GET_INTERNAL_USER";
 }

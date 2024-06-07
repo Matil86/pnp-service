@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static de.hipp.pnp.base.fivee.constants.UrlConstants.CHARACTERURL;
+import static de.hipp.pnp.base.constants.UrlConstants.CHARACTERURL;
 
 @Slf4j
 @RestController
@@ -17,7 +17,7 @@ public class CharacterRestController {
 
     final CharacterProducer characterProducer;
     final DataProducer dataProducer;
-    
+
     public CharacterRestController(CharacterProducer characterProducer, DataProducer dataProducer) {
         this.characterProducer = characterProducer;
         this.dataProducer = dataProducer;

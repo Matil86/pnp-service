@@ -1,9 +1,7 @@
 package de.hipp.pnp.api.fivee;
 
 public enum E5EGameTypes {
-
-    DND(0),
-    GENEFUNK(1);
+    GENEFUNK(0);
 
     private final int value;
 

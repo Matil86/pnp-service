@@ -1,7 +1,9 @@
 package de.hipp.pnp.api.fivee.interfaces;
 
-public interface FiveECharacterProducer {
-	String generate(int gameType);
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-	String getAllCharacters();
+public interface FiveECharacterProducer {
+    String generate(int gameType) throws JsonProcessingException;
+
+    String getAllCharacters();
 }

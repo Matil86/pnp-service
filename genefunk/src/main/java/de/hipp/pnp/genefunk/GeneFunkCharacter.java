@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
-import de.hipp.pnp.base.fivee.Attribute5e;
 import de.hipp.pnp.base.constants.AttributeConstants;
+import de.hipp.pnp.base.fivee.Attribute5e;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +26,6 @@ public class GeneFunkCharacter extends BaseCharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    Integer gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
     String userId;
@@ -40,11 +39,12 @@ public class GeneFunkCharacter extends BaseCharacter {
     Attribute5e wisdom;
     Attribute5e charisma;
 
-    @OneToOne
+    @ManyToOne
     GeneFunkGenome genome;
 
     @JsonIgnore
     void initialize() {
+        this.setGameType(E5EGameTypes.GENEFUNK.getValue());
         if (this.getGenome() == null) {
             return;
         }

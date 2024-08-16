@@ -1,13 +1,11 @@
-package de.hipp.pnp;
+package de.hipp.pnp
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
-@SpringBootApplication(scanBasePackages = "de.hipp.*")
-public class GeneFunkServiceApplication {
+@SpringBootApplication(scanBasePackages = ["de.hipp.*"])
+open class GeneFunkServiceApplication()
 
-    public static void main(String[] args) {
-        SpringApplication.run(GeneFunkServiceApplication.class, args);
-    }
-
+fun main(args: Array<String>) {
+    SpringApplication.run(GeneFunkServiceApplication::class.java, *args)
 }

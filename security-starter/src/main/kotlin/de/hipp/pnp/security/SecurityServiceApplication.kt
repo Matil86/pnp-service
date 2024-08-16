@@ -1,11 +1,11 @@
-package de.hipp.pnp.security;
+package de.hipp.pnp.security
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
-@SpringBootApplication(scanBasePackages = "de.hipp.*")
-public class SecurityServiceApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(SecurityServiceApplication.class, args);
-    }
+@SpringBootApplication(scanBasePackages = ["de.hipp.*"])
+open class SecurityServiceApplication()
+
+fun main(args: Array<String>) {
+    SpringApplication.run(SecurityServiceApplication::class.java, *args)
 }

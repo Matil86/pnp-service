@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-interface GeneFunkFeatureRepository extends JpaRepository<Feature5e, Integer> {
-	@Query("select f from Feature5e f where f.label = :label")
-	Optional<Feature5e> findByLabel(@Param("label") String label);
+public interface GeneFunkFeatureRepository extends JpaRepository<Feature5e, Integer> {
+    @Query("select f from Feature5e f where f.label = :label")
+    Optional<Feature5e> findByLabel(@Param("label") String label);
 }

@@ -1,38 +1,32 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component
 
-@Slf4j
 @Component
-class GeneFunkClassBootstrap {
+internal class GeneFunkClassBootstrap(private val repository: GeneFunkClassRepository) {
+    init {
+        initialize()
+    }
 
-	private final GeneFunkClassRepository repository;
-
-	GeneFunkClassBootstrap(GeneFunkClassRepository repository) {
-		this.repository = repository;
-		initialize();
-	}
-
-	protected void initialize() {
-		if (this.repository.findByName("Biohacker").isEmpty()) {
-			this.repository.save(this.initiateBiohacker());
-		}
-		if (this.repository.findByName("Gunfighter").isEmpty()) {
-			this.repository.save(this.initiateGunfighter());
-		}
-	}
+    protected fun initialize() {
+        if (repository.findByName("Biohacker").isEmpty) {
+            repository.save(this.initiateBiohacker())
+        }
+        if (repository.findByName("Gunfighter").isEmpty) {
+            repository.save(this.initiateGunfighter())
+        }
+    }
 
 
-	private GeneFunkClass initiateBiohacker() {
-		GeneFunkClass biohacker = new GeneFunkClass();
-		biohacker.setName("Biohacker");
-		return biohacker;
-	}
+    private fun initiateBiohacker(): GeneFunkClass {
+        val biohacker = GeneFunkClass()
+        biohacker.setName("Biohacker")
+        return biohacker
+    }
 
-	private GeneFunkClass initiateGunfighter() {
-		GeneFunkClass biohacker = new GeneFunkClass();
-		biohacker.setName("Gunfighter");
-		return biohacker;
-	}
+    private fun initiateGunfighter(): GeneFunkClass {
+        val biohacker = GeneFunkClass()
+        biohacker.setName("Gunfighter")
+        return biohacker
+    }
 }

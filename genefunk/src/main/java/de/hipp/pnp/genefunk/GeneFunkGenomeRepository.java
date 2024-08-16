@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-interface GeneFunkGenomeRepository extends JpaRepository<GeneFunkGenome, Integer> {
-	Optional<GeneFunkGenome> findByName(String name);
+public interface GeneFunkGenomeRepository extends JpaRepository<GeneFunkGenome, Integer> {
+    Optional<GeneFunkGenome> findByName(String name);
 }

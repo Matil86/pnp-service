@@ -31,12 +31,6 @@ public class DataProducer extends BaseProducer<Map<String, Map<String, Map<Strin
     }
 
     @Override
-    public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameType(int gameType) {
-        Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> response = this.sendMessageForRoutingKey(RoutingKeys.GET_ALL_LANGUAGE_KEYS_BY_GAME_ROUTING_KEY, E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK));
-        return response == null ? Collections.EMPTY_MAP : response;
-    }
-
-    @Override
     public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale) {
         LanguageRequest request = new LanguageRequest();
         request.setGameType(gameType);

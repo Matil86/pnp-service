@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @Slf4j
@@ -36,11 +37,15 @@ public class DataProducer extends BaseProducer<Map<String, Map<String, Map<Strin
     }
 
     @Override
-    public Map<String, Map<String, Map<String, LanguageValue>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale) {
+    public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale) {
         LanguageRequest request = new LanguageRequest();
         request.setGameType(gameType);
         request.setLocale(locale);
-        Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> responseMap = this.sendMessageForRoutingKey(RoutingKeys.GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY, E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK), request);
-        return responseMap.get(locale) == null ? Collections.EMPTY_MAP : responseMap.get(locale);
+        Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> responseMap =
+                this.sendMessageForRoutingKey(
+                        RoutingKeys.GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY,
+                        E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK),
+                        request);
+        return Objects.requireNonNullElse(responseMap, Collections.EMPTY_MAP);
     }
 }

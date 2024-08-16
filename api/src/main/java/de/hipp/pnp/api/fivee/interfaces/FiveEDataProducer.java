@@ -12,5 +12,5 @@ public interface FiveEDataProducer {
     public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameType(int gameType);
 
     // <LanguageKey, LanguageEntry>
-    public Map<String, Map<String, Map<String, LanguageValue>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale);
+    public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale);
 }

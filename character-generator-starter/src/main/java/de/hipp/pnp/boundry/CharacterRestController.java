@@ -1,4 +1,4 @@
-package de.hipp.pnp;
+package de.hipp.pnp.boundry;
 
 import de.hipp.pnp.rabbitmq.CharacterProducer;
 import de.hipp.pnp.rabbitmq.DataProducer;
@@ -33,5 +33,6 @@ public class CharacterRestController {
             @RequestParam(value = "gameType", defaultValue = "1") int gameType) {
         return characterProducer.generate(gameType);
     }
+
 
 }

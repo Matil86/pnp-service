@@ -1,18 +1,11 @@
-package de.hipp.pnp.security;
+package de.hipp.pnp.security
 
-public enum Role {
+enum class Role(private val value: String) {
     USER("USER"),
     ADMIN("ADMIN");
 
-    private final String value;
 
-    Role(String value) {
-        this.value = value;
-    }
-
-
-    @Override
-    public String toString() {
-        return this.value;
+    override fun toString(): String {
+        return this.value
     }
 }

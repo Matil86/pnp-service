@@ -1,67 +1,58 @@
-package de.hipp.pnp.security.user;
+package de.hipp.pnp.security.user
 
-import de.hipp.pnp.security.Role;
-import org.springframework.stereotype.Service;
-
-import java.util.Map;
+import de.hipp.pnp.security.Role
+import org.springframework.stereotype.Service
 
 @Service
-public class UserService {
-
-    private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+class UserService(private var userRepository: UserRepository) {
+    fun userExists(sub: String?): Boolean {
+        return userRepository.getUserByExternalIdentifer(sub) != null
     }
 
-    public boolean userExists(String sub) {
-        return userRepository.getUserByExternalIdentifer(sub) != null;
-    }
-
-    public String getRole(String sub) {
-        String role = "ANNONYMOUS";
-        User user = userRepository.getUserByExternalIdentifer(sub);
+    fun getRole(sub: String?): String {
+        var role = "ANNONYMOUS"
+        val user = userRepository.getUserByExternalIdentifer(sub)
         if (user != null) {
-            role = user.getRole().toString();
+            role = user.role.toString()
         }
-        return role;
+        return role
     }
 
-    public User createUser(Map<String, Object> attributes) {
-        return create(attributes, false);
+    fun createUser(attributes: Map<String, Any>): User? {
+        return create(attributes, false)
     }
 
-    public User createAdmin(Map<String, Object> attributes) {
-        return create(attributes, true);
+    fun createAdmin(attributes: Map<String, Any>): User? {
+        return create(attributes, true)
     }
 
-    private User create(Map<String, Object> attributes, boolean isAdmin) {
+    private fun create(attributes: Map<String, Any>, isAdmin: Boolean): User? {
         if (attributes.isEmpty()) {
-            return null;
+            return null
         }
         if (!attributes.containsKey("email_verified")) {
-            return null;
+            return null
         }
-        if (!"true".equals(String.valueOf(attributes.get("email_verified")))) {
-            return null;
+        if ("true" != attributes["email_verified"].toString()) {
+            return null
         }
-        User newUser = new User();
-        newUser.setMail(attributes.get("email").toString());
-        newUser.setNachname(attributes.get("family_name").toString());
-        newUser.setVorname(attributes.get("given_name").toString());
-        newUser.setName(attributes.get("name").toString());
-        newUser.setExternalIdentifer(attributes.get("sub").toString());
-        newUser.setRole(isAdmin ? Role.ADMIN.toString() : Role.USER.toString());
-        userRepository.save(newUser);
-        return newUser;
+        val newUser = User()
+        newUser.mail = attributes["email"].toString()
+        newUser.nachname = attributes["family_name"].toString()
+        newUser.vorname = attributes["given_name"].toString()
+        newUser.name = attributes["name"].toString()
+        newUser.externalIdentifer = attributes["sub"].toString()
+        newUser.role = if (isAdmin) Role.ADMIN.toString() else Role.USER.toString()
+        userRepository.save(newUser)
+        return newUser
     }
 
-    public void updateUser(User maskedUser) {
-        userRepository.save(maskedUser);
+    fun updateUser(maskedUser: User) {
+        userRepository.save(maskedUser)
     }
 
-    public User getUserByExternalId(String externalUserId) {
-        var user = userRepository.getUserByExternalIdentifer(externalUserId);
-        return user;
+    fun getUserByExternalId(externalUserId: String?): User? {
+        val user = userRepository.getUserByExternalIdentifer(externalUserId)
+        return user
     }
 }

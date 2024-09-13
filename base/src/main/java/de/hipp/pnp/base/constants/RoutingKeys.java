@@ -7,4 +7,5 @@ public class RoutingKeys {
     public static final String GET_ALL_LANGUAGE_KEYS_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS";
     public static final String GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE";
     public static final String GET_INTERNAL_USER = "GET_INTERNAL_USER";
+    public static final String SAVE_NEW_USER = "SAVE_NEW_USER";
 }

@@ -4,6 +4,7 @@ import de.hipp.pnp.base.dto.Customer
 import de.hipp.pnp.base.rabbitmq.UserInfoProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -20,48 +21,52 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import org.springframework.web.cors.CorsConfiguration
+import java.util.UUID
 
 @Configuration
 @EnableWebSecurity
-open class SecurityConfiguration(var userInfoProducer: UserInfoProducer) {
+open class SecurityConfiguration(@Autowired private var userInfoProducer: UserInfoProducer) {
     var log: Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
+
 
     private fun userAuthoritiesMapper(): GrantedAuthoritiesMapper =
         GrantedAuthoritiesMapper { authorities: Collection<GrantedAuthority> ->
-            val mappedAuthorities = emptySet<GrantedAuthority>()
+            val mappedAuthorities = mutableSetOf<GrantedAuthority>()
 
             authorities.forEach { authority ->
                 if (authority is OidcUserAuthority) {
                     val attributes = authority.attributes
-                    val userRole = "ADMIN"
-
-                    /* if (userService.userExists(String.valueOf(attributes.get("sub")))) {
-                            userRole = userService.getRole(String.valueOf(attributes.get("sub")));
-                        } else {
-                            User createdUser = userService.createUser(attributes);
-                            if (createdUser != null) {
-                                userRole = Role.USER.toString();
-                                User maskedUser = this.maskUserData(createdUser);
-                                if (maskedUser != null) {
-                                    userService.updateUser(maskedUser);
-                                }
-                            }
-                        }*/
+                    var customer: Customer? = userInfoProducer.getCustomerInfoFor(attributes["sub"].toString())
+                    if (customer == null) {
+                        customer = Customer(
+                            UUID.randomUUID().toString(),
+                            attributes["given_name"] as String,
+                            attributes["family_name"] as String,
+                            attributes["name"] as String,
+                            attributes["sub"] as String,
+                            attributes["email"] as String,
+                            "USER",
+                        )
+                        customer = userInfoProducer.saveNewUser(customer)
+                    }
+                    val userRole = customer?.role ?: "ADMIN"
                     when (userRole) {
                         "ANNONYMOUS" -> {}
                         "USER" -> {
                             log.info("User found: {}", attributes["sub"])
-                            mappedAuthorities + (SimpleGrantedAuthority(userRole))
+                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
                         }
 
                         "ADMIN" -> {
                             log.info("Admin found: {}", attributes["sub"])
-                            mappedAuthorities + SimpleGrantedAuthority("ADMIN")
-                            mappedAuthorities + (SimpleGrantedAuthority("USER"))
+                            mappedAuthorities.add(SimpleGrantedAuthority("ADMIN"))
+                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
                         }
 
                         else -> log.error("Unknown role found {}", userRole)
                     }
+                } else if (authority is SimpleGrantedAuthority) {
+                    log.warn("SimpleGrantedAuthority authority: {}", authority.authority)
                 } else {
                     log.error("Unknown authority: {}", authority)
                 }

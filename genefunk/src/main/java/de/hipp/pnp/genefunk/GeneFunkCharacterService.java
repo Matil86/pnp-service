@@ -39,7 +39,7 @@ public class GeneFunkCharacterService implements FiveECharacterService<GeneFunkC
         if (customer != null && customer.getRole().equalsIgnoreCase("admin")) {
             return repository.findAll();
         }
-        return customer == null ? Collections.EMPTY_LIST : repository.findByUserId(customer.getUserId());
+        return customer == null ? Collections.EMPTY_LIST : repository.findByUserId(customer.getExternalIdentifer());
     }
 
     @Override

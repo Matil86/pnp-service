@@ -28,6 +28,7 @@ public class GeneFunkCharacter extends BaseCharacter {
 
     String firstName;
     String lastName;
+    @JsonIgnore
     String userId;
 
     Integer level = 1;

@@ -5,17 +5,16 @@ import de.hipp.pnp.base.fivee.Feature5e
 import org.springframework.stereotype.Component
 
 @Component
-class GeneFunkGenomeBootstrap {
-    private val repository: GeneFunkGenomeRepository
+open class GeneFunkGenomeBootstrap(
+    private val repository: GeneFunkGenomeRepository,
     private val featureRepository: GeneFunkFeatureRepository
+) {
 
-    constructor(repository: GeneFunkGenomeRepository, featureRepository: GeneFunkFeatureRepository) {
-        this.repository = repository
-        this.featureRepository = featureRepository
+    init {
         initialize()
     }
 
-    protected fun initialize() {
+    private fun initialize() {
         repository.save(this.initializeCompanions())
         repository.save(this.initializeCoelhomortos())
         repository.save(this.initializeCanary())

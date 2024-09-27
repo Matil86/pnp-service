@@ -28,53 +28,6 @@ import java.util.UUID
 open class SecurityConfiguration(@Autowired private var userInfoProducer: UserInfoProducer) {
     var log: Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
-
-    private fun userAuthoritiesMapper(): GrantedAuthoritiesMapper =
-        GrantedAuthoritiesMapper { authorities: Collection<GrantedAuthority> ->
-            val mappedAuthorities = mutableSetOf<GrantedAuthority>()
-
-            authorities.forEach { authority ->
-                if (authority is OidcUserAuthority) {
-                    val attributes = authority.attributes
-                    var customer: Customer? = userInfoProducer.getCustomerInfoFor(attributes["sub"].toString())
-                    if (customer == null) {
-                        customer = Customer(
-                            UUID.randomUUID().toString(),
-                            attributes["given_name"] as String,
-                            attributes["family_name"] as String,
-                            attributes["name"] as String,
-                            attributes["sub"] as String,
-                            attributes["email"] as String,
-                            "USER",
-                        )
-                        customer = userInfoProducer.saveNewUser(customer)
-                    }
-                    val userRole = customer?.role ?: "ADMIN"
-                    when (userRole) {
-                        "ANNONYMOUS" -> {}
-                        "USER" -> {
-                            log.info("User found: {}", attributes["sub"])
-                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
-                        }
-
-                        "ADMIN" -> {
-                            log.info("Admin found: {}", attributes["sub"])
-                            mappedAuthorities.add(SimpleGrantedAuthority("ADMIN"))
-                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
-                        }
-
-                        else -> log.error("Unknown role found {}", userRole)
-                    }
-                } else if (authority is SimpleGrantedAuthority) {
-                    log.warn("SimpleGrantedAuthority authority: {}", authority.authority)
-                } else {
-                    log.error("Unknown authority: {}", authority)
-                }
-            }
-
-            mappedAuthorities
-        }
-
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
@@ -124,5 +77,50 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
         return corsConfiguration
     }
 
+    private fun userAuthoritiesMapper(): GrantedAuthoritiesMapper =
+        GrantedAuthoritiesMapper { authorities: Collection<GrantedAuthority> ->
+            val mappedAuthorities = mutableSetOf<GrantedAuthority>()
+
+            authorities.forEach { authority ->
+                if (authority is OidcUserAuthority) {
+                    val attributes = authority.attributes
+                    var customer: Customer? = userInfoProducer.getCustomerInfoFor(attributes["sub"].toString())
+                    if (customer == null) {
+                        customer = Customer(
+                            UUID.randomUUID().toString(),
+                            attributes["given_name"] as String,
+                            attributes["family_name"] as String,
+                            attributes["name"] as String,
+                            attributes["sub"] as String,
+                            attributes["email"] as String,
+                            "USER",
+                        )
+                        customer = userInfoProducer.saveNewUser(customer)
+                    }
+                    val userRole = customer?.role ?: "ADMIN"
+                    when (userRole) {
+                        "ANNONYMOUS" -> {}
+                        "USER" -> {
+                            log.info("User found: {}", attributes["sub"])
+                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
+                        }
+
+                        "ADMIN" -> {
+                            log.info("Admin found: {}", attributes["sub"])
+                            mappedAuthorities.add(SimpleGrantedAuthority("ADMIN"))
+                            mappedAuthorities.add(SimpleGrantedAuthority("USER"))
+                        }
+
+                        else -> log.error("Unknown role found {}", userRole)
+                    }
+                } else if (authority is SimpleGrantedAuthority) {
+                    log.warn("SimpleGrantedAuthority authority: {}", authority.authority)
+                } else {
+                    log.error("Unknown authority: {}", authority)
+                }
+            }
+
+            mappedAuthorities
+        }
 
 }

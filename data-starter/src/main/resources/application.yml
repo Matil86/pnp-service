@@ -2,5 +2,5 @@ server:
   port: ${SERVER_PORT}
 spring:
   profiles:
-    include: genefunk-crb-locale, genefunk-crb-classes
+    include: rabbitmq,genefunk-crb-locale, genefunk-crb-classes
 

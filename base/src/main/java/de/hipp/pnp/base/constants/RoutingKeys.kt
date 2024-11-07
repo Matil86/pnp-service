@@ -1,0 +1,13 @@
+package de.hipp.pnp.base.constants
+
+object RoutingKeys {
+    const val CREATE_CHARACTER_ROUTING_KEY: String = "CREATE_CHARACTER"
+    const val GET_ALL_CHARACTERS_ROUTING_KEY: String = "GET_ALL_CHARACTERS"
+    const val GET_ALL_LANGUAGE_KEYS_ROUTING_KEY: String = "GET_ALL_LANGUAGE_KEYS"
+    const val GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY: String =
+        "GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE"
+    const val GET_INTERNAL_USER: String = "GET_INTERNAL_USER"
+    const val SAVE_NEW_USER: String = "SAVE_NEW_USER"
+    const val GET_GENEFUNK_CLASSES: String = "GET_GENEFUNK_CLASSES"
+    const val GET_GENEFUNK_GENOMES: String = "GET_GENEFUNK_GENOMES"
+}

@@ -15,7 +15,24 @@
         <start-class>de.hipp.pnp.GeneFunkServiceApplication</start-class>
     </properties>
 
-
+    <dependencies>
+        <dependency>
+            <artifactId>base</artifactId>
+            <groupId>de.hipp.pnp</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>genefunk</artifactId>
+            <groupId>de.hipp.pnp</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.hipp.pnp</groupId>
+            <artifactId>genefunk-bootstrap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    
     <build>
         <plugins>
             <plugin>
@@ -37,23 +54,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <artifactId>base</artifactId>
-            <groupId>de.hipp.pnp</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>genefunk</artifactId>
-            <groupId>de.hipp.pnp</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.hipp.pnp</groupId>
-            <artifactId>genefunk-bootstrap</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-
 </project>

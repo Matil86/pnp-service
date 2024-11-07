@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
-import de.hipp.pnp.base.fivee.Attribute5e;
 import de.hipp.pnp.base.constants.AttributeConstants;
+import de.hipp.pnp.base.fivee.Attribute5e;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,9 +26,9 @@ public class GeneFunkCharacter extends BaseCharacter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    Integer gameTypes = E5EGameTypes.GENEFUNK.getValue();
     String firstName;
     String lastName;
+    @JsonIgnore
     String userId;
 
     Integer level = 1;
@@ -40,11 +40,12 @@ public class GeneFunkCharacter extends BaseCharacter {
     Attribute5e wisdom;
     Attribute5e charisma;
 
-    @OneToOne
+    @ManyToOne
     GeneFunkGenome genome;
 
     @JsonIgnore
     void initialize() {
+        this.setGameType(E5EGameTypes.GENEFUNK.getValue());
         if (this.getGenome() == null) {
             return;
         }
@@ -82,22 +83,22 @@ public class GeneFunkCharacter extends BaseCharacter {
     @JsonIgnore
     void setMaxValues(Map<String, Integer> attributeChanges) {
         if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
-            this.strength.setMax(attributeChanges.get(AttributeConstants.STRENGTH_MAX));
+            this.strength.max = attributeChanges.get(AttributeConstants.STRENGTH_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.DEXTERITY_MAX)) {
-            this.dexterity.setMax(attributeChanges.get(AttributeConstants.DEXTERITY_MAX));
+            this.dexterity.max = attributeChanges.get(AttributeConstants.DEXTERITY_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION_MAX)) {
-            this.constitution.setMax(attributeChanges.get(AttributeConstants.CONSTITUTION_MAX));
+            this.constitution.max = attributeChanges.get(AttributeConstants.CONSTITUTION_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE_MAX)) {
-            this.intelligence.setMax(attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX));
+            this.intelligence.max = attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.WISDOM_MAX)) {
-            this.wisdom.setMax(attributeChanges.get(AttributeConstants.WISDOM_MAX));
+            this.wisdom.max = attributeChanges.get(AttributeConstants.WISDOM_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.CHARISMA_MAX)) {
-            this.charisma.setMax(attributeChanges.get(AttributeConstants.CHARISMA_MAX));
+            this.charisma.max = attributeChanges.get(AttributeConstants.CHARISMA_MAX);
         }
     }
 

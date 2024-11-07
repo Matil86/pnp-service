@@ -3,7 +3,7 @@ package de.hipp.data.rabbitmq
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
-import de.hipp.data.language.LanguageKeyConfiguration
+import de.hipp.data.config.LanguageKeyConfiguration
 import de.hipp.pnp.api.dto.LanguageRequest
 import de.hipp.pnp.api.fivee.E5EGameTypes
 import de.hipp.pnp.api.fivee.LanguageValue

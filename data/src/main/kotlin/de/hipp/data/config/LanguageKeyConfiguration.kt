@@ -1,4 +1,4 @@
-package de.hipp.data.language
+package de.hipp.data.config
 
 import de.hipp.pnp.api.fivee.LanguageValue
 import lombok.extern.slf4j.Slf4j
@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "languagekeys")
 open class LanguageKeyConfiguration {
     // locale , game , book , languageKey,
-    val locale: Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> = HashMap()
+    val locale: Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> = mutableMapOf()
 }

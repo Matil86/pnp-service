@@ -83,22 +83,22 @@ public class GeneFunkCharacter extends BaseCharacter {
     @JsonIgnore
     void setMaxValues(Map<String, Integer> attributeChanges) {
         if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
-            this.strength.setMax(attributeChanges.get(AttributeConstants.STRENGTH_MAX));
+            this.strength.max = attributeChanges.get(AttributeConstants.STRENGTH_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.DEXTERITY_MAX)) {
-            this.dexterity.setMax(attributeChanges.get(AttributeConstants.DEXTERITY_MAX));
+            this.dexterity.max = attributeChanges.get(AttributeConstants.DEXTERITY_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION_MAX)) {
-            this.constitution.setMax(attributeChanges.get(AttributeConstants.CONSTITUTION_MAX));
+            this.constitution.max = attributeChanges.get(AttributeConstants.CONSTITUTION_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE_MAX)) {
-            this.intelligence.setMax(attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX));
+            this.intelligence.max = attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.WISDOM_MAX)) {
-            this.wisdom.setMax(attributeChanges.get(AttributeConstants.WISDOM_MAX));
+            this.wisdom.max = attributeChanges.get(AttributeConstants.WISDOM_MAX);
         }
         if (attributeChanges.containsKey(AttributeConstants.CHARISMA_MAX)) {
-            this.charisma.setMax(attributeChanges.get(AttributeConstants.CHARISMA_MAX));
+            this.charisma.max = attributeChanges.get(AttributeConstants.CHARISMA_MAX);
         }
     }
 

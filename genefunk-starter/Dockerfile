@@ -1,4 +1,4 @@
-FROM amazoncorretto:17.0.8-alpine3.18
+FROM amazoncorretto:22-alpine3.20
 LABEL authors="hipp"
 
 COPY target/*-spring-boot.jar service.jar

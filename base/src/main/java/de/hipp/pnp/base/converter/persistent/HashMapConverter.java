@@ -1,4 +1,4 @@
-package de.hipp.pnp.base.fivee.converter.persistent;
+package de.hipp.pnp.base.converter.persistent;
 
 import jakarta.persistence.Converter;
 import org.springframework.stereotype.Component;

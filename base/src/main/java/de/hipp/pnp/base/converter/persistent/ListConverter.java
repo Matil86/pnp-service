@@ -1,7 +1,8 @@
-package de.hipp.pnp.base.fivee.converter.persistent;
+package de.hipp.pnp.base.converter.persistent;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.persistence.Converter;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListConverter extends BaseConverter<List<Object>> {
 
-  public ListConverter() {
-    this.type = new ArrayList<Object>();
-  }
+    public ListConverter() {
+        this.type = new ArrayList<Object>();
+    }
 }

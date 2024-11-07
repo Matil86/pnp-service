@@ -1,4 +1,4 @@
-package de.hipp.pnp.base.fivee.converter.persistent;
+package de.hipp.pnp.base.converter.persistent;
 
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
 import jakarta.persistence.Converter;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CharacterConverter extends BaseConverter<BaseCharacter> {
 
-  public CharacterConverter() {
-    this.type = new BaseCharacter();
-  }
+    public CharacterConverter() {
+        this.type = new BaseCharacter();
+    }
 }

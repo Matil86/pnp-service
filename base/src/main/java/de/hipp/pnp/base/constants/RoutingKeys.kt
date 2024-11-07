@@ -1,11 +1,13 @@
-package de.hipp.pnp.base.constants;
+package de.hipp.pnp.base.constants
 
-public class RoutingKeys {
-
-    public static final String CREATE_CHARACTER_ROUTING_KEY = "CREATE_CHARACTER";
-    public static final String GET_ALL_CHARACTERS_ROUTING_KEY = "GET_ALL_CHARACTERS";
-    public static final String GET_ALL_LANGUAGE_KEYS_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS";
-    public static final String GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY = "GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE";
-    public static final String GET_INTERNAL_USER = "GET_INTERNAL_USER";
-    public static final String SAVE_NEW_USER = "SAVE_NEW_USER";
+object RoutingKeys {
+    const val CREATE_CHARACTER_ROUTING_KEY: String = "CREATE_CHARACTER"
+    const val GET_ALL_CHARACTERS_ROUTING_KEY: String = "GET_ALL_CHARACTERS"
+    const val GET_ALL_LANGUAGE_KEYS_ROUTING_KEY: String = "GET_ALL_LANGUAGE_KEYS"
+    const val GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY: String =
+        "GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE"
+    const val GET_INTERNAL_USER: String = "GET_INTERNAL_USER"
+    const val SAVE_NEW_USER: String = "SAVE_NEW_USER"
+    const val GET_GENEFUNK_CLASSES: String = "GET_GENEFUNK_CLASSES"
+    const val GET_GENEFUNK_GENOMES: String = "GET_GENEFUNK_GENOMES"
 }

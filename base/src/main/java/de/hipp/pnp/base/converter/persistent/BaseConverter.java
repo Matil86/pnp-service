@@ -1,4 +1,4 @@
-package de.hipp.pnp.base.fivee.converter.persistent;
+package de.hipp.pnp.base.converter.persistent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

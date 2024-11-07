@@ -1,14 +1,13 @@
-package de.hipp.pnp.base.converter.persistent;
+package de.hipp.pnp.base.converter.persistent
 
-import de.hipp.pnp.base.fivee.Feature5e;
-import jakarta.persistence.Converter;
-import org.springframework.stereotype.Component;
+import de.hipp.pnp.base.fivee.Feature5e
+import jakarta.persistence.Converter
+import org.springframework.stereotype.Component
 
 @Converter(autoApply = true)
 @Component
-public class Feature5eConverter extends BaseConverter<Feature5e> {
-
-    public Feature5eConverter() {
-        this.type = new Feature5e();
+class Feature5eConverter : BaseConverter<Feature5e?>() {
+    init {
+        this.type = Feature5e()
     }
 }

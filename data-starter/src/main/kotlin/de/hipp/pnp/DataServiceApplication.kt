@@ -4,9 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(scanBasePackages = ["de.hipp.*"])
-open class DataServiceApplication
+open class DataServiceApplication {
 
-fun main(args: Array<String>) {
-    runApplication<DataServiceApplication>(*args)
+    fun main(args: Array<String>) {
+        runApplication<DataServiceApplication>(*args)
+    }
 }
+
 

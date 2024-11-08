@@ -11,15 +11,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Map;
 
 @Entity
-@Setter
-@Getter
 @JsonSerialize
 public class GeneFunkCharacter extends BaseCharacter {
     @Id
@@ -113,5 +109,107 @@ public class GeneFunkCharacter extends BaseCharacter {
         } else {
             this.characterClasses.add(addClass);
         }
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @Override
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Override
+    public String getLastName() {
+        return lastName;
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public Integer getLevel() {
+        return level;
+    }
+
+    @Override
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Attribute5e getStrength() {
+        return strength;
+    }
+
+    public void setStrength(Attribute5e strength) {
+        this.strength = strength;
+    }
+
+    public Attribute5e getDexterity() {
+        return dexterity;
+    }
+
+    public void setDexterity(Attribute5e dexterity) {
+        this.dexterity = dexterity;
+    }
+
+    public Attribute5e getConstitution() {
+        return constitution;
+    }
+
+    public void setConstitution(Attribute5e constitution) {
+        this.constitution = constitution;
+    }
+
+    public Attribute5e getIntelligence() {
+        return intelligence;
+    }
+
+    public void setIntelligence(Attribute5e intelligence) {
+        this.intelligence = intelligence;
+    }
+
+    public Attribute5e getWisdom() {
+        return wisdom;
+    }
+
+    public void setWisdom(Attribute5e wisdom) {
+        this.wisdom = wisdom;
+    }
+
+    public Attribute5e getCharisma() {
+        return charisma;
+    }
+
+    public void setCharisma(Attribute5e charisma) {
+        this.charisma = charisma;
+    }
+
+    public GeneFunkGenome getGenome() {
+        return genome;
+    }
+
+    public void setGenome(GeneFunkGenome genome) {
+        this.genome = genome;
     }
 }

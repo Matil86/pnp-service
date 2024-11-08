@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
-import de.hipp.pnp.api.rabbitMq.DefaultMessage;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
+import de.hipp.pnp.api.rabbitMq.DefaultMessage;
 import de.hipp.pnp.base.constants.RoutingKeys;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.stereotype.Component;
@@ -16,8 +17,9 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@Slf4j
 public class GeneFunkCharakterListener {
+
+    private Logger log = LoggerFactory.getLogger(GeneFunkCharakterListener.class);
 
     private final GeneFunkCharacterService service;
     private final ObjectMapper mapper;

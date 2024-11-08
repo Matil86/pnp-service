@@ -3,19 +3,9 @@ package de.hipp.pnp.api.rabbitMq;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonSerialize
 public class DefaultMessage<T> {
 
     private String action;
@@ -23,7 +13,47 @@ public class DefaultMessage<T> {
     private String detailMessage;
     private String uuid;
     private MessageHeader header;
-    
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public T getPayload() {
+        return payload;
+    }
+
+    public void setPayload(T payload) {
+        this.payload = payload;
+    }
+
+    public String getDetailMessage() {
+        return detailMessage;
+    }
+
+    public void setDetailMessage(String detailMessage) {
+        this.detailMessage = detailMessage;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public MessageHeader getHeader() {
+        return header;
+    }
+
+    public void setHeader(MessageHeader header) {
+        this.header = header;
+    }
+
     @Override
     @JsonIgnore
     public String toString() {

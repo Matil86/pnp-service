@@ -1,20 +1,28 @@
 package de.hipp.pnp.api.fivee.abstracts;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public abstract class BaseCharacterClass {
 
-  private String name;
-  private Integer level;
+    private String name;
+    private Integer level;
 
-  public void increaseLevel(int amount){
-    this.level = (this.level == null ? amount : this.level+amount);
-  }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public void increaseLevel(int amount) {
+        this.level = (this.level == null ? amount : this.level + amount);
+    }
 }

@@ -11,13 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
 class GeneFunkGenome extends BaseOrigin {
 
     @Enumerated(EnumType.ORDINAL)
@@ -35,5 +33,42 @@ class GeneFunkGenome extends BaseOrigin {
 
     public void addFeature(Feature5e feature5e) {
         features.add(feature5e);
+    }
+
+    public GeneFunkGenomeType getGenomeType() {
+        return genomeType;
+    }
+
+    public void setGenomeType(GeneFunkGenomeType genomeType) {
+        this.genomeType = genomeType;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Nullable
+    public Set<Feature5e> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(@Nullable Set<Feature5e> features) {
+        this.features = features;
     }
 }

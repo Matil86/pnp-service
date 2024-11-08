@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.hipp.pnp.api.fivee.E5EGameTypes;
 import de.hipp.pnp.api.rabbitMq.DefaultMessage;
 import de.hipp.pnp.api.rabbitMq.MessageHeader;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-@Slf4j
 public abstract class BaseProducer<T> {
+    private Logger log = LoggerFactory.getLogger(BaseProducer.class);
 
     protected final RabbitTemplate template;
     protected final ObjectMapper mapper;

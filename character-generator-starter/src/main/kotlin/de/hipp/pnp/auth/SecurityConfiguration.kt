@@ -1,4 +1,4 @@
-package de.hipp.pnp
+package de.hipp.pnp.auth
 
 import de.hipp.pnp.base.dto.Customer
 import de.hipp.pnp.base.rabbitmq.UserInfoProducer
@@ -97,7 +97,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                         )
                         customer = userInfoProducer.saveNewUser(customer)
                     }
-                    val userRole = customer?.role ?: "ADMIN"
+                    val userRole = customer.role ?: "ADMIN"
                     when (userRole) {
                         "ANNONYMOUS" -> {}
                         "USER" -> {
@@ -113,10 +113,6 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
 
                         else -> log.error("Unknown role found {}", userRole)
                     }
-                } else if (authority is SimpleGrantedAuthority) {
-                    log.warn("SimpleGrantedAuthority authority: {}", authority.authority)
-                } else {
-                    log.error("Unknown authority: {}", authority)
                 }
             }
 

@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  logging:
+    level:
+      com:
+        springframework:
+          web: DEBUG
+          security: DEBUG
+          oauth2: DEBUG
+          boot: DEBUG
+
+spring:
+  profiles:
+    active: rabbitmq
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-authentication-method: client_secret_basic

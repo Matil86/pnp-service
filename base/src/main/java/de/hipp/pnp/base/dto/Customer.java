@@ -3,7 +3,7 @@ package de.hipp.pnp.base.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Customer {
+public class Customer extends BaseDto {
     String userId;
     String vorname;
     String nachname;
@@ -23,30 +23,19 @@ public class Customer {
     }
 
     public Customer() {
+        super();
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getVorname() {
         return vorname;
     }
 
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
-
     public String getNachname() {
         return nachname;
-    }
-
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
     }
 
     public String getName() {
@@ -61,23 +50,11 @@ public class Customer {
         return externalIdentifer;
     }
 
-    public void setExternalIdentifer(String externalIdentifer) {
-        this.externalIdentifer = externalIdentifer;
-    }
-
     public String getMail() {
         return mail;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     public String getRole() {
         return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }

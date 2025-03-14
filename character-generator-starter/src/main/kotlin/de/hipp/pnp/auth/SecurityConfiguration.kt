@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper
@@ -35,6 +36,15 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                 userInfoEndpoint {
                     userAuthoritiesMapper = userAuthoritiesMapper()
                 }
+            }
+            sessionManagement {
+                sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
+            }
+            formLogin {
+                disable()
+            }
+            httpBasic {
+                disable()
             }
             authorizeHttpRequests {
                 authorize("/", permitAll)
@@ -93,7 +103,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                             attributes["name"] as String,
                             attributes["sub"] as String,
                             attributes["email"] as String,
-                            "USER",
+                            "USER"
                         )
                         customer = userInfoProducer.saveNewUser(customer)
                     }
@@ -101,12 +111,12 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                     when (userRole) {
                         "ANNONYMOUS" -> {}
                         "USER" -> {
-                            log.info("User found: {}", attributes["sub"])
+                            log.info("User found: {}", customer)
                             mappedAuthorities.add(SimpleGrantedAuthority("USER"))
                         }
 
                         "ADMIN" -> {
-                            log.info("Admin found: {}", attributes["sub"])
+                            log.info("Admin found: {}", customer)
                             mappedAuthorities.add(SimpleGrantedAuthority("ADMIN"))
                             mappedAuthorities.add(SimpleGrantedAuthority("USER"))
                         }

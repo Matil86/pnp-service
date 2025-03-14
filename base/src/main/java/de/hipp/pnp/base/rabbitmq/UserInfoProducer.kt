@@ -14,7 +14,7 @@ class UserInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
     BaseProducer<Map<*, *>?>(rabbitTemplate, mapper) {
 
     fun getCustomerInfoFor(userId: String?): Customer {
-        val map = this.sendMessageForRoutingKey(GET_INTERNAL_USER, null, userId)
+        val map = this.sendMessageForRoutingKey(GET_INTERNAL_USER, null, userId) ?: return Customer()
         return mapper.convertValue(map, Customer::class.java)
     }
 

@@ -15,4 +15,6 @@ buildNumber.properties
 /compose-ui/.gradle/
 /compose-ui/.kotlin/
 /compose-ui/.run/
+/compose-ui/composeApp/build/
 /compose-ui/build/
+/compose-ui/.fleet/

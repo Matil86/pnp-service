@@ -12,3 +12,7 @@ buildNumber.properties
 /.idea/*
 /database/
 *.iml
+/compose-ui/.gradle/
+/compose-ui/.kotlin/
+/compose-ui/.run/
+/compose-ui/build/

@@ -5,9 +5,9 @@ class LoginService : BaseHttpService(), LoginServiceInterface {
     private val client: GoogleLoginClient = getClient<GoogleLoginClient>()
     override fun login(onSuccess: () -> Unit, onError: (Error) -> Unit) {
 
-        println("Login successful")
         val response = client.loginWithGoogle().execute()
         if (response.isSuccessful) {
+            println("Login successful")
             onSuccess()
         } else {
             onError(Error("Login failed"))

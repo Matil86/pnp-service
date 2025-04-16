@@ -1,0 +1,60 @@
+{
+  "extends": [
+           "config:base",
+           "github>whitesource/merge-confidence:beta"
+         ],
+         "dependencyDashboard": true,
+         "schedule": ["after 8am and before 5pm every weekday"],
+         "automergeSchedule": ["after 8am and before 3pm every weekday"],
+         "timezone": "Europe/Berlin",
+         "stabilityDays": 3,
+         "vulnerabilityAlerts": {
+           "addLabels": ["security"],
+           "commitMessageSuffix": "[SECURITY]"
+         },
+         "packageRules": [                  
+           {
+             "matchUpdateTypes": ["major"],
+             "labels": ["renovate", "update-major"]
+           },
+           {
+             "matchUpdateTypes": ["minor"],
+             "labels": ["renovate", "update-minor"]
+           },
+           {
+             "matchUpdateTypes": ["patch"],
+             "labels": ["renovate", "update-patch"]
+           },
+           {
+             "matchUpdateTypes": ["digest"],
+             "labels": ["renovate", "update-digest"]
+           },
+           {
+             "matchUpdateTypes": ["pin"],
+             "labels": ["renovate", "update-pin"]
+           },
+           {
+             "matchPackagePatterns": ["akka"],
+             "enabled": false
+           }
+         ]
+  "labels": ["📌 dependencies"],
+  "commitMessagePrefix": "⬆️",
+  "commitMessageAction": "Upgrade",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["pin"],
+      "commitMessagePrefix": "📌",
+      "commitMessageAction": "Pin"
+    },
+    {
+      "matchUpdateTypes": ["rollback"],
+      "commitMessagePrefix": "⏪",
+      "commitMessageAction": "Rollback"
+    }
+  ]
+}

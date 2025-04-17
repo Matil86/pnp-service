@@ -1,14 +1,10 @@
 {
-  "extends": [
-    "config:base",
-    "github>whitesource/merge-confidence:beta"
-  ],
   "dependencyDashboard": true,
   "schedule": [
-    "after 8am and before 5pm every weekday"
+    "after 1am and before 11pm every weekday"
   ],
   "automergeSchedule": [
-    "after 8am and before 3pm every weekday"
+    "after 1am and before 11pm every weekday"
   ],
   "timezone": "Europe/Berlin",
   "stabilityDays": 3,

@@ -1,4 +1,4 @@
-package de.hipp.pnp.boundry
+package de.hipp.pnp.rest
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import de.hipp.pnp.base.constants.UrlConstants

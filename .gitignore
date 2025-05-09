@@ -19,3 +19,4 @@ buildNumber.properties
 /compose-ui/build/
 /compose-ui/.fleet/
 /compose-ui/composeApp/build/
+/.env.base

@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/login")
 class LoginController {
     private val log = KotlinLogging.logger {}
+    private val mapper = ObjectMapper()
 
     @PostMapping
     fun login(request: HttpServletRequest, response: HttpServletResponse): String {
         log.info { "Login requested" }
-        val requestString = ObjectMapper().writeValueAsString(request)
+        val requestString = mapper.writeValueAsString(request)
         log.info { "request: $requestString" }
-        val responseString = ObjectMapper().writeValueAsString(response)
+        val responseString = mapper.writeValueAsString(response)
         log.info { "response: $responseString" }
         return "login"
     }

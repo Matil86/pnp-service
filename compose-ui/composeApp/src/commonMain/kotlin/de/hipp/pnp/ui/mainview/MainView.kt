@@ -1,20 +1,13 @@
 package de.hipp.pnp.ui.mainview
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import charactergeneratorclient.composeapp.generated.resources.Res
-import charactergeneratorclient.composeapp.generated.resources.compose_multiplatform
-import de.hipp.pnp.ui.Greeting
 import de.hipp.pnp.ui.clients.LoginServiceInterface
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun mainView(
@@ -57,13 +50,6 @@ fun mainView(
 
             Button(onClick = onLoginClick) {
                 Text(buttonText)
-            }
-
-
-            AnimatedVisibility(mainViewModel.showContent) {
-                val greeting = remember { Greeting().greet() }
-                Image(painterResource(Res.drawable.compose_multiplatform), null)
-                Text("Compose: $greeting")
             }
         }
     }

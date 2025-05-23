@@ -11,13 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
 public abstract class BaseProducer<T> {
+
+
     private Logger log = LoggerFactory.getLogger(BaseProducer.class);
 
     protected final RabbitTemplate template;
@@ -62,9 +64,9 @@ public abstract class BaseProducer<T> {
 
     protected MessageHeader getHeader() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        DefaultOidcUser user = (DefaultOidcUser) auth.getPrincipal();
+        Jwt user = (Jwt) auth.getPrincipal();
         MessageHeader header = new MessageHeader();
-        header.setExternalId(user.getName());
+        header.setExternalId(user.getClaimAsString("sub"));
         return header;
     }
 

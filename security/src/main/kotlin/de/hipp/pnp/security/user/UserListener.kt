@@ -45,6 +45,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
         response.header.externalId = message.payload
         response.header.roles = arrayOf(customer?.role)
         response.setPayload(customer)
+        log.debug("found Internal User Response : {}", response)
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response)
     }
 

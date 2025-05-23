@@ -8,16 +8,17 @@ server:
           security: DEBUG
           oauth2: DEBUG
           boot: DEBUG
+      de:
+        hipp:
+          pnp:
+            auth: INFO
 
 spring:
   profiles:
     active: rabbitmq
   security:
     oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            client-authentication-method: client_secret_basic
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs

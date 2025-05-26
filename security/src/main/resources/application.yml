@@ -1,0 +1,12 @@
+logging:
+  level:
+    com:
+      springframework:
+        web: DEBUG
+        security: DEBUG
+        oauth2: DEBUG
+        boot: DEBUG
+    de:
+      hipp:
+        pnp:
+          auth: debug

@@ -3,55 +3,254 @@ languagekeys:
     enUS:
       genefunk:
         crb:
-          athleticism:
-            label: "Athleticism"
-            description: "You gain proficiency in the Athletics and Acrobatics skills."
+          # Backgrounds
+          academic:
+            label: "Academic"
+            description: "You spent years in university studying your discipline. Books, research, and learning the mysteries of human nature and the universe are your life."
+          artist:
+            label: "Artist"
+            description: "You are a creative spirit, who needs to produce art for an audience."
+          ideologue:
+            label: "Ideologue"
+            description: "You have devoted your life to a specific cause or ideology. You pursue it with religious zeal and view the world through your doctrine’s lens."
+          investigator:
+            label: "Investigator"
+            description: "You uncover hidden truths and solve crimes or mysteries, whether as a private detective, corporate agent, or insurance investigator."
+          makeYourOwn:
+            label: "Make Your Own"
+            description: "You craft a unique background tailored to your character’s story. Work with the GM to define skills, proficiencies, and narrative hooks."
+          militaryVeteran:
+            label: "Military Veteran"
+            description: "You spent years in a military operation, seeing battle and bloodshed. Your training and discipline make you a lethal killer."
+          outlaw:
+            label: "Outlaw"
+            description: "You made your living on the wrong side of the law, mastering theft, fraud, and violence to survive and profit."
+          religiousDisciple:
+            label: "Religious Disciple"
+            description: "You follow a faith or doctrine with unwavering devotion, wielding holy texts or dogma to guide your actions."
+          slumDog:
+            label: "Slum Dog"
+            description: "You grew up in the undercity, scraping by on the streets and honing your wits to survive in poverty and danger."
+          stargazer:
+            label: "Stargazer"
+            description: "You spent nights studying the sky, becoming an expert in navigation, astrology, or the mysteries of the cosmos."
+          technician:
+            label: "Technician"
+            description: "You’re a hands-on expert in machines and electronics, skilled at repairing daemons, jury-rigging devices, and hacking hardware."
+          trustFundKid:
+            label: "Trust Fund Kid"
+            description: "You grew up wealthy, enjoying every comfort and privilege. You may lack street smarts but have resources at your disposal."
+
+          # Classes
+          biohacker:
+            label: "Biohacker"
+            description: "Masters of biological manipulation, using bioware and genetic tweaks to shape the battlefield."
+          codehacker:
+            label: "Codehacker"
+            description: "Experts of digital warfare and intrusion, able to hack daemons and security systems."
+          crook:
+            label: "Crook"
+            description: "Streetwise criminals who use stealth, charm, and violence to get what they want."
+          engineer:
+            label: "Engineer"
+            description: "Innovators and builders, adept at crafting gadgets, vehicles, and mechanical allies."
+          gunfighter:
+            label: "Gunfighter"
+            description: "Deadly with firearms, trained to handle all manner of ranged and close-quarters weaponry."
+          hardcase:
+            label: "Hardcase"
+            description: "Tough front-line fighters who absorb damage and protect their allies."
+          puppeteer:
+            label: "Puppeteer"
+            description: "Controllers of daemons and machines, twisting technology to do their bidding."
+          samurai:
+            label: "Samurai"
+            description: "Elite mercenaries trained in a code of honor, blending martial skill with corporate loyalty."
+          suit:
+            label: "Suit"
+            description: "Corporate operatives and negotiators who wield power through influence."
+          traceur:
+            label: "Traceur"
+            description: "Extreme stunt performers and athletes, blending acrobatics with showmanship."
+
+          # Features (alphabetical)
+          acuteOlfaction:
+            label: "Acute Olfaction"
+            description: "You have countless folds in your nose for increased surface area. You can track and identify scents in great detail, granting advantage on smell-based Perception checks."
+          acuteSenses:
+            label: "Acute Senses"
+            description: "Your peripheral vision and other senses are heightened, granting darkvision and advantage on initiative rolls."
+          actionStarBrain:
+            label: "Action Star Brain"
+            description: "Your Intelligence and Wisdom scores are decreased by 2."
+          adrenalineSurge:
+            label: "Adrenaline Surge"
+            description: "When you take damage, you can use your reaction to gain temporary hit points equal to your proficiency bonus."
+          albinism:
+            label: "Albinism"
+            description: "Your lack of melanin makes your skin and hair fragile to sunlight, and you have disadvantage on Charisma (Intimidation) checks."
+          amphibious:
+            label: "Amphibious"
+            description: "You can breathe underwater and have a swim speed equal to your walking speed."
+          animalRage:
+            label: "Animal Rage"
+            description: "You can enter a feral rage, gaining bonus damage and resistance for a short time."
+          athleticPhenom:
+            label: "Athletic Phenom"
+            description: "Your genes have been tweaked for optimal athletic expression, granting benefits to movement and Acrobatics checks."
           bioluminescence:
             label: "Bioluminescence"
-            description: "Your skin produces blue fluorescent proteins and luciferin, making you glow in the dark with a soft azure hue. You have disadvantage on Dexterity (Stealth) checks unless you are covered from head to toe, and you have a strange appearance."
+            description: "Your skin glows with blue-green light. You suffer disadvantage on Stealth checks unless completely covered."
           blindLoyalty:
             label: "Blind Loyalty"
-            description: "You have absolute devotion to a small group you identify as your pack and will put yourself in harms way to protect any one of them, even if you think it's hopeless. This group is almost always your cadre"
-          canary:
-            label: "Canary"
-            description: "Despite its gentle sounding name, the Canary genome is made of the toughest stuff there is. This Hexie designed genome was developed for working in deep mines doing heavy manual labor and is one of the earliest genomes that is still in production. The oppressed laborers of the Canary genome were quite numerous among the transgenic uprisings in China. Canaries have been designed to possess excellentdurability to better survive the harsh conditions present in deep mines and other blue-collar jobs where safetyregulations may have been lacking. Be it an injury from factory machinery or poisonous gas, the Canary genome can handle it much better than unmodified humans. While many do find employment in dangerous mining or oil rig labor, others have found their talents useful in alternate fields, such as professional fighting,stunt acting, the military, or hired muscle."
+            description: "You have absolute devotion to your pack and will put yourself in harm’s way to protect them."
+          camouflage:
+            label: "Camouflage"
+            description: "You can blend into natural environments, granting advantage on Stealth checks when in terrain you’re adapted to."
+          carnivore:
+            label: "Carnivore"
+            description: "You must eat raw meat to sustain yourself and have advantage on tracking by scent."
           chemicalDependence:
             label: "Chemical Dependence"
-            description: "In addition to regular food, you must consume a nutrient supplement called Median every day. Failure to get this supplement counts as not eating at all. This supplement is available in most cities and is covered by your lifestyle (see Chapter 8: Completing Contracts), but it might be a problem doing long term camping, and costs ?25 per day for field rations."
-          coelhomortos:
-            label: "Coelhomortos"
-            description: "A result of the golden age of animal hybrid genomes and enhanced sports, the rabbit like Coelhomortos genome was illegally developed in the Bosque Oscuro, deep in the Amazon basin. At the time of their creation, an underground market for transgenic blood sports was booming, and the Coelhomortos were engineered to be prey for more predatory genomes in a brutal game of capture the flag. They are designed to work well as a team and are fast, agile, and alert. Earlier Coelhomortos incarnations tended to get uniformly slaughtered in the sport, but later production lines were toughened up to make the events more sporting, and since then, they have developed a fierce reputation. Such blood sports are rare in 2090, but the Coelhomortos genome is still popular for more mainstream athletics and are fan-favorites in many of the traditional team sports. Their short lifespan lends itself to a more reckless lifestyle full of risk and adventure"
-          companion:
-            label: "Companion"
-            description: "The companion genome was designed for sex work, entertainment, social manipulation, and media communication. The great seductive powers of this genome enable them to induce cooperation and manipulate others. Their beauty is enough to drive men and women mad with desire. Even those not attracted to them are overwhelmed by their amazing presence and charm. This genome has seen extensive use in highclass brothels, exotic dancing, the media, music, acting, and even politics."
+            description: "You require a daily nutrient supplement called Median or suffer the effects of starvation."
+          claws:
+            label: "Claws"
+            description: "You possess natural claws that deal slashing damage as a weapon."
+          coldResistance:
+            label: "Cold Resistance"
+            description: "You have resistance to cold damage."
+          colossalPresence:
+            label: "Colossal Presence"
+            description: "Your immense size intimidates foes, granting advantage on Intimidation checks."
+          contact:
+            label: "Contact"
+            description: "You have a reliable ally in the underworld or military who can assist you once per session."
+          crocodilianForm:
+            label: "Crocodilian Form"
+            description: "Your scaly hide grants you a bonus to AC and advantage on grapple saves."
+          darkvision:
+            label: "Darkvision"
+            description: "You can see in dim light within 18 meters as if it were bright light, and in darkness as if it were dim light."
           dangerSense:
             label: "Danger Sense"
-            description: "A mixture of excellent peripheral vision and other sensory tweaks leaves you with an excellent sense for danger. You gain the following benefits: You gain a +5 bonus to initiative You can't be surprised while you are conscious Other people don't gain advantage on attack rolls against you as a result of being hidden from you."
+            description: "You gain a bonus to initiative and cannot be surprised while conscious."
+          emotionallyIntuitive:
+            label: "Emotionally Intuitive"
+            description: "You can read emotional states with uncanny accuracy, gaining advantage on Insight checks."
           enchanting:
             label: "Enchanting"
-            description: "People naturally like you and tend to appreciate your opinion. You gain the following benefits: \nYou gain proficiency in the Persuasion skill. If you are already proficient in this skill or gain proficiency at a later time, you add double your proficiency bonus to checks you make with it.\n\nYou can charm a person, simply by having a brief conversation with them. After a conversation, make a Charisma (Persuasion) check contested by the target's Wisdom (Insight) check. If your check succeeds, the target is charmed by you for 1 minute. This feature cannot be used on a target that is engaged in combat."
+            description: "You gain proficiency in Persuasion and can charm targets after conversation."
+          enhancedSenses:
+            label: "Enhanced Senses"
+            description: "You gain Perception proficiency and superior low-light vision."
+          goonBrain:
+            label: "Goon Brain"
+            description: "Your Intelligence and Wisdom scores are decreased by 1."
           healingFactor:
             label: "Healing Factor"
-            description: "You regain 1 hit point at the start of each turn, and you regain all of your hit points whenever you take a short rest. Additionally, you always count as having two fewer levels of exhaustion. You need access to extra food (calories) after a combat when this feature is used, or it won't function in the next combat."
-          musk:
-            label: "Musk"
-            description: "Your sweat glands produce a sharp-smelling rusty odor. You have disadvantage on Dexterity (Stealth), Charisma (Persuasion), and Charisma (Performance) checks if the target can smell you."
-          pactTactics:
+            description: "You regenerate hit points each round and count as having two fewer exhaustion levels."
+          inhumanAppearance:
+            label: "Inhuman Appearance"
+            description: "Your alien form unsettles others, imposing disadvantage on Persuasion checks."
+          inhumanlyLarge:
+            label: "Inhumanly Large"
+            description: "Your towering size grants advantage on Intimidation but disadvantage on Stealth."
+          inefficientMetabolism:
+            label: "Inefficient Metabolism"
+            description: "You require five times as much food to sustain yourself."
+          keenMind:
+            label: "Keen Mind"
+            description: "You have advantage on Intelligence checks related to memory and puzzles."
+          leatheryScales:
+            label: "Leathery Scales"
+            description: "Your tough hide provides damage reduction and increases your natural armor."
+          martialTraining:
+            label: "Martial Training"
+            description: "You gain proficiency with all martial weapons and heavy armor."
+          menacingMaw:
+            label: "Menacing Maw"
+            description: "Your powerful bite deals additional damage and can knock foes prone."
+          marfanSyndrome:
+            label: "Marfan Syndrome"
+            description: "Your limbs are abnormally long and thin, granting advantage on Acrobatics but disadvantage on Athletics."
+          naturalCoder:
+            label: "Natural Coder"
+            description: "You gain proficiency in a programming-related skill or tool of your choice."
+          naturalLeaper:
+            label: "Natural Leaper"
+            description: "Your jump distances are tripled and you can fall greater heights without harm."
+          nematocysts:
+            label: "Nematocysts"
+            description: "You can deliver a venomous sting once per short rest."
+          nocturnalSenses:
+            label: "Nocturnal Senses"
+            description: "You gain Perception proficiency and dim light doesn’t impose disadvantage."
+          packTactics:
             label: "Pack Tactics"
-            description: "You gain advantage on attack rolls against a target if at least one of your allies is within 1.5 meters of the target and that ally isn't incapacitated."
+            description: "You have advantage on attack rolls when an ally is near your target."
+          parkourMastery:
+            label: "Parkour Mastery"
+            description: "You gain Acrobatics proficiency and can move through difficult terrain more easily."
           performanceArtist:
             label: "Performance Artist"
-            description: "Be it dance, storytelling, painting,or some other artform, your natural mastery of performance allows you to command the attention of others. You gain the following benefits:\nYou gain proficiency in the Performance skill. If you are already proficient in the skill or acquire it later, you add double your proficiency bonus to checks you make with it.\n\nYou can use performance to occupy a target's attention, distracting them. Make a Charisma (Performance) check contested by the target's Wisdom (Insight) check. If your check succeeds, the target makes Dexterity, Intelligence, and Wisdom ability checks with disadvantage as long as they are perceiving your performance."
+            description: "You gain Performance proficiency and can distract foes with a show."
           pheromones:
             label: "Pheromones"
-            description: "You produce scents that make people trust you implicitly. Whenever you make a Wisdom (Insight), Charisma (Deception), Charisma (Persuasion), or Charisma (Performance) ability check, you can roll with advantage as long as the target is within 6 meters and can smell you."
+            description: "Your scent grants advantage on social checks among those who can smell you."
+          pounce:
+            label: "Pounce"
+            description: "You can use Dash, Disengage, or Hide as a bonus action once per rest."
+          predatoryForm:
+            label: "Predatory Form"
+            description: "Your bestial visage imposes disadvantage on foes’ reaction rolls."
+          polyglot:
+            label: "Polyglot"
+            description: "You learn up to four languages for free and gain an Intelligence bonus."
           preyInstincts:
             label: "Prey Instincts"
-            description: "Your ancestral prey traits lend themselves to quick thinking and agility. As a free action on your turn, you can take the Dash, Disengage, or Hide action. After you use prey instincts, you can't use it again until you complete a short or long rest."
+            description: "You can take Dash, Disengage, or Hide as a free action between rests."
+          reptileBrain:
+            label: "Reptile Brain"
+            description: "You have advantage on saves against mind-altering effects."
+          shortLived:
+            label: "Short Lived"
+            description: "You age twice as fast and die young, but reach maturity early."
+          simple:
+            label: "Simple"
+            description: "Your Intelligence score is decreased by 2."
+          simpleMinded:
+            label: "Simple Minded"
+            description: "You take a penalty to Wisdom and Intelligence checks due to your single-minded focus."
+          socialChameleon:
+            label: "Social Chameleon"
+            description: "You can mimic social cues to blend into groups and infiltrate organizations."
+          stealthProtocol:
+            label: "Stealth Protocol"
+            description: "You can become invisible in darkness for a short time."
+          sturdyFrame:
+            label: "Sturdy Frame"
+            description: "You gain resistance to bludgeoning damage and your unarmed strikes deal extra damage."
+          swiftFeet:
+            label: "Swift Feet"
+            description: "Difficult terrain doesn’t slow you when dashing, and you don’t provoke opportunity attacks."
+          terrifyingForm:
+            label: "Terrifying Form"
+            description: "Your fearsome appearance grants advantage on Intimidation checks."
+          tireless:
+            label: "Tireless"
+            description: "You always count as two exhaustion levels lower than you actually are."
+          toxinResilience:
+            label: "Toxin Resilience"
+            description: "You have advantage on saving throws against poison and resistance to poison damage."
           toughAsNails:
             label: "Tough as Nails"
-            description: "At first level, and whenever you gain a level, your hit point maximum increases by an additional 2 hit points."
-          toxicResilience:
-            label: "Toxin Resilience"
-            description: "You have advantage on saving throws against poison, and you have resistance against poison damage."
-
+            description: "Whenever you gain a level, your maximum hit points increase by an additional 2."
+          trackPrey:
+            label: "Track Prey"
+            description: "You gain advantage on checks to follow tracks and identify recent passage."
+          upgradeIntolerant:
+            label: "Upgrade Intolerant"
+            description: "You suffer a penalty when using or installing cybernetic or daemon upgrades."
+          weak:
+            label: "Weak"
+            description: "Your Strength score is decreased by 2."

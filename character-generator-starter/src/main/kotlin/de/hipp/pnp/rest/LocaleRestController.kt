@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RestController
 class LocaleRestController(val dataProducer: DataProducer, val mapper: ObjectMapper) {
     @GetMapping(LOCALEURL)
     @Throws(JsonProcessingException::class)
-    fun getLocale(@RequestParam(value = "gameType", defaultValue = "0") gameType: Int): String {
+    fun getLocale(
+        @RequestParam(
+            value = "gameType",
+            defaultValue = "0"
+        ) gameType: Int
+    ): String {
         val locale = dataProducer.getLanguageKeysByGameTypeAndLanguage(gameType, "en_US")
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(locale)
     }

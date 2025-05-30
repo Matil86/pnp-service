@@ -47,15 +47,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                 }
             }
             sessionManagement {
-                // Check if desktop app requires stateless session management
-                val sessionPolicy = if (System.getenv("USE_STATELESS_SESSION")?.toBoolean() == true) {
-                    log.info("Using STATELESS session policy for desktop app compatibility")
-                    SessionCreationPolicy.STATELESS
-                } else {
-                    log.info("Using IF_REQUIRED session policy")
-                    SessionCreationPolicy.IF_REQUIRED
-                }
-                sessionCreationPolicy = sessionPolicy
+                sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
             }
             formLogin {
                 disable()
@@ -65,13 +57,6 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
             }
             authorizeHttpRequests {
                 authorize("/", permitAll)
-                authorize("/index.html", permitAll)
-                authorize("/login/**", permitAll)
-                authorize("/oauth2/**", permitAll)
-                authorize("/logout", permitAll)
-                authorize("/api/login/**", permitAll)
-                authorize("/test/public", permitAll)
-                authorize("/test/auth", hasAnyAuthority("ADMIN", "USER"))
                 authorize("/resource/**", hasAnyAuthority("ADMIN", "USER"))
                 authorize("/user/**", hasAnyAuthority("USER"))
                 authorize("/admin/**", hasAnyAuthority("ADMIN"))
@@ -80,17 +65,6 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                 logoutSuccessUrl = "/"
             }
             csrf {
-                // Check if CSRF protection should be disabled for API endpoints used by desktop app
-                val disableCsrfForApi = System.getenv("DISABLE_CSRF_FOR_API")?.toBoolean() == true
-
-                if (disableCsrfForApi) {
-                    log.info("CSRF protection disabled for API endpoints")
-                    // Disable CSRF for API endpoints
-                    ignoringRequestMatchers("/api/**", "/test/**")
-                } else {
-                    log.info("CSRF protection enabled for all endpoints")
-                }
-
                 csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse()
             }
             cors {
@@ -104,8 +78,8 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
     open fun customer(): Customer? {
         val auth = SecurityContextHolder.getContext().authentication ?: return null
         val jwt = auth.principal as? Jwt ?: return null
-        val email = jwt.claims["email"] as? String ?: return null
-        return userInfoProducer.getCustomerInfoFor(email)
+        val userId = jwt.claims["sub"] as? String ?: return null
+        return userInfoProducer.getCustomerInfoFor(userId)
     }
 
     @Bean
@@ -151,10 +125,13 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
             val authorities = grantedAuthoritiesConverter.convert(jwt)
             val userId = jwt.claims["sub"] as? String
 
+            log.debug("User ID from JWT: {}", userId)
             // Look up the user by email and add appropriate authorities
             if (userId != null) {
                 val customer = userInfoProducer.getCustomerInfoFor(userId)
-                if (customer != null) {
+                log.debug("Customer from UserInfoProducer: {}", customer)
+                if (customer.role != null) {
+                    log.debug("Customer role: {}", customer.role)
                     val userRole = customer.role ?: "USER"
                     when (userRole) {
                         "ADMIN" -> {
@@ -181,7 +158,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                     authorities?.add(SimpleGrantedAuthority("USER"))
                 }
             }
-
+            log.debug("Assigned authorities: {}", authorities)
             authorities
         }
 

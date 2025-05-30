@@ -1,9 +1,12 @@
 package de.hipp.pnp.api.fivee.interfaces;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
+
+import java.util.List;
 
 public interface FiveECharacterProducer {
-    String generate(int gameType) throws JsonProcessingException;
+    BaseCharacter generate(int gameType) throws JsonProcessingException;
 
-    String getAllCharacters();
+    List<BaseCharacter> getAllCharacters();
 }

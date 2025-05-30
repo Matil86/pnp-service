@@ -1,6 +1,7 @@
 package de.hipp.pnp.rest
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacter
 import de.hipp.pnp.base.constants.UrlConstants
 import de.hipp.pnp.rabbitmq.CharacterProducer
 import de.hipp.pnp.rabbitmq.DataProducer
@@ -14,10 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(UrlConstants.CHARACTERURL)
 class CharacterRestController(val characterProducer: CharacterProducer, val dataProducer: DataProducer) {
 
-    @get:ResponseBody
-    @get:GetMapping
-    val allCharacters: String
-        get() = characterProducer.allCharacters
+    @ResponseBody
+    @GetMapping("/")
+    fun allCharacters(): List<BaseCharacter?> = characterProducer.allCharacters
 
     @GetMapping("/generate")
     @ResponseBody

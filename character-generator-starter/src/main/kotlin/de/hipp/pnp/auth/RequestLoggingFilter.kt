@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 /**
  * Filter to log all incoming requests and their authentication status.
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE)
 class RequestLoggingFilter : OncePerRequestFilter() {
     private val log = LoggerFactory.getLogger(RequestLoggingFilter::class.java)
 
@@ -26,12 +26,12 @@ class RequestLoggingFilter : OncePerRequestFilter() {
 
         // Get query string if present
         val queryString = if (request.queryString != null) "?${request.queryString}" else ""
-        
+
         // Execute the rest of the filter chain
         filterChain.doFilter(request, response)
 
         // Log response status after the request is processed
-        log.info(
+        log.debug(
             "Response: {} {}{} - Status: {} - Authenticated: {} - User: {} - Remote IP: {}",
             request.method,
             request.requestURI,

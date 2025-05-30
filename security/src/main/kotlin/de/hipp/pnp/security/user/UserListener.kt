@@ -37,7 +37,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
     fun handleGetInternalUserId(user: String?): String {
         val message: DefaultMessage<String> =
             mapper.readValue(user, object : TypeReference<DefaultMessage<String>>() {})
-        log.info("Received Get Internal User Message : {}", message)
+        log.debug("Received Get Internal User Message : {}", message)
         val customer: User? = userService.getUserByExternalId(message.payload)
         log.debug("found Internal User Customer : {}", customer)
         val response = DefaultMessage<User>()

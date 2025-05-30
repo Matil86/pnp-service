@@ -11,7 +11,12 @@ logging:
     de:
       hipp:
         pnp:
-          auth: debug
+          auth: DEBUG
+          security:
+            user: DEBUG  # Add this for UserService, UserRepository, and UserListener
+          base:
+            rabbitmq: DEBUG  # Add this for UserInfoProducer
+          rabbitmq: DEBUG  # Add this for other RabbitMQ components
 
 spring:
   profiles:

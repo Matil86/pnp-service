@@ -3,10 +3,11 @@ package de.hipp.data.rabbitmq
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
-import de.hipp.data.config.LanguageKeyConfiguration
+import de.hipp.data.config.LocalizationProperties
 import de.hipp.pnp.api.dto.LanguageRequest
 import de.hipp.pnp.api.fivee.E5EGameTypes
-import de.hipp.pnp.api.fivee.LanguageValue
+import de.hipp.pnp.api.locale.BookLocale
+import de.hipp.pnp.api.locale.SystemLocale
 import de.hipp.pnp.api.rabbitMq.DefaultMessage
 import de.hipp.pnp.base.constants.RoutingKeys
 import org.slf4j.Logger
@@ -20,7 +21,7 @@ import java.io.IOException
 class LanguageKeyListener(
     private val mapper: ObjectMapper,
     factory: ConnectionFactory,
-    private val configuration: LanguageKeyConfiguration,
+    private val localizationProperties: LocalizationProperties,
 ) {
     private val log: Logger = LoggerFactory.getLogger(LanguageKeyListener::class.java)
 
@@ -43,10 +44,10 @@ class LanguageKeyListener(
     @RabbitListener(queues = [RoutingKeys.GET_ALL_LANGUAGE_KEYS_ROUTING_KEY])
     fun getAllLanguageKeys(): String {
         val message =
-            DefaultMessage<Map<String, Map<String, Map<String, Map<String, LanguageValue>>>>>()
+            DefaultMessage<List<SystemLocale>>()
 
         val payload =
-            configuration.locale
+            localizationProperties.systems.values.toMutableList()
 
         message.action = "finished"
         message.payload = payload
@@ -64,11 +65,12 @@ class LanguageKeyListener(
 
         log.info(messageObject.toString())
         val payload = messageObject.payload
-        val allLocale = configuration.locale
-        val games = allLocale.getOrDefault(payload.locale, allLocale.get("enUS"))
-        val gameType: E5EGameTypes? = E5EGameTypes.fromValue(payload.gameType)
-        val books: Map<String, Map<String, LanguageValue>>? = games?.get(gameType.toString().lowercase())
-        val response: DefaultMessage<Map<String, Map<String, LanguageValue>>> = DefaultMessage()
+        val allLocale = localizationProperties.systems
+
+        val gameName = E5EGameTypes.fromValue(payload.gameType).toString().lowercase()
+        val game = allLocale[gameName]
+        val books = game?.books
+        val response: DefaultMessage<Map<String, BookLocale>> = DefaultMessage()
         response.action = "finished"
         response.payload = books
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response)

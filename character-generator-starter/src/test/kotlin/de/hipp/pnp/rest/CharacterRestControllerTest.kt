@@ -2,7 +2,6 @@ package de.hipp.pnp.rest
 
 import de.hipp.pnp.base.constants.UrlConstants
 import de.hipp.pnp.rabbitmq.CharacterProducer
-import de.hipp.pnp.rabbitmq.DataProducer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,8 +26,6 @@ class CharacterRestControllerTest {
     @Mock
     private lateinit var characterProducer: CharacterProducer
 
-    @Mock
-    private lateinit var dataProducer: DataProducer
 
     @InjectMocks
     private lateinit var characterRestController: CharacterRestController

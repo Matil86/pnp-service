@@ -64,9 +64,11 @@ public abstract class BaseProducer<T> {
 
     protected MessageHeader getHeader() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Jwt user = (Jwt) auth.getPrincipal();
         MessageHeader header = new MessageHeader();
-        header.setExternalId(user.getClaimAsString("sub"));
+        if (auth != null) {
+            Jwt user = (Jwt) auth.getPrincipal();
+            header.setExternalId(user.getClaimAsString("sub"));
+        }
         return header;
     }
 

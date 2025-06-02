@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter
 import de.hipp.pnp.base.constants.UrlConstants
 import de.hipp.pnp.rabbitmq.CharacterProducer
-import de.hipp.pnp.rabbitmq.DataProducer
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(UrlConstants.CHARACTERURL)
-class CharacterRestController(val characterProducer: CharacterProducer, val dataProducer: DataProducer) {
+class CharacterRestController(val characterProducer: CharacterProducer) {
 
     @ResponseBody
     @GetMapping("/")

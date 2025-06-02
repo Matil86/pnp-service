@@ -1,14 +1,12 @@
 package de.hipp.pnp.api.fivee.interfaces;
 
-import de.hipp.pnp.api.fivee.LanguageValue;
+import de.hipp.pnp.api.locale.BookLocale;
 
 import java.util.Map;
 
 public interface FiveEDataProducer {
 
-    // <Language, <LanguageKey, LanguageEntry>>
-    public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getAllLanguageKeys();
+    Map<String, BookLocale> getAllLanguageKeys();
 
-    // <LanguageKey, LanguageEntry>
-    public Map<String, Map<String, Map<String, Map<String, LanguageValue>>>> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale);
+    Map<String, BookLocale> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale);
 }

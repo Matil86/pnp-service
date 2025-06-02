@@ -1,9 +1,8 @@
-languagekeys:
-  locale:
-    enUS:
-      genefunk:
-        crb:
-          # Backgrounds
+systems:
+  genefunk:
+    books:
+      crb:
+        backgrounds:
           academic:
             label: "Academic"
             description: "You spent years in university studying your discipline. Books, research, and learning the mysteries of human nature and the universe are your life."
@@ -41,7 +40,7 @@ languagekeys:
             label: "Trust Fund Kid"
             description: "You grew up wealthy, enjoying every comfort and privilege. You may lack street smarts but have resources at your disposal."
 
-          # Classes
+        classes:
           biohacker:
             label: "Biohacker"
             description: "Masters of biological manipulation, using bioware and genetic tweaks to shape the battlefield."
@@ -73,7 +72,7 @@ languagekeys:
             label: "Traceur"
             description: "Extreme stunt performers and athletes, blending acrobatics with showmanship."
 
-          # Features (alphabetical)
+        features:
           acuteOlfaction:
             label: "Acute Olfaction"
             description: "You have countless folds in your nose for increased surface area. You can track and identify scents in great detail, granting advantage on smell-based Perception checks."
@@ -106,13 +105,13 @@ languagekeys:
             description: "You have absolute devotion to your pack and will put yourself in harm’s way to protect them."
           camouflage:
             label: "Camouflage"
-            description: "You can blend into natural environments, granting advantage on Stealth checks when in terrain you’re adapted to."
+            description: "You can blend into natural environments, gaining advantage on Stealth checks when in terrain you’re adapted to."
           carnivore:
             label: "Carnivore"
             description: "You must eat raw meat to sustain yourself and have advantage on tracking by scent."
           chemicalDependence:
             label: "Chemical Dependence"
-            description: "You require a daily nutrient supplement called Median or suffer the effects of starvation."
+            description: "In addition to regular food, you must consume a daily nutrient supplement called Median. Failure counts as not eating and can be problematic during long missions."
           claws:
             label: "Claws"
             description: "You possess natural claws that deal slashing damage as a weapon."
@@ -164,15 +163,15 @@ languagekeys:
           leatheryScales:
             label: "Leathery Scales"
             description: "Your tough hide provides damage reduction and increases your natural armor."
+          marfanSyndrome:
+            label: "Marfan Syndrome"
+            description: "Your limbs are abnormally long and thin, granting advantage on Acrobatics but disadvantage on Athletics."
           martialTraining:
             label: "Martial Training"
             description: "You gain proficiency with all martial weapons and heavy armor."
           menacingMaw:
             label: "Menacing Maw"
             description: "Your powerful bite deals additional damage and can knock foes prone."
-          marfanSyndrome:
-            label: "Marfan Syndrome"
-            description: "Your limbs are abnormally long and thin, granting advantage on Acrobatics but disadvantage on Athletics."
           naturalCoder:
             label: "Natural Coder"
             description: "You gain proficiency in a programming-related skill or tool of your choice."
@@ -185,9 +184,9 @@ languagekeys:
           nocturnalSenses:
             label: "Nocturnal Senses"
             description: "You gain Perception proficiency and dim light doesn’t impose disadvantage."
-          packTactics:
-            label: "Pack Tactics"
-            description: "You have advantage on attack rolls when an ally is near your target."
+          OsaLaska:
+            label: "OsaLaska"
+            description: "A reptilian genome adapted to swamps and rivers. OsaLaskas have keen senses, stealth and adaptability."
           parkourMastery:
             label: "Parkour Mastery"
             description: "You gain Acrobatics proficiency and can move through difficult terrain more easily."
@@ -209,9 +208,15 @@ languagekeys:
           preyInstincts:
             label: "Prey Instincts"
             description: "You can take Dash, Disengage, or Hide as a free action between rests."
+          puppeteer:
+            label: "Puppeteer"
+            description: "Controllers of daemons and machines, twisting technology to do their bidding."
           reptileBrain:
             label: "Reptile Brain"
             description: "You have advantage on saves against mind-altering effects."
+          samurai:
+            label: "Samurai"
+            description: "Elite mercenaries trained in a code of honor, blending martial skill with corporate loyalty."
           shortLived:
             label: "Short Lived"
             description: "You age twice as fast and die young, but reach maturity early."
@@ -221,36 +226,57 @@ languagekeys:
           simpleMinded:
             label: "Simple Minded"
             description: "You take a penalty to Wisdom and Intelligence checks due to your single-minded focus."
+          slumDog:
+            label: "Slum Dog"
+            description: "You grew up in the undercity, scraping by on the streets and honing your wits to survive in poverty and danger."
           socialChameleon:
             label: "Social Chameleon"
             description: "You can mimic social cues to blend into groups and infiltrate organizations."
           stealthProtocol:
             label: "Stealth Protocol"
             description: "You can become invisible in darkness for a short time."
+          stargazer:
+            label: "Stargazer"
+            description: "You spent nights studying the sky, becoming an expert in navigation, astrology, or the mysteries of the cosmos."
           sturdyFrame:
             label: "Sturdy Frame"
             description: "You gain resistance to bludgeoning damage and your unarmed strikes deal extra damage."
+          suit:
+            label: "Suit"
+            description: "Corporate operatives and negotiators who wield power through influence."
           swiftFeet:
             label: "Swift Feet"
             description: "Difficult terrain doesn’t slow you when dashing, and you don’t provoke opportunity attacks."
           terrifyingForm:
             label: "Terrifying Form"
-            description: "Your fearsome appearance grants advantage on Intimidation checks."
+            description: "Your grotesque appearance grants advantage on Intimidation checks."
+          technician:
+            label: "Technician"
+            description: "You’re a hands-on expert in machines and electronics, skilled at repairing daemons, jury-rigging devices, and hacking hardware."
+          tetherUpgradeIntolerant:
+            label: "Upgrade Intolerant"
+            description: "You suffer a penalty when using or installing cyber or daemon upgrades."
+          titan:
+            label: "Titan"
+            description: "A colossal genome built for unmatched strength. Titans are slow but nearly unbreakable."
           tireless:
             label: "Tireless"
             description: "You always count as two exhaustion levels lower than you actually are."
           toxinResilience:
             label: "Toxin Resilience"
             description: "You have advantage on saving throws against poison and resistance to poison damage."
-          toughAsNails:
-            label: "Tough as Nails"
-            description: "Whenever you gain a level, your maximum hit points increase by an additional 2."
+          traceur:
+            label: "Traceur"
+            description: "Extreme stunt performers and athletes, blending acrobatics with showmanship."
           trackPrey:
             label: "Track Prey"
             description: "You gain advantage on checks to follow tracks and identify recent passage."
+          toughAsNails:
+            label: "Tough as Nails"
+            description: "Whenever you gain a level, your maximum hit points increase by an additional 2."
           upgradeIntolerant:
             label: "Upgrade Intolerant"
-            description: "You suffer a penalty when using or installing cybernetic or daemon upgrades."
+            description: "You suffer a penalty when using or installing cyber or daemon upgrades."
           weak:
             label: "Weak"
             description: "Your Strength score is decreased by 2."

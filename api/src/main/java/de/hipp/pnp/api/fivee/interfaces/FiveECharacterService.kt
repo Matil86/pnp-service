@@ -1,12 +1,9 @@
-package de.hipp.pnp.api.fivee.interfaces;
+package de.hipp.pnp.api.fivee.interfaces
 
-import de.hipp.pnp.api.fivee.abstracts.BaseCharacter;
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacter
 
-import java.util.List;
+interface FiveECharacterService<T : BaseCharacter?> {
+    fun getAllCharacters(userId: String?): MutableList<T?>?
 
-public interface FiveECharacterService<T extends BaseCharacter> {
-
-    public List<T> getAllCharacters(String userId);
-
-    public T generate();
+    fun generate(): T?
 }

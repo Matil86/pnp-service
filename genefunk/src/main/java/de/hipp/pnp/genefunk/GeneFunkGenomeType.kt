@@ -1,29 +1,21 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import jakarta.persistence.Id;
+import jakarta.persistence.Id
 
-enum GeneFunkGenomeType {
+enum class GeneFunkGenomeType(@Id var value: Int) {
     UNKNOWN(-1),
     ENGINEERED(0),
-    MUTT(1),
+    MUTTS(1),
     OPTIMIZED(2),
     TRANSHUMAN(3);
-    @Id
-    int value;
 
-    GeneFunkGenomeType(int value) {
-        this.value = value;
-    }
-
-    public static GeneFunkGenomeType valueOf(int value) {
-        GeneFunkGenomeType[] values = GeneFunkGenomeType.values();
-        for (GeneFunkGenomeType type : values) {
-            if (type.getValue() == value) return type;
+    companion object {
+        fun valueOf(value: Int): GeneFunkGenomeType {
+            val values = entries.toTypedArray()
+            for (type in values) {
+                if (type.value == value) return type
+            }
+            return UNKNOWN
         }
-        return GeneFunkGenomeType.UNKNOWN;
-    }
-
-    public int getValue() {
-        return this.value;
     }
 }

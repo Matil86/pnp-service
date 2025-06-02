@@ -1,74 +1,35 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import de.hipp.pnp.api.fivee.abstracts.BaseOrigin;
-import de.hipp.pnp.base.fivee.Feature5e;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
-import java.util.HashSet;
-import java.util.Set;
+import de.hipp.pnp.api.fivee.abstracts.Species
+import de.hipp.pnp.base.fivee.Feature5e
+import jakarta.annotation.Nullable
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
 
 @Entity
-class GeneFunkGenome extends BaseOrigin {
-
+class GeneFunkGenome : Species() {
     @Enumerated(EnumType.ORDINAL)
-    GeneFunkGenomeType genomeType = GeneFunkGenomeType.ENGINEERED;
+    var genomeType: GeneFunkGenomeType? = GeneFunkGenomeType.UNKNOWN
 
     @Id
-    String name;
+    override var name: String? = ""
 
     @Column(columnDefinition = "TEXT")
-    String description;
+    override var description: String? = ""
 
+    @get:Nullable
     @Nullable
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Set<Feature5e> features = new HashSet<>();
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var features: MutableSet<Feature5e?>? = HashSet<Feature5e?>()
 
-    public void addFeature(Feature5e feature5e) {
-        features.add(feature5e);
+    fun addFeature(feature5e: Feature5e?) {
+        features!!.add(feature5e)
     }
 
-    public GeneFunkGenomeType getGenomeType() {
-        return genomeType;
-    }
-
-    public void setGenomeType(GeneFunkGenomeType genomeType) {
-        this.genomeType = genomeType;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Nullable
-    public Set<Feature5e> getFeatures() {
-        return features;
-    }
-
-    public void setFeatures(@Nullable Set<Feature5e> features) {
-        this.features = features;
-    }
 }

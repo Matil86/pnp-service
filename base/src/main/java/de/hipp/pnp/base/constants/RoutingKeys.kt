@@ -9,5 +9,5 @@ object RoutingKeys {
     const val GET_INTERNAL_USER: String = "GET_INTERNAL_USER"
     const val SAVE_NEW_USER: String = "SAVE_NEW_USER"
     const val GET_GENEFUNK_CLASSES: String = "GET_GENEFUNK_CLASSES"
-    const val GET_GENEFUNK_GENOMES: String = "GET_GENEFUNK_GENOMES"
+    const val GET_GENEFUNK_SPECIES: String = "GET_GENEFUNK_SPECIES"
 }

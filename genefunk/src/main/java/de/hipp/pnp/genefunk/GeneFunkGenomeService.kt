@@ -1,24 +1,56 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import org.springframework.stereotype.Service;
+import de.hipp.pnp.base.entity.CharacterSpeciesEntity
+import de.hipp.pnp.base.rabbitmq.GenefunkInfoProducer
+import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.annotation.PostConstruct
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
-import java.util.Collection;
-import java.util.List;
-
+@Transactional
 @Service
-public class GeneFunkGenomeService {
+open class GeneFunkGenomeService(
+    val repository: GeneFunkGenomeRepository,
+    val genefunkInfoProducer: GenefunkInfoProducer
+) {
 
-    final GeneFunkGenomeRepository repository;
+    private val log = KotlinLogging.logger {}
 
-    public GeneFunkGenomeService(GeneFunkGenomeRepository repository) {
-        this.repository = repository;
+    @PostConstruct
+    fun init() {
+        val genomes: List<CharacterSpeciesEntity>? = genefunkInfoProducer.getAllSpecies()
+        if (genomes.isNullOrEmpty()) {
+            println("No genomes found for GeneFunk")
+            return
+        }
+        val geneFunkGenomes = genomes.map { species ->
+            GeneFunkGenome().apply {
+                name = species.name
+                description = species.description
+                attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
+                features = species.features.map { it }.toMutableSet()
+                genomeType = getGenomeType(species.name)
+            }
+        }
+        println("genomes found for GeneFunk: ${geneFunkGenomes.size}")
+        save(geneFunkGenomes)
     }
 
-    public void save(Collection<? extends GeneFunkGenome> genomes) {
-        repository.saveAll(genomes);
+    private fun getGenomeType(name: String): GeneFunkGenomeType {
+        when (name.lowercase()) {
+            "mutts" -> return GeneFunkGenomeType.MUTTS
+            "optimized" -> return GeneFunkGenomeType.OPTIMIZED
+            "transhuman" -> return GeneFunkGenomeType.TRANSHUMAN
+            else -> return GeneFunkGenomeType.ENGINEERED
+        }
     }
 
-    public List<GeneFunkGenome> getAllGenomes() {
-        return repository.findAll();
+    open fun save(genomes: List<GeneFunkGenome>) {
+        genomes.forEach {
+            log.info { "Saving genome: ${it.name}" }
+            repository.save(it)
+        }
     }
+
+    fun allGenomes(): MutableList<GeneFunkGenome?> = repository.findAll()
 }

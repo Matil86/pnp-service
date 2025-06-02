@@ -22,20 +22,22 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) 
      * @param gameType The type of game for which to generate the character.
      * @return A BaseCharacter object representing the generated character, or null if generation fails.
      */
-    override fun generate(gameType: Int): BaseCharacter? {
+    override fun generate(gameType: Int): String {
         log.debug { "${"message to generate character for {} received"} ${E5EGameTypes.fromValue(gameType)}" }
 
-        return sendMessageForRoutingKey(
-            RoutingKeys.CREATE_CHARACTER_ROUTING_KEY,
-            E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK)
+        return mapper.writeValueAsString(
+            sendMessageForRoutingKey(
+                RoutingKeys.CREATE_CHARACTER_ROUTING_KEY,
+                E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK)
+            )
         )
     }
 
-    override fun getAllCharacters(): List<BaseCharacter?> {
+    override fun allCharacters(): MutableList<BaseCharacter?> {
         log.debug { "get all characters request received" }
         return sendMessageForRoutingKey(
             RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY,
             E5EGameTypes.GENEFUNK
-        ) as List<BaseCharacter?>
+        ) as MutableList<BaseCharacter?>
     }
 }

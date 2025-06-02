@@ -1,12 +1,9 @@
-package de.hipp.pnp.api.fivee.interfaces;
+package de.hipp.pnp.api.fivee.interfaces
 
-import de.hipp.pnp.api.locale.BookLocale;
+import de.hipp.pnp.api.locale.BookLocale
 
-import java.util.Map;
+interface FiveEDataProducer {
+    fun getAllLanguageKeys(): MutableMap<String, BookLocale>?
 
-public interface FiveEDataProducer {
-
-    Map<String, BookLocale> getAllLanguageKeys();
-
-    Map<String, BookLocale> getLanguageKeysByGameTypeAndLanguage(int gameType, String locale);
+    fun getLanguageKeysByGameTypeAndLanguage(gameType: Int, locale: String?): MutableMap<String, BookLocale>?
 }

@@ -1,93 +1,78 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService;
-import de.hipp.pnp.base.fivee.Attribute5e;
-import de.hipp.pnp.base.fivee.DiceRoller;
-import de.hipp.pnp.base.dto.Customer;
-import de.hipp.pnp.base.rabbitmq.UserInfoProducer;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import de.hipp.pnp.api.fivee.interfaces.FiveECharacterService
+import de.hipp.pnp.base.fivee.Attribute5e
+import de.hipp.pnp.base.fivee.DiceRoller
+import de.hipp.pnp.base.rabbitmq.UserInfoProducer
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.util.Objects
+import java.util.Random
+import kotlin.math.max
 
 @Service
 @Transactional
-public class GeneFunkCharacterService implements FiveECharacterService<GeneFunkCharacter> {
+open class GeneFunkCharacterService(
+    private val repository: GeneFunkCharacterRepository,
+    private val genomeService: GeneFunkGenomeService,
+    private val classService: GeneFunkClassService, private val userInfoProducer: UserInfoProducer
+) : FiveECharacterService<GeneFunkCharacter?> {
+    private val random = Random()
 
-    final GeneFunkCharacterRepository repository;
-    final GeneFunkGenomeService genomeService;
-    final GeneFunkClassService classService;
-    private final UserInfoProducer userInfoProducer;
-    private final Random random = new Random();
-
-    public GeneFunkCharacterService(
-            GeneFunkCharacterRepository repository,
-            GeneFunkGenomeService genomeService,
-            GeneFunkClassService classService, UserInfoProducer userInfoProducer) {
-        this.repository = repository;
-        this.genomeService = genomeService;
-        this.classService = classService;
-        this.userInfoProducer = userInfoProducer;
-    }
-
-    @Override
-    public List<GeneFunkCharacter> getAllCharacters(String userId) {
-        Customer customer = userInfoProducer.getCustomerInfoFor(userId);
-        if (customer != null && customer.getRole().equalsIgnoreCase("admin")) {
-            return repository.findAll();
+    override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter?>? {
+        val customer = userInfoProducer.getCustomerInfoFor(userId)
+        if (customer != null && customer.getRole().equals("admin", ignoreCase = true)) {
+            return repository.findAll()
         }
-        return customer == null ? Collections.EMPTY_LIST : repository.findByUserId(customer.getExternalIdentifer());
+        return repository.findByUserId(customer.getExternalIdentifer())
     }
 
-    @Override
-    public GeneFunkCharacter generate() {
-        return this.generate(new GeneFunkCharacter(), "unknown");
+    override fun generate(): GeneFunkCharacter {
+        return this.generate(GeneFunkCharacter(), "unknown")
     }
 
-    public GeneFunkCharacter generate(GeneFunkCharacter character, String externalId) {
-        List<GeneFunkGenome> genomes = genomeService.getAllGenomes();
-        List<GeneFunkClass> classes = classService.getAllClasses();
+    fun generate(character: GeneFunkCharacter?, externalId: String?): GeneFunkCharacter {
+        var character = character
+        val genomes = genomeService.allGenomes()
+        val classes = classService.getAllClasses()
 
         if (Objects.isNull(character)) {
-            character = new GeneFunkCharacter();
+            character = GeneFunkCharacter()
         }
-        if (Objects.isNull(character.getLevel())) {
-            character.setLevel(1);
+        if (Objects.isNull(character!!.level)) {
+            character.level = 1
         }
-        if (Objects.isNull(character.getStrength())) {
-            character.setStrength(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.strength)) {
+            character.strength = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (Objects.isNull(character.getDexterity())) {
-            character.setDexterity(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.dexterity)) {
+            character.dexterity = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (Objects.isNull(character.getConstitution())) {
-            character.setConstitution(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.constitution)) {
+            character.constitution = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (Objects.isNull(character.getIntelligence())) {
-            character.setIntelligence(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.intelligence)) {
+            character.intelligence = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (Objects.isNull(character.getWisdom())) {
-            character.setWisdom(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.wisdom)) {
+            character.wisdom = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (Objects.isNull(character.getCharisma())) {
-            character.setCharisma(new Attribute5e(DiceRoller.roll(4, 6, 3, true)));
+        if (Objects.isNull(character.charisma)) {
+            character.charisma = Attribute5e(DiceRoller.roll(4, 6, 3, true))
         }
-        if (!genomes.isEmpty() && Objects.isNull(character.getGenome())) {
-            character.setGenome((GeneFunkGenome) pickRandom(genomes));
+        if (!genomes.isEmpty() && Objects.isNull(character.genome)) {
+            character.genome = pickRandom<GeneFunkGenome?>(genomes) as GeneFunkGenome?
         }
-        if (!classes.isEmpty() && Objects.isNull(character.getCharacterClasses())) {
-            character.addClass((GeneFunkClass) pickRandom(classes));
+        if (!classes.isEmpty() && Objects.isNull(character.characterClasses)) {
+            character.addClass(pickRandom<GeneFunkClass?>(classes) as GeneFunkClass?)
         }
-        character.setUserId(externalId);
-        character.initialize();
-        return repository.save(character);
+        character.userId = externalId
+        character.initialize()
+        return repository.save<GeneFunkCharacter>(character)
     }
 
-    private <X> Object pickRandom(List<X> list) {
-        int randomInt = random.nextInt(list.size());
-        return list.get(Math.max(randomInt, 0));
+    private fun <X> pickRandom(list: MutableList<X?>): Any? {
+        val randomInt = random.nextInt(list.size)
+        return list.get(max(randomInt, 0))
     }
 }

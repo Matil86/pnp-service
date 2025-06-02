@@ -1,9 +1,7 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository
 
-import java.util.List;
-
-interface GeneFunkCharacterRepository extends JpaRepository<GeneFunkCharacter, Integer> {
-    List<GeneFunkCharacter> findByUserId(String userId);
+interface GeneFunkCharacterRepository : JpaRepository<GeneFunkCharacter?, Int?> {
+    fun findByUserId(userId: String?): MutableList<GeneFunkCharacter?>?
 }

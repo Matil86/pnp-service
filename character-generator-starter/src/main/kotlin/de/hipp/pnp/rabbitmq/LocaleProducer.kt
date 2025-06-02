@@ -12,17 +12,17 @@ import org.springframework.stereotype.Component
 
 @Component
 class LocaleProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
-    BaseProducer<Map<String, BookLocale>>(rabbitTemplate, mapper),
+    BaseProducer<MutableMap<String, BookLocale>>(rabbitTemplate, mapper),
     FiveEDataProducer {
-    override fun getAllLanguageKeys(): Map<String, BookLocale>? {
+    override fun getAllLanguageKeys(): MutableMap<String, BookLocale>? {
         val response = this.sendMessageForRoutingKey(RoutingKeys.GET_ALL_LANGUAGE_KEYS_ROUTING_KEY)
         return response
     }
 
     override fun getLanguageKeysByGameTypeAndLanguage(
         gameType: Int,
-        locale: String
-    ): Map<String, BookLocale>? {
+        locale: String?
+    ): MutableMap<String, BookLocale>? {
         val request = LanguageRequest()
         request.gameType = gameType
         request.locale = locale

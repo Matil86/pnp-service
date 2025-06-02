@@ -1,44 +1,18 @@
-package de.hipp.pnp.genefunk;
+package de.hipp.pnp.genefunk
 
-import de.hipp.pnp.api.fivee.abstracts.BaseCharacterClass;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import de.hipp.pnp.api.fivee.abstracts.BaseCharacterClass
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 
 @Entity
-class GeneFunkClass extends BaseCharacterClass {
-
+class GeneFunkClass : BaseCharacterClass() {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    long id;
+    var id: Long = 0
 
-    String name;
+    override var name: String? = ""
 
-    Integer level = 1;
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
+    override var level: Int? = 1
 }

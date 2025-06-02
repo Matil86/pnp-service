@@ -1,28 +1,11 @@
-package de.hipp.pnp.api.fivee.abstracts;
+package de.hipp.pnp.api.fivee.abstracts
 
 
-public abstract class BaseCharacterClass {
+abstract class BaseCharacterClass {
+    open var name: String? = null
+    open var level: Int? = null
 
-    private String name;
-    private Integer level;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public void increaseLevel(int amount) {
-        this.level = (this.level == null ? amount : this.level + amount);
+    fun increaseLevel(amount: Int) {
+        this.level = (if (this.level == null) amount else this.level!! + amount)
     }
 }

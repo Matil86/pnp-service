@@ -1,10 +1,14 @@
 # PnP Service
 
-A comprehensive service for pen and paper (PnP) role-playing games, providing character generation capabilities based on the 5e license. This project uses Spring Boot and RabbitMQ to create a modular service architecture for various game systems.
+A comprehensive service for pen and paper (PnP) role-playing games, providing character generation capabilities based on
+the 5e license. This project uses Spring Boot and RabbitMQ to create a modular service architecture for various game
+systems.
 
 ## Project Overview
 
-The PnP Service is designed to provide character generation and management tools for tabletop role-playing games. It's built with a modular architecture to support multiple game systems, with GeneFunk being the first implementation (currently a work in progress).
+The PnP Service is designed to provide character generation and management tools for tabletop role-playing games. It's
+built with a modular architecture to support multiple game systems, with GeneFunk being the first implementation (
+currently a work in progress).
 
 ## Modules
 
@@ -15,7 +19,6 @@ The project consists of the following modules:
 - **character-generator-starter**: Character generation service with desktop app integration
 - **genefunk**: Implementation for the GeneFunk game system
 - **genefunk-starter**: Starter module for GeneFunk
-- **genefunk-bootstrap**: Bootstrap configuration for GeneFunk
 - **data**: Data persistence and management
 - **data-starter**: Starter module for data services
 - **security**: Authentication and authorization
@@ -53,11 +56,12 @@ Each module has its own configuration in `application.yml`. Key configuration ar
 - `GOOGLE_CLIENT_ID`: Your Google OAuth client ID
 - `GOOGLE_CLIENT_SECRET`: Your Google OAuth client secret
 - `OAUTH2_REDIRECT_URI`: The redirect URI for OAuth2 authentication
-  - Example: `http://localhost:8080/login/oauth2/code/google`
+    - Example: `http://localhost:8080/login/oauth2/code/google`
 
 #### Desktop App Integration
 
-For integrating with a desktop application, see the detailed instructions in the [Character Generator Starter README](character-generator-starter/README.md).
+For integrating with a desktop application, see the detailed instructions in
+the [Character Generator Starter README](character-generator-starter/README.md).
 
 ## Usage
 
@@ -83,7 +87,7 @@ mvn spring-boot:run
 ## Roadmap
 
 - Data Service
-  - Move data storage functionality to the Data Service
+    - Move data storage functionality to the Data Service
 - Complete content transfer for GeneFunk
 - Integration of additional game systems
 

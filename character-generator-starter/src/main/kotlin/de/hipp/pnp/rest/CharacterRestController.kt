@@ -16,7 +16,7 @@ class CharacterRestController(val characterProducer: CharacterProducer) {
 
     @ResponseBody
     @GetMapping("/")
-    fun allCharacters(): List<BaseCharacter?> = characterProducer.allCharacters
+    fun allCharacters(): List<BaseCharacter?> = characterProducer.allCharacters()
 
     @GetMapping("/generate")
     @ResponseBody

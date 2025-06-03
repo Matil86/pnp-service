@@ -7,12 +7,16 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
 @Entity
-class GeneFunkClass : BaseCharacterClass() {
+class GeneFunkClassEntity : BaseCharacterClass() {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long = 0
 
-    override var name: String? = ""
+    override var name: String = ""
+    var label: String = ""
+    var description: String = ""
+    var savingThrows: List<String> = emptyList()
+    var startingEquipment: List<String> = emptyList()
+    var skills: List<String> = emptyList()
 
-    override var level: Int? = 1
 }

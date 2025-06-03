@@ -6,12 +6,17 @@ import de.hipp.pnp.api.fivee.E5EGameTypes
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacterClass
 import de.hipp.pnp.base.constants.AttributeConstants
+import de.hipp.pnp.base.entity.InventoryItem
 import de.hipp.pnp.base.fivee.Attribute5e
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
+
 
 @Entity
 @JsonSerialize
@@ -38,6 +43,12 @@ class GeneFunkCharacter : BaseCharacter() {
     @ManyToOne
     var genome: GeneFunkGenome? = null
 
+    var money = 0
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    var inventory: MutableList<InventoryItem> = mutableListOf()
+    var proficientSkills: MutableList<String> = mutableListOf()
+
     @JsonIgnore
     fun initialize() {
         this.gameType = E5EGameTypes.GENEFUNK.value
@@ -50,29 +61,13 @@ class GeneFunkCharacter : BaseCharacter() {
     @JsonIgnore
     fun applyBaseValues(attributeChanges: MutableMap<String?, Int?>) {
         setMaxValues(attributeChanges)
-        if (attributeChanges.containsKey(AttributeConstants.STRENGTH)) {
-            this.strength!!.modifyValue(attributeChanges.get(AttributeConstants.STRENGTH)!!)
-        }
 
-        if (attributeChanges.containsKey(AttributeConstants.DEXTERITY)) {
-            this.dexterity!!.modifyValue(attributeChanges.get(AttributeConstants.DEXTERITY)!!)
-        }
-
-        if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION)) {
-            this.constitution!!.modifyValue(attributeChanges.get(AttributeConstants.CONSTITUTION)!!)
-        }
-
-        if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE)) {
-            this.intelligence!!.modifyValue(attributeChanges.get(AttributeConstants.INTELLIGENCE)!!)
-        }
-
-        if (attributeChanges.containsKey(AttributeConstants.WISDOM)) {
-            this.wisdom!!.modifyValue(attributeChanges.get(AttributeConstants.WISDOM)!!)
-        }
-
-        if (attributeChanges.containsKey(AttributeConstants.CHARISMA)) {
-            this.charisma!!.modifyValue(attributeChanges.get(AttributeConstants.CHARISMA)!!)
-        }
+        this.strength!!.modifyValue(attributeChanges[AttributeConstants.STRENGTH] ?: 0)
+        this.dexterity!!.modifyValue(attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
+        this.constitution!!.modifyValue(attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
+        this.intelligence!!.modifyValue(attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
+        this.wisdom!!.modifyValue(attributeChanges[AttributeConstants.WISDOM] ?: 0)
+        this.charisma!!.modifyValue(attributeChanges[AttributeConstants.CHARISMA] ?: 0)
     }
 
     @JsonIgnore
@@ -98,15 +93,40 @@ class GeneFunkCharacter : BaseCharacter() {
     }
 
     @JsonIgnore
-    fun addClass(addClass: GeneFunkClass?) {
+    fun addClass(addClass: GeneFunkClassEntity) {
         val classes = this.characterClasses ?: emptySet<BaseCharacterClass?>().toMutableSet()
-        val index = classes.contains(addClass)
-        if (index) {
+        if (classes.contains(addClass)) {
             classes.stream().filter { value: BaseCharacterClass? -> value == addClass }
                 .forEach { charClass: BaseCharacterClass? -> charClass!!.increaseLevel(1) }
         } else {
             classes.add(addClass)
         }
         this.characterClasses = classes
+        proficientSkills.addAll(addClass.skills)
+        addClass.startingEquipment.forEach {
+            if (it.contains("¥")) {
+                addMoney(amountString = it)
+            } else {
+                var item = inventory.find { item -> item.name == it }
+                if (item == null) {
+                    item = InventoryItem().apply {
+                        name = it
+                    }
+                }
+                item.amount += 1
+                inventory.add(item)
+            }
+        }
+    }
+
+    @JsonIgnore
+    fun addMoney(amountString: String) {
+        val amount = amountString
+            .replace("¥", "")
+            .replace(",", "")
+            .replace(".", "")
+            .replace(":", "")
+            .toIntOrNull() ?: 0
+        money += amount
     }
 }

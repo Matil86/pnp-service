@@ -467,3 +467,230 @@ genefunk:
               description: "swiftFeet.description"
             - label: "toughAsNails.label"
               description: "toughAsNails.description"
+      classes:
+        biohacker:
+          label: biohacker.label
+          description: biohacker.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Biohacker’s pack"
+              - "Reinforced clothing"
+              - "¥1,500"
+            savingThrows:
+              - Intelligence
+              - Dexterity
+            skills:
+              choose: 2
+              from:
+                - Bureaucracy
+                - Computers
+                - Deception
+                - Drive
+                - Insight
+                - Investigation
+                - Physical Science
+                - Mechanics
+                - Social Science
+                - Survival
+        codehacker:
+          label: codehacker.label
+          description: codehacker.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Spy’s pack"
+              - "Reinforced clothing"
+              - "¥1,000"
+            savingThrows:
+              - Intelligence
+              - Wisdom
+            skills:
+              choose: 2
+              from:
+                - Bureaucracy
+                - Deception
+                - Drive
+                - Investigation
+                - Life Science
+                - Mechanics
+                - Physical Science
+                - Social Science
+                - Stealth
+        crook:
+          label: crook.label
+          description: crook.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Gangster’s pack or Merc’s pack"
+              - "Reinforced clothing"
+              - "¥3,000"
+            savingThrows:
+              - Intelligence
+              - Dexterity
+            skills:
+              choose: 2
+              from:
+                - Acrobatics
+                - Athletics
+                - Deception
+                - Drive
+                - Insight
+                - Intimidation
+                - Investigation
+                - Mechanics
+                - Perception
+                - Performance
+                - Persuasion
+                - Sleight of Hand
+                - Streetwise
+                - Stealth
+                - Computers
+        engineer:
+          label: engineer.label
+          description: engineer.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Tech’s pack"
+              - "Reinforced clothing"
+              - "¥1,500"
+            savingThrows:
+              - Constitution
+              - Intelligence
+            skills:
+              choose: 2
+              from:
+                - Bureaucracy
+                - Computers
+                - Deception
+                - Drive
+                - Investigation
+                - Life Science
+                - Physical Science
+                - Social Science
+                - Stealth
+        gunfighter:
+          label: gunfighter.label
+          description: gunfighter.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Gangster’s pack or Merc’s pack"
+              - "Reinforced clothing"
+              - "¥3,000"
+            savingThrows:
+              - Dexterity
+              - Constitution
+            skills:
+              choose: 2
+              from:
+                - Acrobatics
+                - Athletics
+                - Computers
+                - Drive
+                - Insight
+                - Intimidation
+                - Mechanics
+                - Perception
+                - Stealth
+                - Streetwise
+                - Survival
+        hardcase:
+          label: hardcase.label
+          description: hardcase.description
+          characterCreation:
+            customCreation:
+              money: "¥5,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Gangster’s pack or Merc’s pack"
+              - "Reinforced clothing"
+              - "¥3,000"
+            savingThrows:
+              - Strength
+              - Constitution
+            skills:
+              choose: 2
+              from:
+                - Acrobatics
+                - Athletics
+                - Drive
+                - Insight
+                - Intimidation
+                - Perception
+                - Sleight of Hand
+                - Streetwise
+                - Stealth
+
+        samurai:
+          label: samurai.label
+          description: samurai.description
+          characterCreation:
+            customCreation:
+              money: "¥7,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Gangster’s pack or Merc’s pack"
+              - "Reinforced clothing"
+              - "¥5,000"
+            savingThrows:
+              - Strength
+              - Dexterity
+            skills:
+              choose: 2
+              from:
+                - Acrobatics
+                - Athletics
+                - Drive
+                - Insight
+                - Intimidation
+                - Investigation
+                - Perception
+                - Social Science
+                - Streetwise
+                - Stealth
+        suit:
+          label: suit.label
+          description: suit.description
+          characterCreation:
+            customCreation:
+              money: "¥7,000"
+            startingEquipment:
+              - "9mm, 10mm, or 11mm handgun"
+              - "Spy’s pack"
+              - "Reinforced clothing"
+              - "¥2,500"
+            savingThrows:
+              - Wisdom
+              - Charisma
+            skills:
+              choose: 2
+              from:
+                - Acrobatics
+                - Athletics
+                - Bureaucracy
+                - Computers
+                - Deception
+                - Drive
+                - Insight
+                - Intimidation
+                - Investigation
+                - Life Science
+                - Mechanics
+                - Perception
+                - Performance
+                - Persuasion
+                - Social Science
+                - Stealth

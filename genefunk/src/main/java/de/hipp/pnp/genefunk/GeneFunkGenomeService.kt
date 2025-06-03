@@ -5,9 +5,7 @@ import de.hipp.pnp.base.rabbitmq.GenefunkInfoProducer
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
-@Transactional
 @Service
 open class GeneFunkGenomeService(
     val repository: GeneFunkGenomeRepository,
@@ -48,7 +46,11 @@ open class GeneFunkGenomeService(
     open fun save(genomes: List<GeneFunkGenome>) {
         genomes.forEach {
             log.info { "Saving genome: ${it.name}" }
-            repository.save(it)
+            if (repository.existsByName(it.name)) {
+                log.warn { "Genome with name ${it.name} already exists, skipping save." }
+                return@forEach
+            }
+            repository.saveAndFlush(it)
         }
     }
 

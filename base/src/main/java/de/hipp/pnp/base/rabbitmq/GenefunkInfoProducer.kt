@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.hipp.pnp.api.fivee.E5EGameTypes
 import de.hipp.pnp.base.constants.RoutingKeys
 import de.hipp.pnp.base.entity.CharacterSpeciesEntity
+import de.hipp.pnp.base.entity.GeneFunkClass
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
@@ -21,4 +22,18 @@ class GenefunkInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper
         }
     }
 
+    fun getAllClasses(): Map<String, GeneFunkClass> {
+        return this.sendMessageForRoutingKey(RoutingKeys.GET_GENEFUNK_CLASSES, E5EGameTypes.GENEFUNK).map {
+            it!!.mapKeys { entry ->
+                entry.key.toString()
+            }
+                .mapValues { entry ->
+                    val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry.value)
+                    mapper.readValue(
+                        json,
+                        GeneFunkClass::class.java
+                    )
+                }
+        }.first()
+    }
 }

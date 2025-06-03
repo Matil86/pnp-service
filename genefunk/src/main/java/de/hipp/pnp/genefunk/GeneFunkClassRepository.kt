@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface GeneFunkClassRepository : JpaRepository<GeneFunkClass?, Int?> {
-    fun findByName(name: String?): Optional<GeneFunkClass?>?
+interface GeneFunkClassRepository : JpaRepository<GeneFunkClassEntity?, Int?> {
+    fun findByName(name: String?): Optional<GeneFunkClassEntity?>?
 }

@@ -7,8 +7,7 @@ import com.rabbitmq.client.Channel
 import de.hipp.pnp.api.fivee.E5EGameTypes
 import de.hipp.pnp.api.rabbitMq.DefaultMessage
 import de.hipp.pnp.base.constants.RoutingKeys
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.stereotype.Component
@@ -20,7 +19,7 @@ class GeneFunkCharakterListener(
     private val mapper: ObjectMapper,
     factory: ConnectionFactory
 ) {
-    private val log: Logger = LoggerFactory.getLogger(GeneFunkCharakterListener::class.java)
+    private val log = KotlinLogging.logger {}
 
     init {
         declareQueues(factory.createConnection().createChannel(true))
@@ -42,13 +41,13 @@ class GeneFunkCharakterListener(
         val payload = service.getAllCharacters(message.header.getExternalId())
         message.action = "finished"
         message.payload = payload
-        log.info("{} finished with {}", RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY, payload)
+        log.debug { "${RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY} finished with $payload" }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message)
     }
 
     @RabbitListener(queues = [RoutingKeys.CREATE_CHARACTER_ROUTING_KEY])
     @Throws(JsonProcessingException::class)
-    protected fun createGenefunkCharacter(character: String?): String? {
+    fun createGenefunkCharacter(character: String?): String? {
         val message = mapper.readValue<DefaultMessage<GeneFunkCharacter?>>(
             character,
             object : TypeReference<DefaultMessage<GeneFunkCharacter?>?>() {
@@ -59,7 +58,7 @@ class GeneFunkCharakterListener(
         val payload = service.generate(message.getPayload(), message.header.getExternalId())
         message.action = "finished"
         message.payload = payload
-        log.info("{} finished with {}", RoutingKeys.CREATE_CHARACTER_ROUTING_KEY, payload)
+        log.debug { "${RoutingKeys.CREATE_CHARACTER_ROUTING_KEY} finished with  $payload" }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message)
     }
 }

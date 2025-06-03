@@ -6,6 +6,7 @@ import de.hipp.data.config.GameConfiguration
 import de.hipp.pnp.api.rabbitMq.DefaultMessage
 import de.hipp.pnp.base.constants.RoutingKeys
 import de.hipp.pnp.base.entity.CharacterSpeciesEntity
+import de.hipp.pnp.base.entity.GeneFunkClass
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
@@ -40,10 +41,10 @@ class GenefunkListener(
     @RabbitListener(queues = [RoutingKeys.GET_GENEFUNK_CLASSES])
     fun getGenefunkClasses(): String {
         val message =
-            DefaultMessage<List<String>>()
+            DefaultMessage<List<Map<String, GeneFunkClass>>>()
 
         val payload =
-            configuration.books.map { it.species }.flatten().map { it.name }.distinct()
+            configuration.books.map { it.classes }.distinct()
 
         message.action = "finished"
         message.payload = payload

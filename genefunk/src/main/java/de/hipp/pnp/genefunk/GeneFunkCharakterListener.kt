@@ -29,13 +29,14 @@ class GeneFunkCharakterListener(
     private fun declareQueues(channel: Channel) {
         channel.queueDeclare(RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY, false, false, true, null)
         channel.queueDeclare(RoutingKeys.CREATE_CHARACTER_ROUTING_KEY, false, false, true, null)
+        channel.queueDeclare(RoutingKeys.DELETE_CHARACTER_ROUTING_KEY, false, false, true, null)
     }
 
     @RabbitListener(queues = [RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY])
     @Throws(IOException::class)
-    fun getAllGenefunkCharacters(character: String?): String? {
+    fun getAllGenefunkCharacters(messageString: String): String? {
         val message = mapper.readValue<DefaultMessage<MutableList<GeneFunkCharacter?>?>>(
-            character,
+            messageString,
             object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter?>?>?>() {
             })
         val payload = service.getAllCharacters(message.header.getExternalId())
@@ -47,9 +48,9 @@ class GeneFunkCharakterListener(
 
     @RabbitListener(queues = [RoutingKeys.CREATE_CHARACTER_ROUTING_KEY])
     @Throws(JsonProcessingException::class)
-    fun createGenefunkCharacter(character: String?): String? {
+    fun createGenefunkCharacter(messageString: String?): String? {
         val message = mapper.readValue<DefaultMessage<GeneFunkCharacter?>>(
-            character,
+            messageString,
             object : TypeReference<DefaultMessage<GeneFunkCharacter?>?>() {
             })
         if (message.action != E5EGameTypes.GENEFUNK.name) {
@@ -59,6 +60,22 @@ class GeneFunkCharakterListener(
         message.action = "finished"
         message.payload = payload
         log.debug { "${RoutingKeys.CREATE_CHARACTER_ROUTING_KEY} finished with  $payload" }
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message)
+    }
+
+    @RabbitListener(queues = [RoutingKeys.DELETE_CHARACTER_ROUTING_KEY])
+    @Throws(JsonProcessingException::class)
+    fun delete(messageString: String?): String? {
+        val message = mapper.readValue<DefaultMessage<String>>(
+            messageString,
+            object : TypeReference<DefaultMessage<String>?>() {
+            })
+        if (message.action != E5EGameTypes.GENEFUNK.name) {
+            return null
+        }
+        service.delete(message.getPayload(), message.header.getExternalId())
+        message.action = "finished"
+        log.debug { "${RoutingKeys.DELETE_CHARACTER_ROUTING_KEY} finished" }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message)
     }
 }

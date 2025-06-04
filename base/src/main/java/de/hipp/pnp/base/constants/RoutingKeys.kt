@@ -10,4 +10,5 @@ object RoutingKeys {
     const val SAVE_NEW_USER: String = "SAVE_NEW_USER"
     const val GET_GENEFUNK_CLASSES: String = "GET_GENEFUNK_CLASSES"
     const val GET_GENEFUNK_SPECIES: String = "GET_GENEFUNK_SPECIES"
+    const val DELETE_CHARACTER_ROUTING_KEY: String = "DELETE_CHARACTER_ROUTING_KEY"
 }

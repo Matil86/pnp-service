@@ -152,4 +152,18 @@ open class GeneFunkCharacterService(
         val randomInt = random.nextInt(list.size)
         return list[max(randomInt, 0)]
     }
+
+    fun delete(characterId: String, externalId: String) {
+        val customer = userInfoProducer.getCustomerInfoFor(externalId)
+        if (customer != null && "admin".equals(customer.getRole(), ignoreCase = true)) {
+            repository.deleteById(characterId.toInt())
+            return
+        }
+        val character = repository.findById(characterId.toInt())
+        if (character.isPresent && character.get().userId == customer.getExternalIdentifer()) {
+            repository.deleteById(characterId.toInt())
+        } else {
+            throw IllegalArgumentException("Character with ID $characterId does not exist or does not belong to user.")
+        }
+    }
 }

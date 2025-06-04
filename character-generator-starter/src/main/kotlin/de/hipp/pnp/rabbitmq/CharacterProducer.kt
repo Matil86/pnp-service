@@ -40,4 +40,14 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) 
             E5EGameTypes.GENEFUNK
         ) as MutableList<BaseCharacter?>
     }
+
+    fun deleteCharacter(characterId: Int) {
+        log.debug { "delete character request received for characterId: $characterId" }
+        sendMessageForRoutingKey(
+            RoutingKeys.DELETE_CHARACTER_ROUTING_KEY,
+            E5EGameTypes.GENEFUNK,
+            characterId
+        )
+        log.info { "Character with ID $characterId deleted successfully." }
+    }
 }

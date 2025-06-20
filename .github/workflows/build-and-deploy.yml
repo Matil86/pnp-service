@@ -35,10 +35,19 @@ jobs:
       - name: Run Tests
         run: mvn -B test --file pom.xml
 
+  # Neuer Job für das Approval
+  deployment-approval:
+    needs: build-with-tests
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
+    runs-on: ubuntu-latest
+    environment: live  # Hier wird deine Protection Rule aktiviert
+    steps:
+      - run: echo "Deployment genehmigt für Live-Environment"
+
   pipeline-base:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: build-with-tests
+    needs: deployment-approval
     with:
       build_image: character-generator-service
       service_name: character-generator-service
@@ -48,7 +57,7 @@ jobs:
   pipeline-data:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: build-with-tests
+    needs: deployment-approval
     with:
       build_image: data-service
       service_name: data-service
@@ -58,7 +67,7 @@ jobs:
   pipeline-security:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: build-with-tests
+    needs: deployment-approval
     with:
       build_image: security-service
       service_name: security-service
@@ -68,7 +77,7 @@ jobs:
   pipeline-genefunk:
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: build-with-tests
+    needs: deployment-approval
     with:
       build_image: genefunk-generator-service
       service_name: genefunk-generator-service

@@ -39,12 +39,11 @@ jobs:
   deployment-approval:
     needs: build-with-tests
     runs-on: ubuntu-latest
-    environment: live  # Hier wird deine Protection Rule aktiviert
+    environment: live
     steps:
       - run: echo "Deployment genehmigt für Live-Environment"
 
   pipeline-base:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: deployment-approval
     with:
@@ -54,7 +53,6 @@ jobs:
     secrets: inherit
 
   pipeline-data:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: deployment-approval
     with:
@@ -64,7 +62,6 @@ jobs:
     secrets: inherit
 
   pipeline-security:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: deployment-approval
     with:
@@ -74,7 +71,6 @@ jobs:
     secrets: inherit
 
   pipeline-genefunk:
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: deployment-approval
     with:

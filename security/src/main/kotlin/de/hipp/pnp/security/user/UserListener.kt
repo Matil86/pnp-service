@@ -64,16 +64,19 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
             }
         log.info("Received Save new User Message : {}", message)
         val customer = message.payload
-        val userToSafe: User = User(
-            customer.userId,
-            customer.vorname,
-            customer.nachname,
-            customer.name,
-            customer.externalIdentifer,
-            customer.mail,
-            customer.role
-        )
-        val responseUser: User? = userService.saveUser(userToSafe)
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseUser)
+        var user: User? = userService.getUserByExternalId(customer.userId)
+        if (user == null) {
+            val userToSafe: User = User(
+                customer.userId,
+                customer.vorname,
+                customer.nachname,
+                customer.name,
+                customer.externalIdentifer,
+                customer.mail,
+                customer.role
+            )
+            user = userService.saveUser(userToSafe)
+        }
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user)
     }
 }

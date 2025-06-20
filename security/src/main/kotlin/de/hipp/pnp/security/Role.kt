@@ -1,8 +1,9 @@
 package de.hipp.pnp.security
 
 enum class Role(private val value: String) {
-    USER("USER"),
-    ADMIN("ADMIN");
+    ADMIN("ADMIN"),
+    ANONYMOUS("ANONYMOUS"),
+    USER("USER");
 
 
     override fun toString(): String {

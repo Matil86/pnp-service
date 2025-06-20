@@ -40,22 +40,14 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
             mapper.readValue(user, object : TypeReference<DefaultMessage<String>>() {})
         log.debug("Received Get Internal User Message : {}", message)
         val customer: User? = userService.getUserByExternalId(message.payload)
-        if (customer == null) {
-            log.warn("No Internal User found for externalId: {}", message.payload)
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                DefaultMessage<String>().apply {
-                    action = "error"
-                    detailMessage = "No user found for externalId: ${message.payload}"
-                }
-            )
-        }
-        log.debug("found Internal User Customer : {}", customer)
         val response = DefaultMessage<User>()
         response.header = MessageHeader()
-        response.header.externalId = message.payload.toString()
-        response.header.roles = arrayOf(customer.role ?: Role.USER.name)
-        response.payload = customer
-        log.debug("found Internal User Response : {}", response)
+        response.header.externalId = message.payload
+        response.header.roles = arrayOf(customer?.role ?: Role.ANONYMOUS.name)
+        if (customer != null) {
+            response.payload = customer
+            log.debug("found Internal User Response : {}", response)
+        }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response)
     }
 

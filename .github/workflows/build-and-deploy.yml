@@ -35,17 +35,9 @@ jobs:
       - name: Run Tests
         run: mvn -B test --file pom.xml
 
-  # Neuer Job für das Approval
-  deployment-approval:
-    needs: build-with-tests
-    runs-on: ubuntu-latest
-    environment: live
-    steps:
-      - run: echo "Deployment genehmigt für Live-Environment"
-
   pipeline-base:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: deployment-approval
+    needs: build-with-tests
     with:
       build_image: character-generator-service
       service_name: character-generator-service
@@ -54,7 +46,7 @@ jobs:
 
   pipeline-data:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: deployment-approval
+    needs: build-with-tests
     with:
       build_image: data-service
       service_name: data-service
@@ -63,7 +55,7 @@ jobs:
 
   pipeline-security:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: deployment-approval
+    needs: build-with-tests
     with:
       build_image: security-service
       service_name: security-service
@@ -72,7 +64,7 @@ jobs:
 
   pipeline-genefunk:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
-    needs: deployment-approval
+    needs: build-with-tests
     with:
       build_image: genefunk-generator-service
       service_name: genefunk-generator-service

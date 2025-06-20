@@ -1,6 +1,10 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
 server:
   port: ${SERVER_PORT:0}
-
 spring:
   profiles:
     include: rabbitmq,genefunk-crb-locale, genefunk-crb

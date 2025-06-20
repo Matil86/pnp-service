@@ -1,6 +1,5 @@
 server:
   port: ${SERVER_PORT:0}
-
 spring:
   profiles:
     active: rabbitmq,h2-database

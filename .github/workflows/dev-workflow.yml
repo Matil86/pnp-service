@@ -34,7 +34,7 @@ jobs:
   pipeline-base:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: build-with-tests
-    environment: live
+    if: env == "live"
     with:
       build_image: character-generator-service
       service_name: character-generator-service
@@ -44,7 +44,7 @@ jobs:
   pipeline-data:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: build-with-tests
-    environment: live
+    if: env == "live"
     with:
       build_image: data-service
       service_name: data-service
@@ -54,7 +54,7 @@ jobs:
   pipeline-security:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: build-with-tests
-    environment: live
+    if: env == "live"
     with:
       build_image: security-service
       service_name: security-service
@@ -64,7 +64,7 @@ jobs:
   pipeline-genefunk:
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     needs: build-with-tests
-    environment: live
+    if: env == "live"
     with:
       build_image: genefunk-generator-service
       service_name: genefunk-generator-service

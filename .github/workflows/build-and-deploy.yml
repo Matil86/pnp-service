@@ -6,12 +6,6 @@ concurrency:
 
 on:
   workflow_dispatch:
-    inputs:
-      deploy_to_live:
-        description: 'Live deployment?'
-        type: boolean
-        required: true
-        default: false
   push:
     branches:
       - main

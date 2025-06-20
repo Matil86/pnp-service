@@ -23,7 +23,8 @@ class GenefunkInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper
     }
 
     fun getAllClasses(): Map<String, GeneFunkClass> {
-        return this.sendMessageForRoutingKey(RoutingKeys.GET_GENEFUNK_CLASSES, E5EGameTypes.GENEFUNK).map {
+        val classes = this.sendMessageForRoutingKey(RoutingKeys.GET_GENEFUNK_CLASSES, E5EGameTypes.GENEFUNK)
+        return classes?.map {
             it!!.mapKeys { entry ->
                 entry.key.toString()
             }
@@ -34,6 +35,6 @@ class GenefunkInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper
                         GeneFunkClass::class.java
                     )
                 }
-        }.first()
+        }?.first() ?: emptyMap<String, GeneFunkClass>()
     }
 }

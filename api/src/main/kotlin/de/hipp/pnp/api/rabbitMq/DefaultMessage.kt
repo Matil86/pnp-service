@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class DefaultMessage<T> {
-    lateinit var action: String
+    var action: String = ""
     var payload: T? = null
-    lateinit var detailMessage: String
-    lateinit var uuid: String
-    lateinit var header: MessageHeader
+    var detailMessage: String = ""
+    var uuid: String = ""
+    var header: MessageHeader = MessageHeader()
 
     @JsonIgnore
     override fun toString(): String {

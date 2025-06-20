@@ -19,7 +19,7 @@ class GeneFunkClassService(
     fun init() {
         val classes: Map<String, GeneFunkClass> = genefunkInfoProducer.getAllClasses()
         if (classes.isNullOrEmpty()) {
-            println("No genomes found for GeneFunk")
+            println("No classes found for GeneFunk")
             return
         }
 

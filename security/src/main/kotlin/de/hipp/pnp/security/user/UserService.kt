@@ -3,7 +3,7 @@ package de.hipp.pnp.security.user
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(private var userRepository: UserRepository) {
+open class UserService(private var userRepository: UserRepository) {
     fun userExists(sub: String?): Boolean {
         return userRepository.getUserByExternalIdentifer(sub) != null
     }
@@ -22,7 +22,7 @@ class UserService(private var userRepository: UserRepository) {
         return user
     }
 
-    fun saveUser(user: User): User? {
-        return userRepository.save(user)
+    open fun saveUser(user: User): User? {
+        return userRepository.saveAndFlush(user)
     }
 }

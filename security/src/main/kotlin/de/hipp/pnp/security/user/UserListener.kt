@@ -72,15 +72,6 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
             }
         log.info("Received Save new User Message : {}", message)
         val customer = message.payload
-        if (customer == null) {
-            log.warn("No Customer data provided in message")
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                DefaultMessage<String>().apply {
-                    action = "error"
-                    detailMessage = "No customer data provided"
-                }
-            )
-        }
         val userToSafe: User = User(
             customer.userId,
             customer.vorname,
@@ -90,7 +81,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
             customer.mail,
             customer.role
         )
-        var responseUser: User? = userService.saveUser(userToSafe)
+        val responseUser: User? = userService.saveUser(userToSafe)
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseUser)
     }
 }

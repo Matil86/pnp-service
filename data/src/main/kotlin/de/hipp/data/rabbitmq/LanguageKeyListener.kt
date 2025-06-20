@@ -69,7 +69,8 @@ class LanguageKeyListener(
 
         val gameName = E5EGameTypes.fromValue(payload?.gameType).toString().lowercase()
         val game = allLocale[gameName]
-        val books = game?.books
+            ?: throw IllegalArgumentException("Game type $gameName not found in localization properties")
+        val books = game.books
         val response: DefaultMessage<Map<String, BookLocale>> = DefaultMessage()
         response.action = "finished"
         response.payload = books

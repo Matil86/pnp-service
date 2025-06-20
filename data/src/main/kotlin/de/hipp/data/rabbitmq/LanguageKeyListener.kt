@@ -67,7 +67,7 @@ class LanguageKeyListener(
         val payload = messageObject.payload
         val allLocale = localizationProperties.systems
 
-        val gameName = E5EGameTypes.fromValue(payload.gameType).toString().lowercase()
+        val gameName = E5EGameTypes.fromValue(payload?.gameType).toString().lowercase()
         val game = allLocale[gameName]
         val books = game?.books
         val response: DefaultMessage<Map<String, BookLocale>> = DefaultMessage()

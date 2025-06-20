@@ -39,7 +39,7 @@ class GeneFunkCharakterListener(
             messageString,
             object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter?>?>?>() {
             })
-        val payload = service.getAllCharacters(message.header.getExternalId())
+        val payload = service.getAllCharacters(message.header.externalId)
         message.action = "finished"
         message.payload = payload
         log.debug { "${RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY} finished with $payload" }
@@ -56,7 +56,7 @@ class GeneFunkCharakterListener(
         if (message.action != E5EGameTypes.GENEFUNK.name) {
             return null
         }
-        val payload = service.generate(message.getPayload(), message.header.getExternalId())
+        val payload = service.generate(message.payload, message.header.externalId)
         message.action = "finished"
         message.payload = payload
         log.debug { "${RoutingKeys.CREATE_CHARACTER_ROUTING_KEY} finished with  $payload" }
@@ -73,7 +73,8 @@ class GeneFunkCharakterListener(
         if (message.action != E5EGameTypes.GENEFUNK.name) {
             return null
         }
-        service.delete(message.getPayload(), message.header.getExternalId())
+        val characterId = message.payload ?: throw IllegalArgumentException("Character ID must not be null")
+        service.delete(characterId, message.header.externalId)
         message.action = "finished"
         log.debug { "${RoutingKeys.DELETE_CHARACTER_ROUTING_KEY} finished" }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(message)

@@ -40,11 +40,11 @@ public abstract class BaseProducer<T> {
 
     protected T sendMessageForRoutingKey(String routingKey, E5EGameTypes e5EGameTypes, Object payload) {
         DefaultMessage<Object> message = new DefaultMessage<>();
-        message.setHeader(getHeader());
-        message.setUuid(UUID.randomUUID().toString());
+        message.header = getHeader();
+        message.uuid = UUID.randomUUID().toString();
         prepareTemplate(routingKey);
         if (e5EGameTypes != null) {
-            message.setAction(e5EGameTypes.name());
+            message.action = e5EGameTypes.name();
         }
         if (payload != null) {
             message.setPayload(payload);
@@ -67,7 +67,7 @@ public abstract class BaseProducer<T> {
         MessageHeader header = new MessageHeader();
         if (auth != null) {
             Jwt user = (Jwt) auth.getPrincipal();
-            header.setExternalId(user.getClaimAsString("sub"));
+            header.externalId = user.getClaimAsString("sub");
         }
         return header;
     }

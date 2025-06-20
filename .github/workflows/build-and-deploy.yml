@@ -38,8 +38,8 @@ jobs:
   # Neuer Job für das Approval
   deployment-approval:
     needs: build-with-tests
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_to_live == true
     runs-on: ubuntu-latest
+    environment: live  # Hier wird deine Protection Rule aktiviert
     steps:
       - run: echo "Deployment genehmigt für Live-Environment"
 

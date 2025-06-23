@@ -154,7 +154,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                         jwt.claims["family_name"] as? String ?: "",
                         jwt.claims["name"] as? String ?: "",
                         jwt.claims["sub"] as? String ?: "",
-                        userId,
+                        jwt.claims["email"] as? String ?: "",
                         "USER"
                     )
                     userInfoProducer.saveNewUser(newCustomer)

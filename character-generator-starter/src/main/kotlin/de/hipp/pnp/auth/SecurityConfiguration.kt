@@ -56,7 +56,8 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
                 disable()
             }
             authorizeHttpRequests {
-                authorize("/", permitAll)
+                authorize("/actuator/**", permitAll)
+                authorize("/error/**", permitAll)
                 authorize("/resource/**", hasAnyAuthority("ADMIN", "USER"))
                 authorize("/user/**", hasAnyAuthority("USER"))
                 authorize("/admin/**", hasAnyAuthority("ADMIN"))

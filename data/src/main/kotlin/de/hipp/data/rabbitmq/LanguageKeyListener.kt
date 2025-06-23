@@ -6,7 +6,6 @@ import com.rabbitmq.client.Channel
 import de.hipp.data.config.LocalizationProperties
 import de.hipp.pnp.api.dto.LanguageRequest
 import de.hipp.pnp.api.fivee.E5EGameTypes
-import de.hipp.pnp.api.locale.BookLocale
 import de.hipp.pnp.api.locale.SystemLocale
 import de.hipp.pnp.api.rabbitMq.DefaultMessage
 import de.hipp.pnp.base.constants.RoutingKeys
@@ -70,10 +69,9 @@ class LanguageKeyListener(
         val gameName = E5EGameTypes.fromValue(payload?.gameType).toString().lowercase()
         val game = allLocale[gameName]
             ?: throw IllegalArgumentException("Game type $gameName not found in localization properties")
-        val books = game.books
-        val response: DefaultMessage<Map<String, BookLocale>> = DefaultMessage()
+        val response: DefaultMessage<SystemLocale> = DefaultMessage()
         response.action = "finished"
-        response.payload = books
+        response.payload = game
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response)
     }
 }

@@ -21,6 +21,10 @@ class UserInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
     @Throws(JsonProcessingException::class)
     fun saveNewUser(customer: Customer?): Customer {
         val map = this.sendMessageForRoutingKey(SAVE_NEW_USER, null, customer)
+        if (map == null) {
+            log.warn("Received null response from saveNewUser for customer: {}", customer)
+            return Customer()
+        }
         return mapper.convertValue(map, Customer::class.java)
     }
 

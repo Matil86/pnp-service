@@ -20,7 +20,7 @@ import java.util.UUID;
 public abstract class BaseProducer<T> {
 
 
-    private Logger log = LoggerFactory.getLogger(BaseProducer.class);
+    Logger log = LoggerFactory.getLogger(BaseProducer.class);
 
     protected final RabbitTemplate template;
     protected final ObjectMapper mapper;

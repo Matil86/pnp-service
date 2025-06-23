@@ -19,6 +19,6 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
         ) gameType: Int
     ): String {
         val locale = localeProducer.getLanguageKeysByGameTypeAndLanguage(gameType, "en_US")
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(locale)
+        return mapper.writeValueAsString(locale)
     }
 }

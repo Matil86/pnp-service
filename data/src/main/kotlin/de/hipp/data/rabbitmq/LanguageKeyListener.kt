@@ -72,6 +72,6 @@ class LanguageKeyListener(
         val response: DefaultMessage<SystemLocale> = DefaultMessage()
         response.action = "finished"
         response.payload = game
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response)
+        return mapper.writeValueAsString(response)
     }
 }

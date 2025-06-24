@@ -41,7 +41,10 @@ jobs:
       - name: Run Tests
         run: |
           cd character-generator-starter
-          mvn -B test
+          mvn test
+
+      - name: Build Packages
+        run: mvn install -DskipTests
 
       - name: Build Image
         run: |

@@ -73,6 +73,7 @@
                                     <goal>build-image</goal>
                                 </goals>
                                 <configuration>
+                                    <mainClass>${start-class}</mainClass>
                                     <image>
                                         <builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
                                     </image>

@@ -38,13 +38,13 @@ jobs:
           distribution: 'graalvm'
           cache: maven
 
+      - name: Build Packages
+        run: mvn install -DskipTests
+
       - name: Run Tests
         run: |
           cd character-generator-starter
           mvn test
-
-      - name: Build Packages
-        run: mvn install -DskipTests
 
       - name: Build Image
         run: |

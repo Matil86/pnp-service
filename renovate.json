@@ -1,11 +1,5 @@
 {
   "dependencyDashboard": true,
-  "schedule": [
-    "after 1am and before 11pm every weekday"
-  ],
-  "automergeSchedule": [
-    "after 1am and before 11pm every weekday"
-  ],
   "timezone": "Europe/Berlin",
   "stabilityDays": 3,
   "vulnerabilityAlerts": {

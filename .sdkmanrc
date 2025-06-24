@@ -1,2 +1,2 @@
-java=23.0.2-zulu
+java=23.0.2-graal
 maven=3.9.10

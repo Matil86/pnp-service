@@ -23,20 +23,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
           access_token_lifetime: 3600s
+
       - name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '23'
           distribution: 'graalvm'
           cache: maven
+
       - name: Run Tests
-        run: mvn -B test --file character-generator-starter/pom.xml
+        run: |
+          cd character-generator-starter
+          mvn -B test
+
       - name: Build Image
         run: |
           cd character-generator-starter

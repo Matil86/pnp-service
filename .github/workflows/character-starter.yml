@@ -49,13 +49,13 @@ jobs:
       - name: Build Image
         run: |
           cd character-generator-starter
-          mvn spring-boot:build-image -DskipTests -Pnative -Dimage.build=true -Dimage.push=true -Dimage.name=europe-west3-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/character-generator-starter:latest
+          mvn spring-boot:build-image -DskipTests -Pnative -Dimage.build=true -Dimage.push=true -Dimage.name=europe-west3-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.REPOSITORY_NAME }}/character-generator-service:latest
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v1
         id: deploy
         with:
-          service: ${{inputs.service_name}}
-          image: ${{inputs.registry_hostname}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{inputs.build_image}}:latest
+          service: character-generator-service
+          image: ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/character-generator-service:latest
           region: ${{vars.REGION}}
           flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'

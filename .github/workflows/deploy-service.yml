@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  imageName: ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}
+  imageName: ${{env.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{inputs.image-name}}
 
 jobs:
   build-and-test:
@@ -59,7 +59,7 @@ jobs:
           create_credentials_file: 'false'
 
       - name: Konfiguriere Docker für Google Container Registry
-        run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet
+        run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}}
 
       - name: Push Image to Google Container Registry
         run: docker push ${{env.imageName}}

@@ -9,6 +9,7 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 
 @SpringBootApplication(scanBasePackages = ["de.hipp.*"], proxyBeanMethods = false)
 @ImportRuntimeHints(CharacterGeneratorRuntimeHints::class)
+@RegisterReflectionForBinding(CharacterGeneratorApplication.Companion::class)
 open class CharacterGeneratorApplication {
     companion object {
         @JvmStatic

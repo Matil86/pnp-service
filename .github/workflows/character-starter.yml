@@ -11,8 +11,9 @@ on:
 
 jobs:
   build-and-deploy:
-    uses: ./.github/workflows/deploy-service.yml
+    uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     with:
-      project-folder: 'character-generator-starter'
-      image-name: 'character-generator-service'
+      build_image: character-generator-service
+      service_name: character-generator-service
+      pom_folder: character-generator-starter
     secrets: inherit

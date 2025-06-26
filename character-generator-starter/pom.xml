@@ -12,7 +12,7 @@
 	<artifactId>character-generator-starter</artifactId>
 
 	<properties>
-		<start-class>de.hipp.pnp.CharacterGeneratorApplication$Companion</start-class>
+		<start-class>de.hipp.pnp.CharacterGeneratorApplication</start-class>
 	</properties>
 
 	<dependencies>

@@ -1,5 +1,4 @@
 name: Build and Deploy Service to Cloud Run
-
 on:
   workflow_call:
     inputs:

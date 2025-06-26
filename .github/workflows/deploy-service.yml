@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy-service-to-cloud-run:
+  build-and-test:
     runs-on: ubuntu-latest
     environment: live
     permissions:
@@ -51,6 +51,7 @@ jobs:
   deploy-service-to-cloud-run:
         runs-on: ubuntu-latest
         environment: live
+        needs: build-and-test
         permissions:
             contents: read
             id-token: write
@@ -61,6 +62,7 @@ jobs:
               workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
               service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
               access_token_lifetime: 3600s
+              create_credentials_file: 'false'
 
           - name: Konfiguriere Docker für Google Container Registry
             run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet

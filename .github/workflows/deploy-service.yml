@@ -55,11 +55,6 @@ jobs:
           mvn spring-boot:build-image -DskipTests -Pnative \
             -Dspring-boot.build-image.imageName=${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}:latest
 
-      - name: Authentifiziere bei Google Container Registry
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{vars.PROJECT_ID}}
-
       - name: Konfiguriere Docker für Google Container Registry
         run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet
 

@@ -3,6 +3,8 @@ package de.hipp.pnp.security
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.ImportRuntimeHints
+import org.springframework.aot.hint.RuntimeHints
+import org.springframework.aot.hint.RuntimeHintsRegistrar
 
 @SpringBootApplication(scanBasePackages = ["de.hipp.*"], proxyBeanMethods = false)
 @ImportRuntimeHints(SecurityServiceRuntimeHints::class)
@@ -15,8 +17,9 @@ open class SecurityServiceApplication {
     }
 }
 
-class SecurityServiceRuntimeHints : org.springframework.aot.hint.RuntimeHintsRegistrar {
-    override fun registerHints(hints: org.springframework.aot.hint.RuntimeHints, classLoader: ClassLoader?) {
-        // Register hints for AOT processing if needed
+class SecurityServiceRuntimeHints : RuntimeHintsRegistrar {
+    override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
+        // Register the companion class for reflection
+        hints.reflection().registerType(SecurityServiceApplication.Companion::class.java)
     }
 }

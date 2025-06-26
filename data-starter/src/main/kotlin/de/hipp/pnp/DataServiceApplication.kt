@@ -3,6 +3,8 @@ package de.hipp.pnp
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.ImportRuntimeHints
+import org.springframework.aot.hint.RuntimeHints
+import org.springframework.aot.hint.RuntimeHintsRegistrar
 
 @SpringBootApplication(scanBasePackages = ["de.hipp.*"], proxyBeanMethods = false)
 @ImportRuntimeHints(DataServiceRuntimeHints::class)
@@ -15,8 +17,9 @@ open class DataServiceApplication {
     }
 }
 
-class DataServiceRuntimeHints : org.springframework.aot.hint.RuntimeHintsRegistrar {
-    override fun registerHints(hints: org.springframework.aot.hint.RuntimeHints, classLoader: ClassLoader?) {
-        // Register hints for AOT processing if needed
+class DataServiceRuntimeHints : RuntimeHintsRegistrar {
+    override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
+        // Register the companion class for reflection
+        hints.reflection().registerType(DataServiceApplication.Companion::class.java)
     }
 }

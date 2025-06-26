@@ -91,7 +91,6 @@
 										<env>
 											<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 											<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
-											<BPL_SPRING_AOT_ENABLED>true</BPL_SPRING_AOT_ENABLED>
 											<BP_SPRING_AOT_ENABLED>true</BP_SPRING_AOT_ENABLED>
 											<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 										</env>

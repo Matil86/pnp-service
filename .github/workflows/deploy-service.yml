@@ -27,13 +27,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-          access_token_lifetime: 3600s
-
       - name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
@@ -54,6 +47,13 @@ jobs:
           cd ${{ inputs.project-folder }}
           mvn spring-boot:build-image -DskipTests -Pnative \
             -Dspring-boot.build-image.imageName=${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}:latest
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          access_token_lifetime: 3600s
 
       - name: Konfiguriere Docker für Google Container Registry
         run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet

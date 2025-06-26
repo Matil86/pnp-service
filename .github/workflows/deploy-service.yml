@@ -1,0 +1,76 @@
+name: Build and Deploy Service to Cloud Run
+
+on:
+  workflow_call:
+    inputs:
+      project-folder:
+        required: true
+        type: string
+        description: 'Der Projektordner, in dem der Build ausgeführt wird'
+      image-name:
+        required: true
+        type: string
+        description: 'Name des zu erstellenden Images'
+
+concurrency:
+  group: ${{inputs.image-name}}-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy-service-to-cloud-run:
+    runs-on: ubuntu-latest
+    environment: live
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          access_token_lifetime: 3600s
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '23'
+          distribution: 'graalvm'
+          cache: maven
+
+      - name: Build Packages
+        run: mvn install -DskipTests
+
+      - name: Run Tests
+        run: |
+          cd ${{ inputs.project-folder }}
+          mvn test
+
+      - name: Build Image
+        run: |
+          cd ${{ inputs.project-folder }}
+          mvn spring-boot:build-image -DskipTests -Pnative \
+            -Dspring-boot.build-image.imageName=${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}:latest
+
+      - name: Authentifiziere bei Google Container Registry
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{vars.PROJECT_ID}}
+
+      - name: Konfiguriere Docker für Google Container Registry
+        run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet
+
+      - name: Push Image to Google Container Registry
+        run: docker push ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}:latest
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v1
+        id: deploy
+        with:
+          service: ${{ inputs.image-name }}
+          image: ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/${{ inputs.image-name }}:latest
+          region: ${{vars.REGION}}
+          flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'

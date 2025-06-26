@@ -1,73 +1,18 @@
 name: Build Character Generator Starter
 
-concurrency:
-  group: character-generator-build-${{ github.ref }}
-  cancel-in-progress: true
-
 on:
   workflow_dispatch:
   push:
     paths:
+      - pom.xml
       - api/**
       - base/**
       - character-generator-starter/**
 
 jobs:
-  build-with-tests:
-
-    runs-on: ubuntu-latest
-    environment: live
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-          access_token_lifetime: 3600s
-
-      - name: Set up GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '23'
-          distribution: 'graalvm'
-          cache: maven
-
-      - name: Build Packages
-        run: mvn install -DskipTests
-
-      - name: Run Tests
-        run: |
-          cd character-generator-starter
-          mvn test
-
-      - name: Build Image
-        run: |
-          cd character-generator-starter
-          mvn spring-boot:build-image -DskipTests -Pnative \
-            -Dspring-boot.build-image.imageName=${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/character-generator-service:latest
-
-      - name: Authentifiziere bei Google Container Registry
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{vars.PROJECT_ID}}
-
-      - name: Konfiguriere Docker für Google Container Registry
-        run: gcloud auth configure-docker ${{vars.REGISTRY_HOSTNAME}} --quiet
-
-      - name: Push Image to Google Container Registry
-        run: docker push ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/character-generator-service:latest
-
-      - name: Deploy to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v1
-        id: deploy
-        with:
-          service: character-generator-service
-          image: ${{vars.REGISTRY_HOSTNAME}}/${{vars.PROJECT_ID}}/${{vars.REPOSITORY_NAME}}/character-generator-service:latest
-          region: ${{vars.REGION}}
-          flags: '--service-account=${{ secrets.WIF_SERVICE_ACCOUNT }}'
+  build-and-deploy:
+    uses: ./.github/workflows/deploy-service.yml
+    with:
+      project-folder: 'character-generator-starter'
+      image-name: 'character-generator-service'
+    secrets: inherit

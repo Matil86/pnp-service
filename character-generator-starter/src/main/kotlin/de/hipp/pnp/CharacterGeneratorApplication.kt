@@ -16,11 +16,15 @@ open class CharacterGeneratorApplication {
             SpringApplication.run(CharacterGeneratorApplication::class.java, *args)
         }
     }
+
+    // Empty constructor to ensure AOT processing works correctly
+    constructor()
 }
 
 class CharacterGeneratorRuntimeHints : RuntimeHintsRegistrar {
     override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
-        // Register the companion class for reflection
+        // Register both the main class and companion class for reflection
+        hints.reflection().registerType(CharacterGeneratorApplication::class.java)
         hints.reflection().registerType(CharacterGeneratorApplication.Companion::class.java)
     }
 }

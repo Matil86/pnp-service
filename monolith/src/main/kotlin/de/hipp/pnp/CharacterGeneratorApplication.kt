@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.ImportRuntimeHints
 import org.springframework.aot.hint.RuntimeHints
 import org.springframework.aot.hint.RuntimeHintsRegistrar
+import org.springframework.aot.hint.MemberCategory
 
 @SpringBootApplication(scanBasePackages = ["de.hipp.*"], proxyBeanMethods = false)
 @ImportRuntimeHints(CharacterGeneratorRuntimeHints::class)
@@ -22,8 +23,27 @@ open class CharacterGeneratorApplication {
 
 class CharacterGeneratorRuntimeHints : RuntimeHintsRegistrar {
     override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
-        // Register both the main class and companion class for reflection
-        hints.reflection().registerType(CharacterGeneratorApplication::class.java)
-        hints.reflection().registerType(CharacterGeneratorApplication.Companion::class.java)
+        // Register main class with all member categories for complete reflection access
+        hints.reflection()
+            .registerType(
+                CharacterGeneratorApplication::class.java,
+                MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                MemberCategory.INVOKE_DECLARED_METHODS,
+                MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS,
+                MemberCategory.INVOKE_PUBLIC_METHODS
+            )
+        
+        // Register companion class with all member categories
+        hints.reflection()
+            .registerType(
+                CharacterGeneratorApplication.Companion::class.java,
+                MemberCategory.INVOKE_DECLARED_METHODS,
+                MemberCategory.INVOKE_PUBLIC_METHODS
+            )
+            
+        // Register Spring resources that might be needed
+        hints.resources()
+            .registerPattern("META-INF/spring.*")
+            .registerPattern("META-INF/spring.factories")
     }
 }

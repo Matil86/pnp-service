@@ -60,7 +60,17 @@
 					<mainClass>${start-class}</mainClass>
 					<image>
 						<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+						<env>
+							<BP_JVM_VERSION>23</BP_JVM_VERSION>
+							<SPRING_AOT_ENABLED>true</SPRING_AOT_ENABLED>
+						</env>
 					</image>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -73,6 +83,12 @@
 						<id>repackage</id>
 						<goals>
 							<goal>repackage</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>build-info</id>
+						<goals>
+							<goal>build-info</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -106,5 +122,39 @@
 			<type>pom</type>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>native</id>
+			<properties>
+				<repackage.classifier>exec</repackage.classifier>
+				<native.maven.plugin.version>0.9.28</native.maven.plugin.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter</artifactId>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<image>
+								<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+								<env>
+									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+									<BP_JVM_VERSION>23</BP_JVM_VERSION>
+									<SPRING_AOT_ENABLED>true</SPRING_AOT_ENABLED>
+								</env>
+							</image>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

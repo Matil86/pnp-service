@@ -16,7 +16,7 @@ data class CharacterSpeciesEntity @ConstructorBinding constructor(
     var description: String = "",
     @ElementCollection
     var attributes: Map<String, String> = emptyMap(),
-    @ElementCollection
+    @ElementCollection(targetClass = Feature5e::class)
     var features: List<Feature5e> = emptyList()
 ) : Serializable {
     constructor() : this(

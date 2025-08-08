@@ -1,5 +1,3 @@
-server:
-  port: 8080
 logging:
   level:
     com:
@@ -11,19 +9,9 @@ logging:
     de:
       hipp:
         pnp:
-          auth: DEBUG
+          auth: debug
           security:
             user: DEBUG  # Add this for UserService, UserRepository, and UserListener
           base:
             rabbitmq: DEBUG  # Add this for UserInfoProducer
           rabbitmq: DEBUG  # Add this for other RabbitMQ components
-
-spring:
-  profiles:
-    include: rabbitmq
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://accounts.google.com
-          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs

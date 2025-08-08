@@ -8,6 +8,13 @@ on:
       - api/**
       - base/**
       - character-generator-starter/**
+      - data/**
+      - data-starter/**
+      - monolith/**
+      - genefunk/**
+      - genefunk-starter/**
+      - security/**
+      - security-starter/**
 
 jobs:
   build-and-deploy:
@@ -15,5 +22,5 @@ jobs:
     with:
       build_image: character-generator-service
       service_name: character-generator-service
-      pom_folder: character-generator-starter
+      pom_folder: monolith
     secrets: inherit

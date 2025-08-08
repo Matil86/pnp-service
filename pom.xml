@@ -25,10 +25,14 @@
 		<module>data</module>
 		<module>security</module>
 		<module>security-starter</module>
+		<module>monolith</module>
 	</modules>
 
 	<properties>
-		<java.version>24</java.version>
+		<java.version>23</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<kotlin.code.style>official</kotlin.code.style>
+		<kotlin.compiler.jvmTarget>23</kotlin.compiler.jvmTarget>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

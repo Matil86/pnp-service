@@ -15,16 +15,7 @@
 		<start-class>de.hipp.pnp.CharacterGeneratorApplication</start-class>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>mavenCentral</id>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>
-	</repositories>
-
 	<build>
-		<sourceDirectory>src/main/kotlin</sourceDirectory>
-		<testSourceDirectory>src/test/kotlin</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
@@ -67,8 +58,17 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<mainClass>${start-class}</mainClass>
+					<image>
+						<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+					</image>
 				</configuration>
 				<executions>
+					<execution>
+						<id>process-aot</id>
+						<goals>
+							<goal>process-aot</goal>
+						</goals>
+					</execution>
 					<execution>
 						<id>repackage</id>
 						<goals>

@@ -1,5 +1,9 @@
 name: Build Character Generator Starter
 
+concurrency:
+  group: pnp-build-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   workflow_dispatch:
   push:

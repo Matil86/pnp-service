@@ -27,4 +27,5 @@ jobs:
       build_image: character-generator-service
       service_name: character-generator-service
       pom_folder: monolith
+      build_native: false
     secrets: inherit

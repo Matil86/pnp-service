@@ -62,7 +62,6 @@
 						<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
 						<env>
 							<BP_JVM_VERSION>23</BP_JVM_VERSION>
-							<SPRING_AOT_ENABLED>true</SPRING_AOT_ENABLED>
 						</env>
 					</image>
 					<excludes>
@@ -73,12 +72,6 @@
 					</excludes>
 				</configuration>
 				<executions>
-					<execution>
-						<id>process-aot</id>
-						<goals>
-							<goal>process-aot</goal>
-						</goals>
-					</execution>
 					<execution>
 						<id>repackage</id>
 						<goals>
@@ -147,7 +140,6 @@
 								<env>
 									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 									<BP_JVM_VERSION>23</BP_JVM_VERSION>
-									<SPRING_AOT_ENABLED>true</SPRING_AOT_ENABLED>
 								</env>
 							</image>
 						</configuration>

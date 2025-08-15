@@ -1,3 +1,12 @@
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: health
+      exposure:
+        include:
+          - "health"
 server:
   port: ${SERVER_PORT:0}
 spring:

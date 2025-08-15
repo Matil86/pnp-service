@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 class CharacterGeneratorApplication {
 
     companion object {
+        @JvmStatic
         fun main(args: Array<String>) {
             SpringApplication.run(CharacterGeneratorApplication::class.java, *args)
         }

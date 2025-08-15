@@ -78,59 +78,23 @@
 			<groupId>de.hipp.pnp</groupId>
 			<artifactId>character-generator-starter</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>de.hipp.pnp</groupId>
 			<artifactId>data-starter</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>de.hipp.pnp</groupId>
 			<artifactId>genefunk-starter</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>de.hipp.pnp</groupId>
 			<artifactId>security-starter</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>native</id>
-			<properties>
-				<repackage.classifier>exec</repackage.classifier>
-				<native.maven.plugin.version>0.9.28</native.maven.plugin.version>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter</artifactId>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-						<configuration>
-							<image>
-								<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
-								<env>
-									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
-									<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
-								</env>
-							</image>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

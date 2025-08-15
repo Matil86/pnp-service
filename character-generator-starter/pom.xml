@@ -61,4 +61,35 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>native</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<mainClass>${start-class}</mainClass>
+							<image>
+								<builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+								<env>
+									<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+									<BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
+								</env>
+							</image>
+						</configuration>
+						<executions>
+							<execution>
+								<id>build-image</id>
+								<goals>
+									<goal>build-image</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

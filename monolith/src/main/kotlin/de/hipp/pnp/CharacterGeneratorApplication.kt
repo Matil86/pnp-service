@@ -22,6 +22,7 @@ class CharacterGeneratorApplication {
             return CommandLineRunner { args: Array<String?>? ->
                 println("Let's inspect the beans provided by Spring Boot:")
                 val beanNames: List<String?> = ctx.getBeanDefinitionNames().filter { bean -> !bean.toString().contains("spring") }
+                Arrays.sort(beanNames.toTypedArray())
                 for (beanName in beanNames) {
                     println(beanName)
                 }

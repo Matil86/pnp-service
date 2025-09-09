@@ -1,11 +1,18 @@
 package de.hipp.pnp.security.user
 
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
+import com.google.cloud.firestore.Filter
+import com.google.cloud.firestore.Firestore
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<User?, String?> {
-    @Query("select u from User u where u.externalIdentifer=:sub")
-    fun getUserByExternalIdentifer(sub: String?): User?
+class UserRepository(private val firestore: Firestore) {
+    suspend fun getUserByExternalIdentifer(externalId: String?): User? {
+        val firestoreUser = firestore.collection("users").where(Filter.equalTo("externalIdentifier",externalId)).limit(1).get()
+        return firestoreUser.get().documents.firstOrNull()?.toObject(User::class.java)
+    }
+
+    suspend fun save(user: User): User? {
+        firestore.collection("users").document(user.userId).set(user)
+        return user
+    }
 }

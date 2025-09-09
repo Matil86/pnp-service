@@ -18,6 +18,6 @@ buildNumber.properties
 /compose-ui/composeApp/build/
 /compose-ui/build/
 /compose-ui/.fleet/
-/compose-ui/composeApp/build/
 /.env.base
 /.env
+/character-generator-service-firebase-adminsdk-fbsvc-e6f8e22e01.json

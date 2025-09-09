@@ -1,28 +1,29 @@
 package de.hipp.pnp.security.user
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 
 @Service
-open class UserService(private var userRepository: UserRepository) {
-    fun userExists(sub: String?): Boolean {
-        return userRepository.getUserByExternalIdentifer(sub) != null
+class UserService(private var userRepository: UserRepository) {
+    suspend fun userExists(sub: String?): Boolean {
+        return this.getUserByExternalId(sub) != null
     }
 
-    fun getRole(sub: String?): String {
+    suspend fun getRole(sub: String?): String {
         var role = "ANNONYMOUS"
-        val user = userRepository.getUserByExternalIdentifer(sub)
+        val user = this.getUserByExternalId(sub)
         if (user != null) {
             role = user.role.toString()
         }
         return role
     }
 
-    fun getUserByExternalId(externalUserId: String?): User? {
-        val user = userRepository.getUserByExternalIdentifer(externalUserId)
-        return user
-    }
+     suspend fun getUserByExternalId(externalUserId: String?): User? = withContext(Dispatchers.IO){
+         userRepository.getUserByExternalIdentifer(externalUserId)
+     }
 
-    open fun saveUser(user: User): User? {
-        return userRepository.saveAndFlush(user)
+    suspend fun saveUser(user: User): User? = withContext(Dispatchers.IO) {
+       userRepository.save(user)
     }
 }

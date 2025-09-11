@@ -10,7 +10,6 @@ import de.hipp.pnp.base.constants.RoutingKeys
 import de.hipp.pnp.base.dto.Customer
 import de.hipp.pnp.security.Role
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.runBlocking
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.stereotype.Component
@@ -61,7 +60,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
         val message: DefaultMessage<String> =
             mapper.readValue(user, object : TypeReference<DefaultMessage<String>>() {})
         log.debug { "Received Get Internal User Message : $message" }
-        val customer: User? = runBlocking { userService.getUserByExternalId(message.payload) }
+        val customer: User? = userService.getUserByExternalId(message.payload)
         val response = DefaultMessage<User>()
         response.header = MessageHeader()
         response.header.externalId = message.payload
@@ -94,7 +93,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
             }
         log.info { "Received Save new User Message : $message" }
         val customer = message.payload
-        var user: User? = runBlocking { userService.getUserByExternalId(externalUserId = customer.externalIdentifer) }
+        var user: User? = userService.getUserByExternalId(externalUserId = customer.externalIdentifer)
         if (user == null) {
             val userToSafe = User(
                 customer.userId ?: "",
@@ -105,7 +104,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
                 customer.mail,
                 customer.role
             )
-            user = runBlocking { userService.saveUser(userToSafe) }
+            user = userService.saveUser(userToSafe)
         }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user)
     }

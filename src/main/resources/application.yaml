@@ -11,4 +11,10 @@ server:
   port: ${SERVER_PORT:0}
 spring:
   profiles:
-    include: rabbitmq,h2-database,logging,genefunk-crb-locale, genefunk-crb,oauth
+    include:
+    - genefunk-crb-locale
+    - genefunk-crb
+    - h2-database
+    - logging
+    - rabbitmq
+    - oauth

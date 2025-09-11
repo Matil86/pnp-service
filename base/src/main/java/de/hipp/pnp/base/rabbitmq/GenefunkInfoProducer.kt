@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class GenefunkInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
+class GenefunkInfoProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
     BaseProducer<List<Map<*, *>?>>(rabbitTemplate, mapper) {
     fun getAllSpecies(): List<CharacterSpeciesEntity>? {
         val species = this.sendMessageForRoutingKey(RoutingKeys.GET_GENEFUNK_SPECIES, E5EGameTypes.GENEFUNK)

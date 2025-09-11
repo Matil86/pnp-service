@@ -97,7 +97,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
         var user: User? = userService.getUserByExternalId(customer.userId)
         if (user == null) {
             val userToSafe = User(
-                customer.userId,
+                customer.userId ?: "",
                 customer.vorname,
                 customer.nachname,
                 customer.name,

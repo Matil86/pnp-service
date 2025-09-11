@@ -29,7 +29,7 @@ import java.util.UUID
 
 @Configuration
 @EnableWebSecurity
-open class SecurityConfiguration(@Autowired private var userInfoProducer: UserInfoProducer) {
+open class SecurityConfiguration(@param:Autowired private var userInfoProducer: UserInfoProducer) {
     var log: Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
     @Bean

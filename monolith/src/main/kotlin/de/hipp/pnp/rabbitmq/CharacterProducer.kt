@@ -11,10 +11,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
+class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
     BaseProducer<BaseCharacter?>(rabbitTemplate, mapper), FiveECharacterProducer {
 
-    private val log = KotlinLogging.logger {}
+    private val logger = KotlinLogging.logger {}
 
     /**
      * Generates a character based on the provided game type.
@@ -23,7 +23,7 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) 
      * @return A BaseCharacter object representing the generated character, or null if generation fails.
      */
     override fun generate(gameType: Int): String {
-        log.debug { "${"message to generate character for {} received"} ${E5EGameTypes.fromValue(gameType)}" }
+        logger.debug { "message to generate character for ${E5EGameTypes.fromValue(gameType)} received" }
 
         return mapper.writeValueAsString(
             sendMessageForRoutingKey(
@@ -34,7 +34,7 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) 
     }
 
     override fun allCharacters(): MutableList<BaseCharacter?> {
-        log.debug { "get all characters request received" }
+        logger.debug { "get all characters request received" }
         return sendMessageForRoutingKey(
             RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY,
             E5EGameTypes.GENEFUNK
@@ -42,12 +42,12 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) 
     }
 
     fun deleteCharacter(characterId: Int) {
-        log.debug { "delete character request received for characterId: $characterId" }
+        logger.debug { "delete character request received for characterId: $characterId" }
         sendMessageForRoutingKey(
             RoutingKeys.DELETE_CHARACTER_ROUTING_KEY,
             E5EGameTypes.GENEFUNK,
             characterId
         )
-        log.info { "Character with ID $characterId deleted successfully." }
+        logger.info { "Character with ID $characterId deleted successfully." }
     }
 }

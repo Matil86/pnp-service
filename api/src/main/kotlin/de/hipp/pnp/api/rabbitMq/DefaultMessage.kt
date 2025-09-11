@@ -12,6 +12,7 @@ class DefaultMessage<T>(
     var header: MessageHeader = MessageHeader()
 ) {
 
+    @Suppress("UNCHECKED_CAST")
     constructor() : this(
         action = "",
         payload = null as T,

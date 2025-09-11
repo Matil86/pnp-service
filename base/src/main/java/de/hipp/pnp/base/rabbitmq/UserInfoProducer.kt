@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class UserInfoProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
+class UserInfoProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
     BaseProducer<Map<*, *>?>(rabbitTemplate, mapper) {
 
     fun getCustomerInfoFor(userId: String?): Customer {

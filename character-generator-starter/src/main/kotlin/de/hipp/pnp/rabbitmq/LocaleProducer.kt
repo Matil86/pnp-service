@@ -11,7 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class LocaleProducer(rabbitTemplate: RabbitTemplate?, mapper: ObjectMapper?) :
+class LocaleProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
     BaseProducer<MutableMap<String, BookLocale>>(rabbitTemplate, mapper),
     FiveEDataProducer {
     override fun getAllLanguageKeys(): MutableMap<String, BookLocale>? {

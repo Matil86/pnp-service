@@ -62,10 +62,10 @@ open class GeneFunkCharacterService(
 
     override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter?>? {
         val customer = userInfoProducer.getCustomerInfoFor(userId)
-        if (customer != null && customer.getRole().equals("admin", ignoreCase = true)) {
+        if (customer.role.equals("admin", ignoreCase = true)) {
             return repository.findAll()
         }
-        return repository.findByUserId(customer.getExternalIdentifer())
+        return repository.findByUserId(customer.externalIdentifer)
     }
 
     override fun generate(): GeneFunkCharacter {
@@ -155,12 +155,12 @@ open class GeneFunkCharacterService(
 
     fun delete(characterId: String, externalId: String) {
         val customer = userInfoProducer.getCustomerInfoFor(externalId)
-        if (customer != null && "admin".equals(customer.getRole(), ignoreCase = true)) {
+        if ("admin".equals(customer.role, ignoreCase = true)) {
             repository.deleteById(characterId.toInt())
             return
         }
         val character = repository.findById(characterId.toInt())
-        if (character.isPresent && character.get().userId == customer.getExternalIdentifer()) {
+        if (character.isPresent && character.get().userId == customer.externalIdentifer) {
             repository.deleteById(characterId.toInt())
         } else {
             throw IllegalArgumentException("Character with ID $characterId does not exist or does not belong to user.")

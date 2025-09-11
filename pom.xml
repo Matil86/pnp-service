@@ -37,12 +37,17 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kotlin.version>2.2.10</kotlin.version>
-		<sourceDirectory>src/main/kotlin</sourceDirectory>
-		<testSourceDirectory>src/test/kotlin</testSourceDirectory>
 	</properties>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<includeEmptyDirs>false</includeEmptyDirs>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-maven-plugin</artifactId>
@@ -60,13 +65,18 @@
 							</sourceDirs>
 						</configuration>
 					</execution>
-					<execution>
-						<id>test-compile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
+ 				<execution>
+ 					<id>test-compile</id>
+ 					<phase>test-compile</phase>
+ 					<goals>
+ 						<goal>test-compile</goal>
+ 					</goals>
+ 					<configuration>
+ 						<sourceDirs>
+ 							<source>src/test/kotlin</source>
+ 						</sourceDirs>
+ 					</configuration>
+ 				</execution>
 				</executions>
 				<configuration>
 					<jvmTarget>${maven.compiler.target}</jvmTarget>
@@ -97,6 +107,21 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.3</version>
+				<configuration>
+					<printSummary>true</printSummary>
+					<useFile>false</useFile>
+					<reportFormat>plain</reportFormat>
+					<trimStackTrace>false</trimStackTrace>
+					<forkCount>1</forkCount>
+					<reuseForks>false</reuseForks>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*Test.kt</include>
+					</includes>
+					<systemPropertyVariables>
+						<kotest.framework.timeout>60000</kotest.framework.timeout>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -156,39 +181,14 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-test</artifactId>
-			<version>${kotlin.version}</version>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk</artifactId>
+			<version>1.13.8</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.13.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.13.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.13.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.18.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>5.18.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -209,6 +209,12 @@
 		</dependency>
 		<dependency>
 			<groupId>io.kotest</groupId>
+			<artifactId>kotest-framework-engine</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.kotest</groupId>
 			<artifactId>kotest-runner-junit5</artifactId>
 			<version>5.7.2</version>
 			<scope>test</scope>
@@ -217,6 +223,11 @@
 			<groupId>io.kotest</groupId>
 			<artifactId>kotest-assertions-core</artifactId>
 			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

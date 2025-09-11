@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>24</java.version>
-		<kotlin.version>2.2.10</kotlin.version>
+		<kotlin.version>2.2.20</kotlin.version>
 		<start-class>de.hipp.pnp.CharacterGeneratorApplication</start-class>
 	</properties>
 

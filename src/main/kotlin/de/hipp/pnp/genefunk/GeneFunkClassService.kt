@@ -1,9 +1,7 @@
 package de.hipp.pnp.genefunk
 
 import de.hipp.pnp.base.entity.GeneFunkClass
-import de.hipp.pnp.genefunk.GenefunkInfoProducer
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,16 +13,17 @@ class GeneFunkClassService(
 
     private val log = KotlinLogging.logger {}
 
-    @PostConstruct
-    fun init() {
+    fun reloadAllClasses(): MutableMap<String, GeneFunkClass> {
         val classes: Map<String, GeneFunkClass> = genefunkInfoProducer.getAllClasses()
         if (classes.isNullOrEmpty()) {
-            println("No classes found for GeneFunk")
-            return
+            log.info {"No classes found for GeneFunk"}
+            return mutableMapOf()
         }
 
         this.genefuncClasses.putAll(classes)
+        return this.genefuncClasses
     }
 
-    fun getAllClasses(): MutableMap<String, GeneFunkClass> = genefuncClasses
+    fun getAllClasses(): MutableMap<String, GeneFunkClass> = genefuncClasses.isEmpty().let { reloadAllClasses() }
+
 }

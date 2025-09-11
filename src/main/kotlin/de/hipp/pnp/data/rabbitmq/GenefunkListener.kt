@@ -1,5 +1,6 @@
 package de.hipp.pnp.data.rabbitmq
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.Channel
 import de.hipp.pnp.api.rabbitMq.DefaultMessage
@@ -39,12 +40,17 @@ class GenefunkListener(
     }
 
     @RabbitListener(queues = [RoutingKeys.GET_GENEFUNK_CLASSES])
-    fun getGenefunkClasses(): String {
-        val message =
-            DefaultMessage<List<Map<String, GeneFunkClass>>>()
+    fun getGenefunkClasses(messageString: String?): String {
+        val incomingMessage = mapper.readValue(
+            messageString,
+            object : TypeReference<DefaultMessage<Any>>() {}
+        )
+        
+        val message = DefaultMessage<List<Map<String, GeneFunkClass>>>()
+        message.uuid = incomingMessage.uuid
+        message.header = incomingMessage.header
 
-        val payload =
-            configuration.books.map { it.classes }.distinct()
+        val payload = configuration.books.map { it.classes }.distinct()
 
         message.action = "finished"
         message.payload = payload
@@ -53,12 +59,17 @@ class GenefunkListener(
     }
 
     @RabbitListener(queues = [RoutingKeys.GET_GENEFUNK_SPECIES])
-    fun getGenefunkGenomes(): String {
-        val message =
-            DefaultMessage<List<CharacterSpeciesEntity>>()
+    fun getGenefunkGenomes(messageString: String?): String {
+        val incomingMessage = mapper.readValue(
+            messageString,
+            object : TypeReference<DefaultMessage<Any>>() {}
+        )
+        
+        val message = DefaultMessage<List<CharacterSpeciesEntity>>()
+        message.uuid = incomingMessage.uuid
+        message.header = incomingMessage.header
 
-        val payload =
-            configuration.books.map { it.species }.flatten().distinct()
+        val payload = configuration.books.map { it.species }.flatten().distinct()
 
         message.action = "finished"
         message.payload = payload

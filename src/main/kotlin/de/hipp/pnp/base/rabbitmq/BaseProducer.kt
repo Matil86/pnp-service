@@ -8,6 +8,7 @@ import de.hipp.pnp.api.rabbitMq.DefaultMessage
 import de.hipp.pnp.api.rabbitMq.MessageHeader
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Component
@@ -20,6 +21,9 @@ abstract class BaseProducer<T>(
 ) {
 
     protected val log = KotlinLogging.logger {}
+    
+    @Autowired
+    private lateinit var initializationManager: RabbitMQInitializationManager
 
     protected fun sendMessageForRoutingKey(routingKey: String): T? {
         return sendMessageForRoutingKey(routingKey, null)
@@ -30,6 +34,11 @@ abstract class BaseProducer<T>(
     }
 
     protected fun sendMessageForRoutingKey(routingKey: String, e5EGameTypes: E5EGameTypes?, payload: Any?): T? {
+        // Ensure RabbitMQ listeners are initialized before sending messages
+        if (!initializationManager.waitForInitialization(30)) {
+            log.warn { "RabbitMQ listeners not initialized within timeout, proceeding anyway for routing key: $routingKey" }
+        }
+        
         val message = DefaultMessage<Any>().apply {
             header = getHeader()
             uuid = UUID.randomUUID().toString()

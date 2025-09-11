@@ -1,9 +1,7 @@
 package de.hipp.pnp.genefunk
 
 import de.hipp.pnp.base.entity.CharacterSpeciesEntity
-import de.hipp.pnp.genefunk.GenefunkInfoProducer
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,26 +11,6 @@ class GeneFunkGenomeService(
 ) {
 
     private val log = KotlinLogging.logger {}
-
-    @PostConstruct
-    fun init() {
-        val genomes: List<CharacterSpeciesEntity>? = genefunkInfoProducer.getAllSpecies()
-        if (genomes.isNullOrEmpty()) {
-            println("No genomes found for GeneFunk")
-            return
-        }
-        val geneFunkGenomes = genomes.map { species ->
-            GeneFunkGenome().apply {
-                name = species.name
-                description = species.description
-                attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
-                features = species.features.map { it }.toMutableSet()
-                genomeType = getGenomeType(species.name)
-            }
-        }
-        println("genomes found for GeneFunk: ${geneFunkGenomes.size}")
-        save(geneFunkGenomes)
-    }
 
     private fun getGenomeType(name: String): GeneFunkGenomeType {
         when (name.lowercase()) {
@@ -54,5 +32,32 @@ class GeneFunkGenomeService(
         }
     }
 
-    fun allGenomes(): MutableList<GeneFunkGenome?> = repository.findAll()
+    fun allGenomes(): MutableList<GeneFunkGenome?> {
+        val genomeList = repository.findAll()
+        if (genomeList.isEmpty()) {
+            return reloadAllGenomes()
+        }
+        return genomeList
+    }
+
+    private fun reloadAllGenomes(): MutableList<GeneFunkGenome?> {
+
+        val genomes: List<CharacterSpeciesEntity>? = genefunkInfoProducer.getAllSpecies()
+        if (genomes.isNullOrEmpty()) {
+            log.info {"No genomes found for GeneFunk"}
+            return mutableListOf()
+        }
+        val geneFunkGenomes = genomes.map { species ->
+            GeneFunkGenome().apply {
+                name = species.name
+                description = species.description
+                attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
+                features = species.features.map { it }.toMutableSet()
+                genomeType = getGenomeType(species.name)
+            }
+        }
+        log.info {"genomes found for GeneFunk: ${geneFunkGenomes.size}"}
+        save(geneFunkGenomes)
+        return repository.findAll();
+    }
 }

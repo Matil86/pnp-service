@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.hipp.pnp.base.constants.UrlConstants.LOCALEURL
 import de.hipp.pnp.rabbitmq.LocaleProducer
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.annotation.PostConstruct
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -23,15 +22,6 @@ import org.springframework.web.bind.annotation.RestController
 class LocaleRestController(val localeProducer: LocaleProducer, val mapper: ObjectMapper) {
 
     private val log = KotlinLogging.logger {}
-
-    /**
-     * Initializes the LocaleRestController and logs the availability of the locale endpoint.
-     * This method is called after dependency injection is complete.
-     */
-    @PostConstruct
-    fun init() {
-        log.info { "----->Initialized LocaleRestController: $LOCALEURL should be available" }
-    }
 
     /**
      * Retrieves localized language keys for a specific game type.

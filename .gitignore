@@ -21,3 +21,13 @@ buildNumber.properties
 /.env.base
 /.env
 /character-generator-service-firebase-adminsdk-fbsvc-e6f8e22e01.json
+/api/build
+/base/build
+/character-generator-starter/build
+/data/build
+/data-starter/build
+/genefunk/build
+/genefunk-starter/build
+/security/build
+/security-starter/build
+/build/*

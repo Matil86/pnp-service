@@ -9,16 +9,7 @@ on:
   push:
     paths:
       - pom.xml
-      - api/**
-      - base/**
-      - character-generator-starter/**
-      - data/**
-      - data-starter/**
-      - monolith/**
-      - genefunk/**
-      - genefunk-starter/**
-      - security/**
-      - security-starter/**
+      - src/**
 
 jobs:
   build-and-deploy:

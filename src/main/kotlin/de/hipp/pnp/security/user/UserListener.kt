@@ -57,6 +57,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
         JsonProcessingException::class
     )
     fun handleGetInternalUserId(user: String?): String {
+        if (user == null) return ""
         val message: DefaultMessage<String> =
             mapper.readValue(user, object : TypeReference<DefaultMessage<String>>() {})
         log.debug { "Received Get Internal User Message : $message" }

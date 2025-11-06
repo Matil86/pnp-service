@@ -35,6 +35,7 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
 
     override fun allCharacters(): MutableList<BaseCharacter?> {
         logger.debug { "get all characters request received" }
+        @Suppress("UNCHECKED_CAST")
         return sendMessageForRoutingKey(
             RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY,
             E5EGameTypes.GENEFUNK

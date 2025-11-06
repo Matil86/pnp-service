@@ -18,7 +18,7 @@ open class GeneFunkGenomeService(
     fun init() {
         val genomes: List<CharacterSpeciesEntity>? = genefunkInfoProducer.getAllSpecies()
         if (genomes.isNullOrEmpty()) {
-            println("No genomes found for GeneFunk")
+            log.warn { "No genomes found for GeneFunk" }
             return
         }
         val geneFunkGenomes = genomes.map { species ->
@@ -30,7 +30,7 @@ open class GeneFunkGenomeService(
                 genomeType = getGenomeType(species.name)
             }
         }
-        println("genomes found for GeneFunk: ${geneFunkGenomes.size}")
+        log.info { "Found ${geneFunkGenomes.size} genomes for GeneFunk" }
         save(geneFunkGenomes)
     }
 

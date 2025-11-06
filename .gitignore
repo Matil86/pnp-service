@@ -20,7 +20,15 @@ buildNumber.properties
 /compose-ui/.fleet/
 /.env.base
 /.env
+
+# Firebase credentials - CRITICAL SECURITY
+# Never commit Firebase service account keys or private credentials
+# Use environment variables (GOOGLE_APPLICATION_CREDENTIALS) or secure secret management
 /character-generator-service-firebase-adminsdk-fbsvc-e6f8e22e01.json
+*-private.json
+*-adminsdk-*.json
+serviceAccountKey.json
+
 /api/build
 /base/build
 /character-generator-starter/build

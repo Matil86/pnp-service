@@ -36,5 +36,25 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>io.kotest</groupId>
+			<artifactId>kotest-runner-junit5-jvm</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.kotest</groupId>
+			<artifactId>kotest-assertions-core-jvm</artifactId>
+			<version>5.7.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk-jvm</artifactId>
+			<version>1.13.8</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

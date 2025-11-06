@@ -19,11 +19,12 @@ class GeneFunkClassService(
     fun init() {
         val classes: Map<String, GeneFunkClass> = genefunkInfoProducer.getAllClasses()
         if (classes.isNullOrEmpty()) {
-            println("No classes found for GeneFunk")
+            log.warn { "No classes found for GeneFunk" }
             return
         }
 
         this.genefuncClasses.putAll(classes)
+        log.info { "Initialized GeneFunkClassService with ${classes.size} classes" }
     }
 
     fun getAllClasses(): MutableMap<String, GeneFunkClass> = genefuncClasses

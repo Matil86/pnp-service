@@ -2,8 +2,8 @@ package de.hipp.pnp.auth
 
 import de.hipp.pnp.base.dto.Customer
 import de.hipp.pnp.base.rabbitmq.UserInfoProducer
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,10 +27,11 @@ import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import java.util.UUID
 
+private val logger = KotlinLogging.logger {}
+
 @Configuration
 @EnableWebSecurity
-open class SecurityConfiguration(@Autowired private var userInfoProducer: UserInfoProducer) {
-    var log: Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
+open class SecurityConfiguration(@param:Autowired private var userInfoProducer: UserInfoProducer) {
 
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -71,6 +72,24 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
             cors {
                 configurationSource = corsConfigurationSource()
             }
+            headers {
+                frameOptions { }
+                xssProtection { }
+                contentTypeOptions { }
+                referrerPolicy {
+                    policy = org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN
+                }
+                contentSecurityPolicy {
+                    policyDirectives = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+                }
+                httpStrictTransportSecurity {
+                    includeSubDomains = true
+                    maxAgeInSeconds = 31536000
+                }
+                permissionsPolicy {
+                    policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+                }
+            }
         }
         return http.build()
     }
@@ -99,7 +118,7 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
         // Add desktop app URL if provided
         if (!desktopAppUrl.isNullOrBlank()) {
             allowedOrigins.add(desktopAppUrl)
-            log.info("Added desktop app URL to CORS allowed origins: $desktopAppUrl")
+            logger.info { "Added desktop app URL to CORS allowed origins: $desktopAppUrl" }
         }
 
         corsConfiguration.allowedOrigins = allowedOrigins
@@ -123,50 +142,158 @@ open class SecurityConfiguration(@Autowired private var userInfoProducer: UserIn
 
         // Extract roles from the JWT token
         jwtConverter.setJwtGrantedAuthoritiesConverter { jwt ->
-            log.debug("Converting JWT to authorities: {}", jwt)
-            if (jwt == null) return@setJwtGrantedAuthoritiesConverter null
+            if (jwt == null) {
+                logger.debug { "JWT is null, no authorities to convert" }
+                return@setJwtGrantedAuthoritiesConverter null
+            }
+
             val authorities = grantedAuthoritiesConverter.convert(jwt)
             val userId = jwt.claims["sub"] as? String
+            val email = jwt.claims["email"] as? String
 
-            log.debug("User ID from JWT: {}", userId)
+            // Add to MDC for structured logging
+            userId?.let { MDC.put("user_id", it) }
+            email?.let { MDC.put("email", it) }
+
+            logger.debug { "Converting JWT to authorities for userId=$userId, email=$email" }
+
             // Look up the user by email and add appropriate authorities
             if (userId != null) {
-                val customer = userInfoProducer.getCustomerInfoFor(userId)
-                log.debug("Customer from UserInfoProducer: {}", customer)
-                if (customer.role != null) {
-                    log.debug("Customer role: {}", customer.role)
-                    val userRole = customer.role ?: "USER"
-                    when (userRole) {
-                        "ADMIN" -> {
-                            authorities?.add(SimpleGrantedAuthority("ADMIN"))
-                            authorities?.add(SimpleGrantedAuthority("USER"))
+                try {
+                    val customer = userInfoProducer.getCustomerInfoFor(userId)
+                    logger.debug { "Retrieved customer info: userId=$userId, role=${customer.role}" }
+
+                    if (customer.role != null) {
+                        val userRole = customer.role ?: "USER"
+                        MDC.put("action", "assign_role")
+                        MDC.put("result", userRole)
+
+                        when (userRole) {
+                            "ADMIN" -> {
+                                authorities?.add(SimpleGrantedAuthority("ADMIN"))
+                                authorities?.add(SimpleGrantedAuthority("USER"))
+                                logger.info { "Assigned ADMIN role to user: userId=$userId, email=$email" }
+                            }
+
+                            "USER" -> {
+                                authorities?.add(SimpleGrantedAuthority("USER"))
+                                logger.debug { "Assigned USER role to user: userId=$userId, email=$email" }
+                            }
                         }
 
-                        "USER" -> {
-                            authorities?.add(SimpleGrantedAuthority("USER"))
+                        MDC.remove("action")
+                        MDC.remove("result")
+                    } else {
+                        // Create a new user if not found - with security validations
+                        val email = jwt.claims["email"] as? String ?: ""
+                        val givenName = jwt.claims["given_name"] as? String ?: ""
+                        val familyName = jwt.claims["family_name"] as? String ?: ""
+                        val name = jwt.claims["name"] as? String ?: ""
+                        val sub = jwt.claims["sub"] as? String ?: ""
+
+                        MDC.put("action", "create_user")
+
+                        // SECURITY: Validate email format
+                        if (email.isBlank() || !isValidEmail(email)) {
+                            MDC.put("result", "validation_failed")
+                            logger.error {
+                                "SECURITY: Attempted user creation with invalid email: email=$email, subject=$sub"
+                            }
+                            MDC.remove("action")
+                            MDC.remove("result")
+                            throw IllegalArgumentException("Invalid email address provided in JWT")
                         }
+
+                        // SECURITY: Validate string lengths to prevent abuse
+                        if (givenName.length > 100 || familyName.length > 100 || name.length > 200) {
+                            MDC.put("result", "validation_failed")
+                            logger.error {
+                                "SECURITY: Attempted user creation with excessively long name fields: email=$email"
+                            }
+                            MDC.remove("action")
+                            MDC.remove("result")
+                            throw IllegalArgumentException("Name fields exceed maximum length")
+                        }
+
+                        val newCustomer = Customer(
+                            UUID.randomUUID().toString(),
+                            givenName,
+                            familyName,
+                            name,
+                            sub,
+                            email,
+                            "USER"
+                        )
+
+                        // SECURITY: Log new user creation for audit trail
+                        logger.info {
+                            "SECURITY: Creating new user account - email=$email, subject=$sub, " +
+                            "givenName=$givenName, familyName=$familyName"
+                        }
+
+                        try {
+                            userInfoProducer.saveNewUser(newCustomer)
+                            MDC.put("result", "success")
+                            logger.info { "SECURITY: Successfully created new user account: email=$email, userId=$sub" }
+                        } catch (e: Exception) {
+                            MDC.put("result", "failure")
+                            logger.error(e) { "SECURITY: Failed to create user account: email=$email, error=${e.message}" }
+                            MDC.remove("action")
+                            MDC.remove("result")
+                            throw IllegalStateException("Failed to create user account", e)
+                        }
+
+                        authorities?.add(SimpleGrantedAuthority("USER"))
+                        MDC.remove("action")
+                        MDC.remove("result")
                     }
-                } else {
-                    // Create a new user if not found
-                    val newCustomer = Customer(
-                        UUID.randomUUID().toString(),
-                        jwt.claims["given_name"] as? String ?: "",
-                        jwt.claims["family_name"] as? String ?: "",
-                        jwt.claims["name"] as? String ?: "",
-                        jwt.claims["sub"] as? String ?: "",
-                        jwt.claims["email"] as? String ?: "",
-                        "USER"
-                    )
-                    userInfoProducer.saveNewUser(newCustomer)
-                    authorities?.add(SimpleGrantedAuthority("USER"))
+                } catch (e: Exception) {
+                    logger.error(e) { "Error processing JWT authentication for userId=$userId" }
+                    throw e
                 }
             }
-            log.debug("Assigned authorities: {}", authorities)
+
+            logger.debug { "Assigned authorities: $authorities for userId=$userId" }
+
+            // Clean up MDC
+            MDC.remove("user_id")
+            MDC.remove("email")
+
             authorities
         }
 
         return jwtConverter
     }
 
+    /**
+     * Validates email address format.
+     *
+     * @param email Email address to validate
+     * @return true if email is valid, false otherwise
+     */
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex()
+        return emailRegex.matches(email)
+    }
 
+    /**
+     * Checks if email domain is in the allowed list.
+     * Currently allows all domains. Override this method to restrict user registration to specific domains.
+     *
+     * To enable domain restrictions:
+     * 1. Remove the @Suppress annotation
+     * 2. Call this method in the JWT authentication converter before creating users
+     * 3. Add allowed domains to the logic below
+     *
+     * @param email Email address to check
+     * @return true if domain is allowed, false otherwise
+     */
+    @Suppress("unused")
+    private fun isAllowedDomain(email: String): Boolean {
+        // Currently allows all domains for open registration
+        // To restrict, uncomment and customize:
+        // val allowedDomains = listOf("@yourcompany.com", "@partner.com")
+        // return allowedDomains.any { email.endsWith(it) }
+        return true
+    }
 }

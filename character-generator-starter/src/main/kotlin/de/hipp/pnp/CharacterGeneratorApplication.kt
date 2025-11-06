@@ -1,10 +1,13 @@
 package de.hipp.pnp
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
+
+private val logger = KotlinLogging.logger {}
 
 @SpringBootApplication
 class CharacterGeneratorApplication {
@@ -17,13 +20,14 @@ class CharacterGeneratorApplication {
 
         @Bean
         fun commandLineRunner(ctx: ApplicationContext): CommandLineRunner {
-            return CommandLineRunner { args: Array<String?>? ->
-                println("Let's inspect the beans provided by Spring Boot:")
+            return CommandLineRunner { _: Array<String?>? ->
+                logger.info { "Inspecting beans provided by Spring Boot (non-Spring beans):" }
                 val beanNames: List<String?> =
                     ctx.getBeanDefinitionNames().filter { bean -> !bean.toString().contains("spring") }
-                for (beanName in beanNames) {
-                    println(beanName)
+                beanNames.forEach { beanName ->
+                    logger.debug { "Bean: $beanName" }
                 }
+                logger.info { "Total non-Spring beans registered: ${beanNames.size}" }
             }
         }
     }

@@ -1,30 +1,36 @@
 package de.hipp.pnp
 
-import org.springframework.boot.CommandLineRunner
+import de.hipp.data.config.LocalizationProperties
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.ImportRuntimeHints
+import org.springframework.aot.hint.RuntimeHints
+import org.springframework.aot.hint.RuntimeHintsRegistrar
 
-@SpringBootApplication
-class CharacterGeneratorApplication {
+/**
+ * Main application class for the PnP Character Generator service.
+ *
+ * This Spring Boot application provides character generation services for various
+ * tabletop RPG systems including GeneFunk and 5e-based games.
+ */
+@SpringBootApplication(scanBasePackages = ["de.hipp.*"], proxyBeanMethods = false)
+@EnableConfigurationProperties(LocalizationProperties::class)
+@ImportRuntimeHints(CharacterGeneratorRuntimeHints::class)
+class CharacterGeneratorApplication
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            SpringApplication.run(CharacterGeneratorApplication::class.java, *args)
-        }
+fun main(args: Array<String>) {
+    SpringApplication.run(CharacterGeneratorApplication::class.java, *args)
+}
 
-        @Bean
-        fun commandLineRunner(ctx: ApplicationContext): CommandLineRunner {
-            return CommandLineRunner { args: Array<String?>? ->
-                println("Let's inspect the beans provided by Spring Boot:")
-                val beanNames: List<String?> =
-                    ctx.getBeanDefinitionNames().filter { bean -> !bean.toString().contains("spring") }
-                for (beanName in beanNames) {
-                    println(beanName)
-                }
-            }
-        }
+/**
+ * Runtime hints registrar for GraalVM native image compilation.
+ *
+ * Registers necessary reflection hints for the application classes.
+ */
+class CharacterGeneratorRuntimeHints : RuntimeHintsRegistrar {
+    override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
+        // Register the application class for reflection
+        hints.reflection().registerType(CharacterGeneratorApplication::class.java)
     }
 }

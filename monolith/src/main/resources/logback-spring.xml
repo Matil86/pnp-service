@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Load Spring Boot defaults -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Define properties -->
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- Console appender for development (human-readable) -->
+    <springProfile name="!production">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- JSON appender for production (structured logging) -->
+    <springProfile name="production">
+        <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <!-- Add standard fields -->
+                <includeMdcKeyName>trace_id</includeMdcKeyName>
+                <includeMdcKeyName>span_id</includeMdcKeyName>
+                <includeMdcKeyName>request_id</includeMdcKeyName>
+                <includeMdcKeyName>user_id</includeMdcKeyName>
+                <includeMdcKeyName>email</includeMdcKeyName>
+                <includeMdcKeyName>action</includeMdcKeyName>
+                <includeMdcKeyName>result</includeMdcKeyName>
+                <includeMdcKeyName>character_id</includeMdcKeyName>
+                <includeMdcKeyName>game_type</includeMdcKeyName>
+                <includeMdcKeyName>duration_ms</includeMdcKeyName>
+                <includeMdcKeyName>http_method</includeMdcKeyName>
+                <includeMdcKeyName>http_path</includeMdcKeyName>
+                <includeMdcKeyName>http_status</includeMdcKeyName>
+
+                <!-- Custom fields -->
+                <customFields>{"service":"pnp-character-generator","environment":"${ENVIRONMENT:-production}"}</customFields>
+
+                <!-- Include caller data for debugging (disable in high-throughput scenarios) -->
+                <includeCallerData>false</includeCallerData>
+
+                <!-- Configure timestamp format -->
+                <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampPattern>
+                <timeZone>UTC</timeZone>
+
+                <!-- Include exception stack traces -->
+                <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                    <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                    <maxLength>4096</maxLength>
+                    <shortenedClassNameLength>30</shortenedClassNameLength>
+                    <exclude>sun\.reflect\..*</exclude>
+                    <exclude>java\.lang\.reflect\..*</exclude>
+                    <rootCauseFirst>true</rootCauseFirst>
+                </throwableConverter>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- Async appender wrapper for better performance -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <includeCallerData>false</includeCallerData>
+        <appender-ref ref="JSON_CONSOLE"/>
+    </appender>
+
+    <!-- Fine-tune logging levels for specific packages -->
+    <logger name="de.hipp.pnp" level="INFO"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
+    <logger name="org.springframework.amqp" level="INFO"/>
+    <logger name="com.google.firebase" level="INFO"/>
+
+    <!-- Reduce noise from internal libraries -->
+    <logger name="org.springframework.boot.actuate" level="WARN"/>
+    <logger name="io.micrometer" level="WARN"/>
+    <logger name="io.zipkin" level="WARN"/>
+
+    <!-- Debug mode for development -->
+    <springProfile name="!production">
+        <logger name="de.hipp.pnp" level="DEBUG"/>
+    </springProfile>
+</configuration>

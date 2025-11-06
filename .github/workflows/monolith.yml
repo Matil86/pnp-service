@@ -9,23 +9,15 @@ on:
   push:
     paths:
       - pom.xml
-      - api/**
-      - base/**
-      - character-generator-starter/**
-      - data/**
-      - data-starter/**
-      - monolith/**
-      - genefunk/**
-      - genefunk-starter/**
-      - security/**
-      - security-starter/**
+      - src/**
 
 jobs:
   build-and-deploy:
+    if: github.actor != 'dependabot[bot]'
     uses: Matil86/github-actions/.github/workflows/pipeline-cloud-run-service.yaml@main
     with:
       build_image: character-generator-service
       service_name: character-generator-service
-      pom_folder: monolith
+      pom_folder: .
       build_native: false
     secrets: inherit

@@ -9,3 +9,20 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    # Enable version updates for all dependency types
+    open-pull-requests-limit: 10
+    # Add commit message configuration
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    # Add labels to PRs for better organization
+    labels:
+      - "dependencies"
+      - "java"
+    # Add reviewers (optional - can be configured per repository)
+    # reviewers:
+    #   - "your-username"
+    # Custom commands to verify build after dependency updates
+    # Note: Dependabot doesn't directly support custom build commands in YAML
+    # However, you can use GitHub Actions workflows triggered by dependabot PRs
+    # to run './mvnw verify -U' as part of the CI/CD pipeline

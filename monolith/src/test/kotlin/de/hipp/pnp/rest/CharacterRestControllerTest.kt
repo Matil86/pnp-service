@@ -5,6 +5,7 @@ import de.hipp.pnp.rabbitmq.CharacterProducer
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.micrometer.core.instrument.MeterRegistry
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,6 +17,7 @@ class CharacterRestControllerTest : StringSpec({
 
     fun createMockController(): CharacterRestController {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
         val goku = GeneFunkCharacter().apply {
             firstName = "Goku"
@@ -31,7 +33,7 @@ class CharacterRestControllerTest : StringSpec({
         every { characterProducer.generate(any()) } returns """{"firstName":"Neo","lastName":"Anderson"}"""
         every { characterProducer.deleteCharacter(any()) } returns Unit
 
-        return CharacterRestController(characterProducer)
+        return CharacterRestController(characterProducer, meterRegistry)
     }
 
     "GET /characters - Goku (孫悟空) and Tony Stark should be returned" {
@@ -55,9 +57,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters/generate with gameType 0 - default GeneFunk character" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.generate(0) } returns """{"firstName":"Spider-Man"}"""
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val result = controller.generateCharacter(0)
 
         result shouldContain "Spider-Man"
@@ -66,9 +69,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters/generate with gameType 1 - different game system" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.generate(1) } returns """{"firstName":"Wonder Woman"}"""
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val result = controller.generateCharacter(1)
 
         result shouldContain "Wonder Woman"
@@ -77,8 +81,9 @@ class CharacterRestControllerTest : StringSpec({
 
     "DELETE /characters/1 - Batman should be deleted" {
         val characterProducer = mockk<CharacterProducer>(relaxed = true)
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         controller.deleteCharacter(1)
 
         verify { characterProducer.deleteCharacter(1) }
@@ -86,8 +91,9 @@ class CharacterRestControllerTest : StringSpec({
 
     "DELETE /characters/999 - Delete non-existent character Gandalf" {
         val characterProducer = mockk<CharacterProducer>(relaxed = true)
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         controller.deleteCharacter(999)
 
         verify { characterProducer.deleteCharacter(999) }
@@ -95,9 +101,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters - Empty list when no characters exist" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.allCharacters() } returns mutableListOf()
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val characters = controller.allCharacters()
 
         characters.size shouldBe 0
@@ -105,9 +112,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters/generate - Japanese character name (ナルト)" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.generate(0) } returns """{"firstName":"ナルト","lastName":"うずまき"}"""
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val result = controller.generateCharacter(0)
 
         result shouldContain "ナルト"
@@ -116,9 +124,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters/generate - Character with emoji in description 🎲⚔️" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.generate(0) } returns """{"firstName":"Deadpool","description":"🎲⚔️"}"""
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val result = controller.generateCharacter(0)
 
         result shouldContain "Deadpool"
@@ -127,8 +136,9 @@ class CharacterRestControllerTest : StringSpec({
 
     "DELETE /characters/42 - Delete Pikachu (ピカチュウ)" {
         val characterProducer = mockk<CharacterProducer>(relaxed = true)
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         controller.deleteCharacter(42)
 
         verify { characterProducer.deleteCharacter(42) }
@@ -136,6 +146,7 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters - Multiple characters including Vegeta and Piccolo" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
         val vegeta = GeneFunkCharacter().apply {
             firstName = "Vegeta"
@@ -149,7 +160,7 @@ class CharacterRestControllerTest : StringSpec({
 
         every { characterProducer.allCharacters() } returns mutableListOf(vegeta, piccolo)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val characters = controller.allCharacters()
 
         characters.size shouldBe 2
@@ -159,9 +170,10 @@ class CharacterRestControllerTest : StringSpec({
 
     "GET /characters/generate - Captain America with shield" {
         val characterProducer = mockk<CharacterProducer>()
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
         every { characterProducer.generate(0) } returns """{"firstName":"Steve","lastName":"Rogers","equipment":["Shield"]}"""
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         val result = controller.generateCharacter(0)
 
         result shouldContain "Steve"
@@ -171,8 +183,9 @@ class CharacterRestControllerTest : StringSpec({
 
     "DELETE /characters/0 - Edge case: delete character with ID 0" {
         val characterProducer = mockk<CharacterProducer>(relaxed = true)
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         controller.deleteCharacter(0)
 
         verify { characterProducer.deleteCharacter(0) }
@@ -180,8 +193,9 @@ class CharacterRestControllerTest : StringSpec({
 
     "DELETE /characters/-1 - Edge case: delete character with negative ID" {
         val characterProducer = mockk<CharacterProducer>(relaxed = true)
+        val meterRegistry = mockk<MeterRegistry>(relaxed = true)
 
-        val controller = CharacterRestController(characterProducer)
+        val controller = CharacterRestController(characterProducer, meterRegistry)
         controller.deleteCharacter(-1)
 
         verify { characterProducer.deleteCharacter(-1) }

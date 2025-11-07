@@ -60,15 +60,15 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("goku123") } returns Customer(
-            id = "1",
-            firstName = "Son",
-            lastName = "Goku",
-            fullname = "Son Goku",
+            userId = "1",
+            vorname = "Son",
+            nachname = "Goku",
+            name = "Son Goku",
             externalIdentifer = "goku123",
-            email = "goku@dbz.com",
+            mail = "goku@dbz.com",
             role = null
         )
-        every { userInfoProducer.saveNewUser(any()) } returns Unit
+        every { userInfoProducer.saveNewUser(any()) } returns Customer()
 
         val converter = securityConfig.jwtAuthenticationConverter()
         val authentication = converter.convert(jwt)
@@ -88,12 +88,12 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("tony123") } returns Customer(
-            id = "1",
-            firstName = "Tony",
-            lastName = "Stark",
-            fullname = "Tony Stark",
+            userId = "1",
+            vorname = "Tony",
+            nachname = "Stark",
+            name = "Tony Stark",
             externalIdentifer = "tony123",
-            email = "tony@stark.com",
+            mail = "tony@stark.com",
             role = "ADMIN"
         )
 
@@ -119,12 +119,12 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("peter123") } returns Customer(
-            id = "2",
-            firstName = "Peter",
-            lastName = "Parker",
-            fullname = "Peter Parker",
+            userId = "2",
+            vorname = "Peter",
+            nachname = "Parker",
+            name = "Peter Parker",
             externalIdentifer = "peter123",
-            email = "peter@parker.com",
+            mail = "peter@parker.com",
             role = "USER"
         )
 
@@ -159,12 +159,12 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("bruce123") } returns Customer(
-            id = "3",
-            firstName = "Bruce",
-            lastName = "Wayne",
-            fullname = "Bruce Wayne",
+            userId = "3",
+            vorname = "Bruce",
+            nachname = "Wayne",
+            name = "Bruce Wayne",
             externalIdentifer = "bruce123",
-            email = "bruce@wayne.com",
+            mail = "bruce@wayne.com",
             role = "ADMIN"
         )
 
@@ -175,8 +175,8 @@ class SecurityConfigurationTest : StringSpec({
         val customer = securityConfig.customer()
 
         customer.shouldNotBeNull()
-        customer.firstName shouldBe "Bruce"
-        customer.lastName shouldBe "Wayne"
+        customer.vorname shouldBe "Bruce"
+        customer.nachname shouldBe "Wayne"
     }
 
     "Customer bean - no authentication in context returns null" {
@@ -247,15 +247,15 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("naruto123") } returns Customer(
-            id = "4",
-            firstName = "",
-            lastName = "",
-            fullname = "",
+            userId = "4",
+            vorname = "",
+            nachname = "",
+            name = "",
             externalIdentifer = "naruto123",
-            email = "naruto@konoha.com",
+            mail = "naruto@konoha.com",
             role = null
         )
-        every { userInfoProducer.saveNewUser(any()) } returns Unit
+        every { userInfoProducer.saveNewUser(any()) } returns Customer()
 
         val converter = securityConfig.jwtAuthenticationConverter()
         val authentication = converter.convert(jwt)
@@ -263,10 +263,10 @@ class SecurityConfigurationTest : StringSpec({
         authentication.shouldNotBeNull()
         verify {
             userInfoProducer.saveNewUser(match { customer ->
-                customer.email == "naruto@konoha.com" &&
+                customer.mail == "naruto@konoha.com" &&
                 customer.role == "USER" &&
-                customer.firstName == "Naruto" &&
-                customer.lastName == "Uzumaki"
+                customer.vorname == "Naruto" &&
+                customer.nachname == "Uzumaki"
             })
         }
     }
@@ -304,15 +304,15 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("pikachu123") } returns Customer(
-            id = "5",
-            firstName = "Pikachu",
-            lastName = "",
-            fullname = "Pikachu",
+            userId = "5",
+            vorname = "Pikachu",
+            nachname = "",
+            name = "Pikachu",
             externalIdentifer = "pikachu123",
-            email = "pikachu@pokemon.com",
+            mail = "pikachu@pokemon.com",
             role = null
         )
-        every { userInfoProducer.saveNewUser(any()) } returns Unit
+        every { userInfoProducer.saveNewUser(any()) } returns Customer()
 
         val converter = securityConfig.jwtAuthenticationConverter()
         val authentication = converter.convert(jwt)
@@ -354,12 +354,12 @@ class SecurityConfigurationTest : StringSpec({
         )
 
         every { userInfoProducer.getCustomerInfoFor("neo123") } returns Customer(
-            id = "6",
-            firstName = "Thomas",
-            lastName = "Anderson",
-            fullname = "Neo",
+            userId = "6",
+            vorname = "Thomas",
+            nachname = "Anderson",
+            name = "Neo",
             externalIdentifer = "neo123",
-            email = "neo@matrix.com",
+            mail = "neo@matrix.com",
             role = "ADMIN"
         )
 

@@ -17,7 +17,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.util.Optional
+import java.util.*
 
 /**
  * Tests for GeneFunkCharacterService with creative test data inspired by iconic characters
@@ -405,7 +405,7 @@ class GeneFunkCharacterServiceTest : StringSpec({
             mail = "test@user.com",
             role = "user"
         )
-        every { repository.findById(999) } returns (Optional.empty() as Optional<GeneFunkCharacter?>)
+        every { repository.findById(999) } returns (Optional.empty<GeneFunkCharacter?>() as Optional<GeneFunkCharacter?>)
 
         val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
         val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)

@@ -2,6 +2,7 @@ package de.hipp.pnp.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.hipp.pnp.api.locale.BookLocale
+import de.hipp.pnp.api.locale.LabelDesc
 import de.hipp.pnp.rabbitmq.LocaleProducer
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -32,8 +33,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - default gameType 0 returns English locale" {
         val localeData = mutableMapOf(
-            "character.name" to BookLocale().apply { value = "Character Name" },
-            "character.class" to BookLocale().apply { value = "Character Class" }
+            "character.name" to BookLocale(features = mapOf("name" to LabelDesc(label = "Character Name"))),
+            "character.class" to BookLocale(features = mapOf("class" to LabelDesc(label = "Character Class")))
         )
         val controller = createMockController(localeData)
 
@@ -46,8 +47,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Goku (孫悟空) checks Japanese locale with hiragana" {
         val localeData = mutableMapOf(
-            "character.name" to BookLocale().apply { value = "なまえ" },
-            "character.strength" to BookLocale().apply { value = "ちから" }
+            "character.name" to BookLocale(features = mapOf("name" to LabelDesc(label = "なまえ"))),
+            "character.strength" to BookLocale(features = mapOf("strength" to LabelDesc(label = "ちから")))
         )
         val controller = createMockController(localeData)
 
@@ -59,8 +60,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Naruto (ナルト) checks Japanese locale with katakana" {
         val localeData = mutableMapOf(
-            "game.title" to BookLocale().apply { value = "ゲーム" },
-            "character.status" to BookLocale().apply { value = "ステータス" }
+            "game.title" to BookLocale(features = mapOf("title" to LabelDesc(label = "ゲーム"))),
+            "character.status" to BookLocale(features = mapOf("status" to LabelDesc(label = "ステータス")))
         )
         val controller = createMockController(localeData)
 
@@ -72,9 +73,9 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Emoji support 🎲⚔️🛡️" {
         val localeData = mutableMapOf(
-            "dice.roll" to BookLocale().apply { value = "🎲 Roll Dice" },
-            "weapon.attack" to BookLocale().apply { value = "⚔️ Attack" },
-            "armor.defense" to BookLocale().apply { value = "🛡️ Defense" }
+            "dice.roll" to BookLocale(features = mapOf("roll" to LabelDesc(label = "🎲 Roll Dice"))),
+            "weapon.attack" to BookLocale(features = mapOf("attack" to LabelDesc(label = "⚔️ Attack"))),
+            "armor.defense" to BookLocale(features = mapOf("defense" to LabelDesc(label = "🛡️ Defense")))
         )
         val controller = createMockController(localeData)
 
@@ -95,7 +96,7 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Key with empty string value" {
         val localeData = mutableMapOf(
-            "empty.key" to BookLocale().apply { value = "" }
+            "empty.key" to BookLocale(features = mapOf("key" to LabelDesc(label = "")))
         )
         val controller = createMockController(localeData)
 
@@ -106,7 +107,7 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Key with whitespace value" {
         val localeData = mutableMapOf(
-            "whitespace.key" to BookLocale().apply { value = "   " }
+            "whitespace.key" to BookLocale(features = mapOf("key" to LabelDesc(label = "   ")))
         )
         val controller = createMockController(localeData)
 
@@ -118,9 +119,9 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Mixed languages (English, Japanese, emoji)" {
         val localeData = mutableMapOf(
-            "title.en" to BookLocale().apply { value = "GeneFunk 2090" },
-            "title.jp" to BookLocale().apply { value = "ジーンファンク 2090" },
-            "icon" to BookLocale().apply { value = "🎲🧬" }
+            "title.en" to BookLocale(features = mapOf("en" to LabelDesc(label = "GeneFunk 2090"))),
+            "title.jp" to BookLocale(features = mapOf("jp" to LabelDesc(label = "ジーンファンク 2090"))),
+            "icon" to BookLocale(features = mapOf("icon" to LabelDesc(label = "🎲🧬")))
         )
         val controller = createMockController(localeData)
 
@@ -133,8 +134,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Tony Stark checks technical terms" {
         val localeData = mutableMapOf(
-            "tech.ai" to BookLocale().apply { value = "Artificial Intelligence" },
-            "tech.nano" to BookLocale().apply { value = "Nanotechnology" }
+            "tech.ai" to BookLocale(features = mapOf("ai" to LabelDesc(label = "Artificial Intelligence"))),
+            "tech.nano" to BookLocale(features = mapOf("nano" to LabelDesc(label = "Nanotechnology")))
         )
         val controller = createMockController(localeData)
 
@@ -146,8 +147,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Spider-Man (スパイダーマン) checks ability names" {
         val localeData = mutableMapOf(
-            "ability.web" to BookLocale().apply { value = "ウェブ・シューター" },
-            "ability.sense" to BookLocale().apply { value = "スパイダーセンス" }
+            "ability.web" to BookLocale(features = mapOf("web" to LabelDesc(label = "ウェブ・シューター"))),
+            "ability.sense" to BookLocale(features = mapOf("sense" to LabelDesc(label = "スパイダーセンス")))
         )
         val controller = createMockController(localeData)
 
@@ -159,9 +160,9 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Special characters and symbols" {
         val localeData = mutableMapOf(
-            "math" to BookLocale().apply { value = "±10%" },
-            "currency" to BookLocale().apply { value = "¥1000" },
-            "arrows" to BookLocale().apply { value = "→←↑↓" }
+            "math" to BookLocale(features = mapOf("math" to LabelDesc(label = "±10%"))),
+            "currency" to BookLocale(features = mapOf("currency" to LabelDesc(label = "¥1000"))),
+            "arrows" to BookLocale(features = mapOf("arrows" to LabelDesc(label = "→←↑↓")))
         )
         val controller = createMockController(localeData)
 
@@ -194,9 +195,9 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Batman checks combat terms" {
         val localeData = mutableMapOf(
-            "combat.melee" to BookLocale().apply { value = "Melee Attack" },
-            "combat.ranged" to BookLocale().apply { value = "Ranged Attack" },
-            "combat.critical" to BookLocale().apply { value = "Critical Hit! 💥" }
+            "combat.melee" to BookLocale(features = mapOf("melee" to LabelDesc(label = "Melee Attack"))),
+            "combat.ranged" to BookLocale(features = mapOf("ranged" to LabelDesc(label = "Ranged Attack"))),
+            "combat.critical" to BookLocale(features = mapOf("critical" to LabelDesc(label = "Critical Hit! 💥")))
         )
         val controller = createMockController(localeData)
 
@@ -209,8 +210,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Pikachu (ピカチュウ) checks Pokemon-style names" {
         val localeData = mutableMapOf(
-            "pokemon.pikachu" to BookLocale().apply { value = "ピカチュウ" },
-            "pokemon.attack" to BookLocale().apply { value = "でんきショック ⚡" }
+            "pokemon.pikachu" to BookLocale(features = mapOf("pikachu" to LabelDesc(label = "ピカチュウ"))),
+            "pokemon.attack" to BookLocale(features = mapOf("attack" to LabelDesc(label = "でんきショック ⚡")))
         )
         val controller = createMockController(localeData)
 
@@ -223,7 +224,7 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Newline and tab characters in value" {
         val localeData = mutableMapOf(
-            "multiline" to BookLocale().apply { value = "Line1\nLine2\tTabbed" }
+            "multiline" to BookLocale(features = mapOf("multiline" to LabelDesc(label = "Line1\nLine2\tTabbed")))
         )
         val controller = createMockController(localeData)
 
@@ -235,7 +236,7 @@ class LocaleRestControllerTest : StringSpec({
     "GET /locale - Very long locale key name" {
         val longKey = "a".repeat(100)
         val localeData = mutableMapOf(
-            longKey to BookLocale().apply { value = "Long key test" }
+            longKey to BookLocale(features = mapOf("longkey" to LabelDesc(label = "Long key test")))
         )
         val controller = createMockController(localeData)
 
@@ -257,8 +258,8 @@ class LocaleRestControllerTest : StringSpec({
 
     "GET /locale - Unicode characters beyond BMP (🧙‍♂️)" {
         val localeData = mutableMapOf(
-            "wizard" to BookLocale().apply { value = "🧙‍♂️ Gandalf" },
-            "elf" to BookLocale().apply { value = "🧝‍♀️ Legolas" }
+            "wizard" to BookLocale(features = mapOf("wizard" to LabelDesc(label = "🧙‍♂️ Gandalf"))),
+            "elf" to BookLocale(features = mapOf("elf" to LabelDesc(label = "🧝‍♀️ Legolas")))
         )
         val controller = createMockController(localeData)
 

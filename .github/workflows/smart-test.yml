@@ -1,0 +1,192 @@
+name: Smart Test Execution
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  detect-changes:
+    name: Detect Changed Modules
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.detect.outputs.docs_only }}
+      changed_modules: ${{ steps.detect.outputs.changed_modules }}
+      run_tests: ${{ steps.detect.outputs.run_tests }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files and modules
+        id: detect
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            docs:
+              - '**.md'
+              - 'docs/**'
+            base:
+              - 'base/**'
+            api:
+              - 'api/**'
+            genefunk:
+              - 'genefunk/**'
+            genefunk_starter:
+              - 'genefunk-starter/**'
+            data:
+              - 'data/**'
+            data_starter:
+              - 'data-starter/**'
+            security:
+              - 'security/**'
+            security_starter:
+              - 'security-starter/**'
+            monolith:
+              - 'monolith/**'
+            character_generator:
+              - 'character-generator-starter/**'
+            gradle:
+              - '**.gradle.kts'
+              - 'gradle/**'
+
+      - name: Compute changed modules
+        id: compute
+        run: |
+          MODULES=""
+
+          # Check each module and add to list if changed
+          if [[ "${{ steps.detect.outputs.base }}" == "true" ]]; then
+            MODULES="base"
+          fi
+          if [[ "${{ steps.detect.outputs.api }}" == "true" ]]; then
+            MODULES="${MODULES:+$MODULES,}api"
+          fi
+          if [[ "${{ steps.detect.outputs.genefunk }}" == "true" ]]; then
+            MODULES="${MODULES:+$MODULES,}genefunk"
+          fi
+          if [[ "${{ steps.detect.outputs.data }}" == "true" ]]; then
+            MODULES="${MODULES:+$MODULES,}data"
+          fi
+          if [[ "${{ steps.detect.outputs.security }}" == "true" ]]; then
+            MODULES="${MODULES:+$MODULES,}security"
+          fi
+          if [[ "${{ steps.detect.outputs.monolith }}" == "true" ]]; then
+            MODULES="${MODULES:+$MODULES,}monolith"
+          fi
+
+          # If only docs changed, skip tests
+          if [[ "${{ steps.detect.outputs.docs }}" == "true" ]] && [[ -z "$MODULES" ]]; then
+            echo "docs_only=true" >> $GITHUB_OUTPUT
+            echo "run_tests=false" >> $GITHUB_OUTPUT
+            echo "📚 Only documentation changed - skipping tests"
+          else
+            echo "docs_only=false" >> $GITHUB_OUTPUT
+            echo "run_tests=true" >> $GITHUB_OUTPUT
+            echo "changed_modules=$MODULES" >> $GITHUB_OUTPUT
+            echo "🧪 Changed modules: $MODULES"
+          fi
+
+          # If gradle files changed, run all tests
+          if [[ "${{ steps.detect.outputs.gradle }}" == "true" ]]; then
+            echo "changed_modules=" >> $GITHUB_OUTPUT
+            echo "run_tests=true" >> $GITHUB_OUTPUT
+            echo "🔧 Gradle files changed - running all tests"
+          fi
+
+  smart-test:
+    name: Smart Test Execution
+    needs: detect-changes
+    if: needs.detect-changes.outputs.run_tests == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run focused tests
+        env:
+          CHANGED_MODULES: ${{ needs.detect-changes.outputs.changed_modules }}
+          DOCS_ONLY: ${{ needs.detect-changes.outputs.docs_only }}
+        run: |
+          if [[ -n "$CHANGED_MODULES" ]]; then
+            echo "🎯 Running tests for modules: $CHANGED_MODULES"
+            ./gradlew test -PCHANGED_MODULES="$CHANGED_MODULES" --parallel
+          else
+            echo "🔄 Running all tests"
+            ./gradlew test --parallel
+          fi
+
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: '**/build/test-results/test/'
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: coverage-report
+          path: '**/build/reports/jacoco/test/'
+
+      - name: Comment on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const modules = '${{ needs.detect-changes.outputs.changed_modules }}';
+            const docsOnly = '${{ needs.detect-changes.outputs.docs_only }}';
+
+            let body = '## ⚡ Smart Test Execution Report\n\n';
+
+            if (docsOnly === 'true') {
+              body += '📚 **Documentation-only change** - Tests skipped\n\n';
+              body += '✅ No code changes detected. Fast-tracked for review.';
+            } else if (modules) {
+              body += `🎯 **Focused testing** on changed modules: \`${modules}\`\n\n`;
+              body += `This saves time by only testing impacted code. Full test suite runs before merge to main.`;
+            } else {
+              body += '🔄 **Full test suite** executed\n\n';
+              body += 'Running all tests due to build configuration changes or wide-reaching changes.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  skip-tests:
+    name: Tests Skipped (Docs Only)
+    needs: detect-changes
+    if: needs.detect-changes.outputs.run_tests == 'false'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## ⚡ Smart Test Execution Report\n\n📚 **Documentation-only change** - Tests skipped\n\n✅ No code changes detected. This PR is fast-tracked!'
+            });

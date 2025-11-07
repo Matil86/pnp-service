@@ -16,6 +16,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
 import java.util.*
 
@@ -24,13 +26,43 @@ import java.util.*
  */
 class GeneFunkCharacterServiceTest : StringSpec({
 
+    // Setup static mocks once for all tests
+    beforeSpec {
+        mockkStatic(io.micrometer.core.instrument.Timer::class)
+        mockkStatic(io.micrometer.core.instrument.Counter::class)
+    }
+
+    afterSpec {
+        unmockkAll()
+    }
+
     fun createMockService(): GeneFunkCharacterService {
         val repository = mockk<GeneFunkCharacterRepository>(relaxed = true)
         val genomeService = mockk<GeneFunkGenomeService>()
         val classService = mockk<GeneFunkClassService>()
         val userInfoProducer = mockk<UserInfoProducer>()
-        val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
+        val characterNamesProperties = CharacterNamesProperties().apply {
+            names = listOf("John", "Jane", "Alex", "Sam", "Taylor", "Jordan", "Morgan", "Casey")
+        }
         val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)
+
+        // Mock Timer to properly execute the callable and return its result
+        val mockTimer = mockk<io.micrometer.core.instrument.Timer>(relaxed = true)
+        val mockTimerBuilder = mockk<io.micrometer.core.instrument.Timer.Builder>(relaxed = true)
+        val mockCounterBuilder = mockk<io.micrometer.core.instrument.Counter.Builder>(relaxed = true)
+        val mockCounter = mockk<io.micrometer.core.instrument.Counter>(relaxed = true)
+
+        every { io.micrometer.core.instrument.Timer.builder(any()) } returns mockTimerBuilder
+        every { mockTimerBuilder.description(any()) } returns mockTimerBuilder
+        every { mockTimerBuilder.register(any()) } returns mockTimer
+        every { mockTimer.recordCallable<GeneFunkCharacter>(any()) } answers {
+            val callable = firstArg<java.util.concurrent.Callable<GeneFunkCharacter>>()
+            callable.call()
+        }
+
+        every { io.micrometer.core.instrument.Counter.builder(any()) } returns mockCounterBuilder
+        every { mockCounterBuilder.description(any()) } returns mockCounterBuilder
+        every { mockCounterBuilder.register(any()) } returns mockCounter
 
         // Mock genome
         val mockGenome = GeneFunkGenome().apply {
@@ -56,7 +88,15 @@ class GeneFunkCharacterServiceTest : StringSpec({
 
         every { genomeService.allGenomes() } returns mutableListOf(mockGenome)
         every { classService.getAllClasses() } returns mutableMapOf("Soldier" to mockClass)
-        every { repository.saveAndFlush(any<GeneFunkCharacter>()) } answers { firstArg() }
+        // Mock repository to return the same character passed to it (simulating persist)
+        every { repository.saveAndFlush(any<GeneFunkCharacter>()) } answers {
+            val char = firstArg<GeneFunkCharacter>()
+            // Simulate database ID assignment
+            if (char.id == null) {
+                char.id = (1..1000).random()
+            }
+            char
+        }
 
         return GeneFunkCharacterService(repository, genomeService, classService, userInfoProducer, characterNamesProperties, meterRegistry)
     }

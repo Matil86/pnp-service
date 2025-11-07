@@ -1,41 +1,91 @@
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-# https://github.com/takari/maven-wrapper#usage-without-binary-jar
-.mvn/wrapper/maven-wrapper.jar
-/.idea/*
-/database/
-*.iml
-/compose-ui/.gradle/
-/compose-ui/.kotlin/
-/compose-ui/.run/
-/compose-ui/composeApp/build/
-/compose-ui/build/
-/compose-ui/.fleet/
-/.env.base
-/.env
+################################################################################
+# Gradle Build System
+################################################################################
+.gradle/
+build/
+out/
+bin/
+gradle-app.setting
+.gradletasknamecache
+!gradle-wrapper.jar
 
-# Firebase credentials - CRITICAL SECURITY
+################################################################################
+# Kotlin
+################################################################################
+.kotlin/
+*.kotlin_module
+
+################################################################################
+# IntelliJ IDEA
+################################################################################
+.idea/
+*.iml
+*.ipr
+*.iws
+.run/
+.fleet/
+
+################################################################################
+# Visual Studio Code
+################################################################################
+.vscode/
+*.code-workspace
+
+################################################################################
+# Eclipse
+################################################################################
+.classpath
+.project
+.settings/
+.metadata/
+
+################################################################################
+# macOS
+################################################################################
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+################################################################################
+# Windows
+################################################################################
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+################################################################################
+# Linux
+################################################################################
+*~
+.directory
+.Trash-*
+
+################################################################################
+# Environment & Configuration
+################################################################################
+.env
+.env.local
+.env.*.local
+.env.base
+/database/
+
+################################################################################
+# Firebase Credentials - CRITICAL SECURITY
 # Never commit Firebase service account keys or private credentials
 # Use environment variables (GOOGLE_APPLICATION_CREDENTIALS) or secure secret management
+################################################################################
 /character-generator-service-firebase-adminsdk-fbsvc-e6f8e22e01.json
 *-private.json
 *-adminsdk-*.json
 serviceAccountKey.json
+firebase-adminsdk-*.json
 
-/api/build
-/base/build
-/character-generator-starter/build
-/data/build
-/data-starter/build
-/genefunk/build
-/genefunk-starter/build
-/security/build
-/security-starter/build
-/build/*
+################################################################################
+# Logs
+################################################################################
+*.log
+logs/
+*.log.*

@@ -19,7 +19,7 @@ RUN yum install -y --allowerasing shadow-utils curl && \
 WORKDIR /app
 
 # Copy the JAR file
-COPY --chown=appuser:appuser target/*-spring-boot.jar service.jar
+COPY --chown=appuser:appuser build/libs/*-spring-boot.jar service.jar
 
 # Switch to non-root user
 USER appuser

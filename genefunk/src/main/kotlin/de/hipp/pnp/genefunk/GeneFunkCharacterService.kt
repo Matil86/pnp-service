@@ -95,9 +95,14 @@ open class GeneFunkCharacterService(
             try {
                 logger.debug { "Generating character for user: $externalId" }
 
-                val char = character ?: GeneFunkCharacter().apply {
-                    firstName = pickRandom(characterNamesProperties.names.toMutableList())
-                    lastName = pickRandom(characterNamesProperties.names.toMutableList())
+                val char = character ?: GeneFunkCharacter()
+
+                // Set names if not already provided
+                if (char.firstName == null) {
+                    char.firstName = pickRandom(characterNamesProperties.names.toMutableList())
+                }
+                if (char.lastName == null) {
+                    char.lastName = pickRandom(characterNamesProperties.names.toMutableList())
                 }
 
                 val genomes = genomeService.allGenomes()

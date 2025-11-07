@@ -62,34 +62,33 @@ class GeneFunkCharacter : BaseCharacter() {
     fun applyBaseValues(attributeChanges: MutableMap<String?, Int?>) {
         setMaxValues(attributeChanges)
 
-        this.strength!!.modifyValue(attributeChanges[AttributeConstants.STRENGTH] ?: 0)
-        this.dexterity!!.modifyValue(attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
-        this.constitution!!.modifyValue(attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
-        this.intelligence!!.modifyValue(attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
-        this.wisdom!!.modifyValue(attributeChanges[AttributeConstants.WISDOM] ?: 0)
-        this.charisma!!.modifyValue(attributeChanges[AttributeConstants.CHARISMA] ?: 0)
+        this.strength!!.modifyValue(attributeChanges["strength"] ?: attributeChanges[AttributeConstants.STRENGTH] ?: 0)
+        this.dexterity!!.modifyValue(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
+        this.constitution!!.modifyValue(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
+        this.intelligence!!.modifyValue(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
+        this.wisdom!!.modifyValue(attributeChanges["wisdom"] ?: attributeChanges[AttributeConstants.WISDOM] ?: 0)
+        this.charisma!!.modifyValue(attributeChanges["charisma"] ?: attributeChanges[AttributeConstants.CHARISMA] ?: 0)
     }
 
     @JsonIgnore
     fun setMaxValues(attributeChanges: MutableMap<String?, Int?>) {
-        if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
-            this.strength!!.max = attributeChanges.get(AttributeConstants.STRENGTH_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.DEXTERITY_MAX)) {
-            this.dexterity!!.max = attributeChanges.get(AttributeConstants.DEXTERITY_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION_MAX)) {
-            this.constitution!!.max = attributeChanges.get(AttributeConstants.CONSTITUTION_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE_MAX)) {
-            this.intelligence!!.max = attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.WISDOM_MAX)) {
-            this.wisdom!!.max = attributeChanges.get(AttributeConstants.WISDOM_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.CHARISMA_MAX)) {
-            this.charisma!!.max = attributeChanges.get(AttributeConstants.CHARISMA_MAX)!!
-        }
+        attributeChanges["strength_max"]?.let { this.strength!!.max = it }
+            ?: attributeChanges[AttributeConstants.STRENGTH_MAX]?.let { this.strength!!.max = it }
+
+        attributeChanges["dexterity_max"]?.let { this.dexterity!!.max = it }
+            ?: attributeChanges[AttributeConstants.DEXTERITY_MAX]?.let { this.dexterity!!.max = it }
+
+        attributeChanges["constitution_max"]?.let { this.constitution!!.max = it }
+            ?: attributeChanges[AttributeConstants.CONSTITUTION_MAX]?.let { this.constitution!!.max = it }
+
+        attributeChanges["intelligence_max"]?.let { this.intelligence!!.max = it }
+            ?: attributeChanges[AttributeConstants.INTELLIGENCE_MAX]?.let { this.intelligence!!.max = it }
+
+        attributeChanges["wisdom_max"]?.let { this.wisdom!!.max = it }
+            ?: attributeChanges[AttributeConstants.WISDOM_MAX]?.let { this.wisdom!!.max = it }
+
+        attributeChanges["charisma_max"]?.let { this.charisma!!.max = it }
+            ?: attributeChanges[AttributeConstants.CHARISMA_MAX]?.let { this.charisma!!.max = it }
     }
 
     @JsonIgnore

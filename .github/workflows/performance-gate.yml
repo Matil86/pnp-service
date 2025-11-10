@@ -20,10 +20,10 @@ jobs:
         with:
           fetch-depth: 0  # Need history for comparison
 
-      - name: Set up JDK 17
+      - name: Set up JDK 24
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '24'
           distribution: 'temurin'
           cache: 'gradle'
 
@@ -157,10 +157,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK 24
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '24'
           distribution: 'temurin'
 
       - name: Build application

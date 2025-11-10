@@ -8,7 +8,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - pom.xml
+      - build.gradle.kts
+      - settings.gradle.kts
+      - gradle/**
       - api/**
       - base/**
       - character-generator-starter/**
@@ -26,6 +28,7 @@ jobs:
     with:
       build_image: character-generator-service
       service_name: character-generator-service
-      pom_folder: monolith
+      build_folder: monolith
       build_native: false
+      build_tool: gradle
     secrets: inherit

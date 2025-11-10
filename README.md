@@ -45,7 +45,7 @@ The PnP Service is designed to provide character generation and management tools
 
 ## Architecture
 
-The PnP Service uses a **modular monolith architecture** with distinct Maven modules for separation of concerns:
+The PnP Service uses a **modular monolith architecture** with distinct Gradle modules for separation of concerns:
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -86,7 +86,7 @@ For detailed architecture documentation, see:
 | **Kotlin** | 2.2.10 | Primary language (100% of codebase) |
 | **Java** | 24 | JVM runtime |
 | **Spring Boot** | 3.5.5 | Application framework |
-| **Maven** | 3.x | Build tool |
+| **Gradle** | 8.x | Build tool (Kotlin DSL) |
 
 ### Key Dependencies
 
@@ -114,7 +114,7 @@ For detailed architecture documentation, see:
 ### Prerequisites
 
 - **Java 24** (Amazon Corretto recommended)
-- **Maven 3.x**
+- **Gradle 8.x** (or use included Gradle wrapper)
 - **Docker** (optional, for containerized development)
 - **RabbitMQ** (via Docker or local installation)
 - **Git**
@@ -194,11 +194,10 @@ See [Deployment Guide](docs/architecture/DEPLOYMENT.md) for detailed Firebase an
 
 ```bash
 # Build all modules
-mvn clean install
+./gradlew build
 
 # Run the monolith
-cd monolith
-mvn spring-boot:run
+./gradlew :monolith:bootRun
 ```
 
 The service will start on `http://localhost:8080`
@@ -257,12 +256,12 @@ pnp-service/
 
 3. **Run Tests**
    ```bash
-   mvn test
+   ./gradlew test
    ```
 
 4. **Build and Verify**
    ```bash
-   mvn clean package
+   ./gradlew clean build
    ```
 
 5. **Commit and Push**
@@ -305,17 +304,16 @@ The project uses **Kotest** for all tests:
 
 ```bash
 # Run all tests
-mvn test
+./gradlew test
 
 # Run tests for specific module
-cd monolith
-mvn test
+./gradlew :monolith:test
 
 # Run tests with coverage
-mvn test jacoco:report
+./gradlew test jacocoTestReport
 
 # Run specific test
-mvn test -Dtest=CharacterRestControllerTest
+./gradlew test --tests CharacterRestControllerTest
 ```
 
 ### Test Structure
@@ -484,7 +482,7 @@ git push origin main
 ```
 
 GitHub Actions workflow:
-1. Build Maven project
+1. Build Gradle project
 2. Build Docker image
 3. Push to Google Container Registry
 4. Deploy to Cloud Run

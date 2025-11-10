@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 plugins {
     id("org.springframework.boot") version "3.5.5" apply false
@@ -100,7 +101,7 @@ subprojects {
     }
 
     // Detekt configuration
-    detekt {
+    configure<DetektExtension> {
         buildUponDefaultConfig = true
         allRules = false
         config.setFrom("$rootDir/config/detekt.yml")
@@ -108,6 +109,9 @@ subprojects {
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        // Detekt doesn't support JVM 24 yet, so we use 21 as the target
+        // This is a static analysis tool limitation and doesn't affect runtime
+        jvmTarget = "21"
         reports {
             html.required.set(true)
             xml.required.set(true)

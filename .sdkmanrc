@@ -1,2 +1,2 @@
 java=24.0.2-graal
-maven=3.9.11
+gradle=9.2.0

@@ -1,12 +1,12 @@
 package de.hipp.pnp
 
 import de.hipp.data.config.LocalizationProperties
+import org.springframework.aot.hint.RuntimeHints
+import org.springframework.aot.hint.RuntimeHintsRegistrar
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ImportRuntimeHints
-import org.springframework.aot.hint.RuntimeHints
-import org.springframework.aot.hint.RuntimeHintsRegistrar
 
 /**
  * Main application class for the PnP Character Generator service.
@@ -29,7 +29,10 @@ fun main(args: Array<String>) {
  * Registers necessary reflection hints for the application classes.
  */
 class CharacterGeneratorRuntimeHints : RuntimeHintsRegistrar {
-    override fun registerHints(hints: RuntimeHints, classLoader: ClassLoader?) {
+    override fun registerHints(
+        hints: RuntimeHints,
+        classLoader: ClassLoader?,
+    ) {
         // Register the application class for reflection
         hints.reflection().registerType(CharacterGeneratorApplication::class.java)
     }

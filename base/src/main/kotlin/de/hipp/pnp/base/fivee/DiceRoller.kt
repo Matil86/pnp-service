@@ -9,7 +9,6 @@ import kotlin.random.Random
  * the highest or lowest results.
  */
 object DiceRoller {
-
     private val random = Random.Default
 
     /**
@@ -19,7 +18,10 @@ object DiceRoller {
      * @param diceSides The number of sides on each die
      * @return The sum of all dice rolls
      */
-    fun roll(numberOfDice: Int, diceSides: Int): Int {
+    fun roll(
+        numberOfDice: Int,
+        diceSides: Int,
+    ): Int {
         // Handle edge cases for invalid dice configurations
         if (diceSides <= 0 || numberOfDice <= 0) {
             return 0
@@ -46,7 +48,12 @@ object DiceRoller {
      * @param highest If true, keeps the highest results; if false, keeps the lowest results
      * @return The sum of the kept dice results
      */
-    fun roll(numberOfDice: Int, diceSides: Int, keep: Int, highest: Boolean): Int {
+    fun roll(
+        numberOfDice: Int,
+        diceSides: Int,
+        keep: Int,
+        highest: Boolean,
+    ): Int {
         val returnList = mutableListOf<Int>()
         for (i in 0 until numberOfDice) {
             returnList.add(roll(1, diceSides))

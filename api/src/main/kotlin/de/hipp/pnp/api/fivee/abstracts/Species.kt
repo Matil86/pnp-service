@@ -8,7 +8,10 @@ abstract class Species {
     var attributes: MutableMap<String?, Int?> = HashMap<String?, Int?>()
 
     @JsonIgnore
-    fun addAttributeChange(key: String?, value: Int?) {
+    fun addAttributeChange(
+        key: String?,
+        value: Int?,
+    ) {
         attributes.put(key, value)
     }
 }

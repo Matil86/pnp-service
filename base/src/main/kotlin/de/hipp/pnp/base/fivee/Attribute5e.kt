@@ -12,8 +12,9 @@ import kotlin.math.min
  * @property max The maximum value the attribute can reach (default: 20)
  * @property modifier The calculated modifier based on the attribute value
  */
-data class Attribute5e(@JsonIgnore var baseValue: Int = 0) : Serializable {
-
+data class Attribute5e(
+    @JsonIgnore var baseValue: Int = 0,
+) : Serializable {
     var value: Int = baseValue
 
     @JvmField

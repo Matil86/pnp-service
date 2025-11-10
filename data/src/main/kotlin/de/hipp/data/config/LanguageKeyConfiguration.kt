@@ -5,6 +5,4 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableConfigurationProperties(LocalizationProperties::class)
-open class LanguageKeyConfiguration {
-
-}
+open class LanguageKeyConfiguration

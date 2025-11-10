@@ -23,7 +23,6 @@ import java.io.IOException
  */
 @Configuration
 class FirebaseConfiguration {
-
     private val log = KotlinLogging.logger {}
 
     @Bean
@@ -36,9 +35,11 @@ class FirebaseConfiguration {
 
         val credentials = loadCredentials()
 
-        val options = FirebaseOptions.builder()
-            .setCredentials(credentials)
-            .build()
+        val options =
+            FirebaseOptions
+                .builder()
+                .setCredentials(credentials)
+                .build()
 
         log.info { "Initializing Firebase with secure credentials" }
         return FirebaseApp.initializeApp(options)
@@ -48,7 +49,9 @@ class FirebaseConfiguration {
     fun fireStore(): Firestore {
         val credentials = loadCredentials()
 
-        return FirestoreOptions.getDefaultInstance().toBuilder()
+        return FirestoreOptions
+            .getDefaultInstance()
+            .toBuilder()
             .setCredentials(credentials)
             .build()
             .service
@@ -106,7 +109,7 @@ class FirebaseConfiguration {
             log.error(e) { "Failed to load Firebase credentials from all sources" }
             throw IllegalStateException(
                 "Firebase credentials not found. Please set FIREBASE_CREDENTIALS or GOOGLE_APPLICATION_CREDENTIALS environment variable",
-                e
+                e,
             )
         }
     }

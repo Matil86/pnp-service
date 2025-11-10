@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 open class MetricsConfiguration {
-
     @Value("\${spring.application.name:pnp-character-generator}")
     private lateinit var applicationName: String
 
@@ -32,17 +31,16 @@ open class MetricsConfiguration {
      * @return MeterRegistryCustomizer with common tags configured
      */
     @Bean
-    open fun metricsCommonTags(): MeterRegistryCustomizer<MeterRegistry> {
-        return MeterRegistryCustomizer { registry ->
+    open fun metricsCommonTags(): MeterRegistryCustomizer<MeterRegistry> =
+        MeterRegistryCustomizer { registry ->
             registry.config().commonTags(
                 listOf(
                     Tag.of("application", applicationName),
                     Tag.of("version", applicationVersion),
-                    Tag.of("environment", System.getenv("ENVIRONMENT") ?: "development")
-                )
+                    Tag.of("environment", System.getenv("ENVIRONMENT") ?: "development"),
+                ),
             )
         }
-    }
 
     /**
      * Configures metric filters for fine-tuning metric collection.
@@ -53,18 +51,18 @@ open class MetricsConfiguration {
      * @return MeterRegistryCustomizer with meter filters configured
      */
     @Bean
-    open fun metricsFilters(): MeterRegistryCustomizer<MeterRegistry> {
-        return MeterRegistryCustomizer { registry ->
-            registry.config()
+    open fun metricsFilters(): MeterRegistryCustomizer<MeterRegistry> =
+        MeterRegistryCustomizer { registry ->
+            registry
+                .config()
                 // Enable histogram data for HTTP server requests to calculate percentiles
                 .meterFilter(
                     MeterFilter.maximumAllowableTags(
                         "http.server.requests",
                         "uri",
                         100,
-                        MeterFilter.deny()
-                    )
+                        MeterFilter.deny(),
+                    ),
                 )
         }
-    }
 }

@@ -1,5 +1,31 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
-  <CurrentIssues></CurrentIssues>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:GeneFunkCharacter.kt$GeneFunkCharacter$(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)</ID>
+    <ID>ArgumentListWrapping:GeneFunkCharacter.kt$GeneFunkCharacter$(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)</ID>
+    <ID>ArgumentListWrapping:GeneFunkCharacter.kt$GeneFunkCharacter$(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)</ID>
+    <ID>ArgumentListWrapping:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$(repository, genomeService, classService, userInfoProducer, characterNamesProperties, meterRegistry)</ID>
+    <ID>CyclomaticComplexMethod:GeneFunkCharacter.kt$GeneFunkCharacter$@JsonIgnore fun setMaxValues(attributeChanges: MutableMap&lt;String?, Int?&gt;)</ID>
+    <ID>CyclomaticComplexMethod:GeneFunkCharacterService.kt$GeneFunkCharacterService$@Timed(value = "characters.generation.duration", description = "Time to generate character") fun generate( character: GeneFunkCharacter?, externalId: String?, ): GeneFunkCharacter</ID>
+    <ID>Indentation:CharacterCreationAcceptance.kt$CharacterCreationAcceptance$ </ID>
+    <ID>Indentation:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$ </ID>
+    <ID>LongMethod:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$fun createMockService(): GeneFunkCharacterService</ID>
+    <ID>MagicNumber:GeneFunkCharacterService.kt$GeneFunkCharacterService$3</ID>
+    <ID>MagicNumber:GeneFunkCharacterService.kt$GeneFunkCharacterService$4</ID>
+    <ID>MagicNumber:GeneFunkCharacterService.kt$GeneFunkCharacterService$6</ID>
+    <ID>MagicNumber:GeneFunkGenomeType.kt$GeneFunkGenomeType.TRANSHUMAN$3</ID>
+    <ID>MaxLineLength:GeneFunkCharacter.kt$GeneFunkCharacter$this.constitution!!.modifyValue(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)</ID>
+    <ID>MaxLineLength:GeneFunkCharacter.kt$GeneFunkCharacter$this.dexterity!!.modifyValue(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)</ID>
+    <ID>MaxLineLength:GeneFunkCharacter.kt$GeneFunkCharacter$this.intelligence!!.modifyValue(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)</ID>
+    <ID>MaxLineLength:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$GeneFunkCharacterService(repository, genomeService, classService, userInfoProducer, characterNamesProperties, meterRegistry)</ID>
+    <ID>MaxLineLength:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$every { repository.findById(999) } returns (Optional.empty&lt;GeneFunkCharacter?&gt;() as Optional&lt;GeneFunkCharacter?&gt;)</ID>
+    <ID>MaximumLineLength:GeneFunkCharacter.kt$GeneFunkCharacter$ </ID>
+    <ID>MaximumLineLength:GeneFunkCharacterServiceTest.kt$GeneFunkCharacterServiceTest$ </ID>
+    <ID>NestedBlockDepth:GeneFunkCharacter.kt$GeneFunkCharacter$@JsonIgnore fun addClass(addClass: GeneFunkClassEntity)</ID>
+    <ID>NoUnusedImports:GeneFunkCharacterServiceTest.kt$de.hipp.pnp.genefunk.GeneFunkCharacterServiceTest.kt</ID>
+    <ID>NoUnusedImports:GeneFunkCharacterTest.kt$de.hipp.pnp.genefunk.GeneFunkCharacterTest.kt</ID>
+    <ID>ReturnCount:GeneFunkGenomeService.kt$GeneFunkGenomeService$private fun getGenomeType(name: String): GeneFunkGenomeType</ID>
+    <ID>TooGenericExceptionCaught:GeneFunkCharacterService.kt$GeneFunkCharacterService$e: Exception</ID>
+  </CurrentIssues>
 </SmellBaseline>

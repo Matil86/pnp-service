@@ -19,7 +19,6 @@ class GenefunkListener(
     factory: ConnectionFactory,
     private val configuration: GameConfiguration,
 ) {
-
     private val log = KotlinLogging.logger {}
 
     init {
@@ -34,7 +33,7 @@ class GenefunkListener(
             false,
             false,
             true,
-            null
+            null,
         )
     }
 
@@ -58,7 +57,10 @@ class GenefunkListener(
             DefaultMessage<List<CharacterSpeciesEntity>>()
 
         val payload =
-            configuration.books.map { it.species }.flatten().distinct()
+            configuration.books
+                .map { it.species }
+                .flatten()
+                .distinct()
 
         message.action = "finished"
         message.payload = payload

@@ -9,16 +9,15 @@ class DefaultMessage<T>(
     var payload: T,
     var detailMessage: String = "",
     var uuid: String = "",
-    var header: MessageHeader = MessageHeader()
+    var header: MessageHeader = MessageHeader(),
 ) {
-
     @Suppress("UNCHECKED_CAST")
     constructor() : this(
         action = "",
         payload = null as T,
         detailMessage = "",
         uuid = "",
-        header = MessageHeader()
+        header = MessageHeader(),
     )
 
     @JsonIgnore

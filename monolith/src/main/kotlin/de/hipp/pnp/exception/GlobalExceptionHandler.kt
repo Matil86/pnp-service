@@ -21,7 +21,6 @@ import java.time.Instant
  */
 @RestControllerAdvice
 class GlobalExceptionHandler {
-
     private val log = KotlinLogging.logger {}
 
     /**
@@ -30,22 +29,24 @@ class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationException(
         ex: MethodArgumentNotValidException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.warn { "Validation error: ${ex.message}" }
 
-        val errors = ex.bindingResult.fieldErrors.associate {
-            it.field to (it.defaultMessage ?: "Validation failed")
-        }
+        val errors =
+            ex.bindingResult.fieldErrors.associate {
+                it.field to (it.defaultMessage ?: "Validation failed")
+            }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = "Validation Failed",
-            message = "Input validation failed. Please check your request data.",
-            path = request.getDescription(false).removePrefix("uri="),
-            validationErrors = errors
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = "Validation Failed",
+                message = "Input validation failed. Please check your request data.",
+                path = request.getDescription(false).removePrefix("uri="),
+                validationErrors = errors,
+            )
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
@@ -56,22 +57,24 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException::class)
     fun handleConstraintViolationException(
         ex: ConstraintViolationException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.warn { "Constraint violation: ${ex.message}" }
 
-        val errors = ex.constraintViolations.associate {
-            it.propertyPath.toString() to it.message
-        }
+        val errors =
+            ex.constraintViolations.associate {
+                it.propertyPath.toString() to it.message
+            }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = "Invalid Input",
-            message = "Request parameters failed validation.",
-            path = request.getDescription(false).removePrefix("uri="),
-            validationErrors = errors
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = "Invalid Input",
+                message = "Request parameters failed validation.",
+                path = request.getDescription(false).removePrefix("uri="),
+                validationErrors = errors,
+            )
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
@@ -82,17 +85,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleTypeMismatchException(
         ex: MethodArgumentTypeMismatchException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.warn { "Type mismatch error: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = "Invalid Input Type",
-            message = "Parameter '${ex.name}' has invalid type. Expected ${ex.requiredType?.simpleName}.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = "Invalid Input Type",
+                message = "Parameter '${ex.name}' has invalid type. Expected ${ex.requiredType?.simpleName}.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
@@ -104,17 +108,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(JwtException::class)
     fun handleJwtException(
         ex: JwtException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.error { "JWT authentication failed: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.UNAUTHORIZED.value(),
-            error = "Authentication Failed",
-            message = "Invalid or expired authentication token.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.UNAUTHORIZED.value(),
+                error = "Authentication Failed",
+                message = "Invalid or expired authentication token.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
     }
@@ -126,17 +131,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException::class)
     fun handleBadCredentialsException(
         ex: BadCredentialsException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.error { "Bad credentials: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.UNAUTHORIZED.value(),
-            error = "Authentication Failed",
-            message = "Authentication failed. Please check your credentials.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.UNAUTHORIZED.value(),
+                error = "Authentication Failed",
+                message = "Authentication failed. Please check your credentials.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
     }
@@ -147,17 +153,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDeniedException(
         ex: AccessDeniedException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.error { "Access denied: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.FORBIDDEN.value(),
-            error = "Access Denied",
-            message = "You do not have permission to access this resource.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.FORBIDDEN.value(),
+                error = "Access Denied",
+                message = "You do not have permission to access this resource.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse)
     }
@@ -168,17 +175,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.warn { "Illegal argument: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.BAD_REQUEST.value(),
-            error = "Invalid Request",
-            message = ex.message ?: "Invalid request parameters.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                error = "Invalid Request",
+                message = ex.message ?: "Invalid request parameters.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
@@ -189,17 +197,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(IllegalStateException::class)
     fun handleIllegalStateException(
         ex: IllegalStateException,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.error(ex) { "Illegal state: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = "An internal error occurred. Please try again later.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                error = "Internal Server Error",
+                message = "An internal error occurred. Please try again later.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse)
     }
@@ -211,17 +220,18 @@ class GlobalExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(
         ex: Exception,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<ErrorResponse> {
         log.error(ex) { "Unhandled exception: ${ex.message}" }
 
-        val errorResponse = ErrorResponse(
-            timestamp = Instant.now(),
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = "An unexpected error occurred. Please try again later.",
-            path = request.getDescription(false).removePrefix("uri=")
-        )
+        val errorResponse =
+            ErrorResponse(
+                timestamp = Instant.now(),
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                error = "Internal Server Error",
+                message = "An unexpected error occurred. Please try again later.",
+                path = request.getDescription(false).removePrefix("uri="),
+            )
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse)
     }
@@ -244,5 +254,5 @@ data class ErrorResponse(
     val error: String,
     val message: String,
     val path: String,
-    val validationErrors: Map<String, String>? = null
+    val validationErrors: Map<String, String>? = null,
 )

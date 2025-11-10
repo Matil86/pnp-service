@@ -22,7 +22,6 @@ private val logger = KotlinLogging.logger {}
 @Aspect
 @Component
 class PerformanceLoggingAspect {
-
     @Value("\${performance.slow-threshold-ms:1000}")
     private var slowThresholdMs: Long = 1000
 
@@ -32,9 +31,7 @@ class PerformanceLoggingAspect {
      * Logs a warning if execution time exceeds the slow threshold.
      */
     @Around("@within(org.springframework.stereotype.Service)")
-    fun monitorServicePerformance(joinPoint: ProceedingJoinPoint): Any? {
-        return monitorExecution(joinPoint, "Service")
-    }
+    fun monitorServicePerformance(joinPoint: ProceedingJoinPoint): Any? = monitorExecution(joinPoint, "Service")
 
     /**
      * Monitors all REST controller methods for performance.
@@ -42,9 +39,7 @@ class PerformanceLoggingAspect {
      * Logs a warning if execution time exceeds the slow threshold.
      */
     @Around("@within(org.springframework.web.bind.annotation.RestController)")
-    fun monitorControllerPerformance(joinPoint: ProceedingJoinPoint): Any? {
-        return monitorExecution(joinPoint, "Controller")
-    }
+    fun monitorControllerPerformance(joinPoint: ProceedingJoinPoint): Any? = monitorExecution(joinPoint, "Controller")
 
     /**
      * Core monitoring logic for method execution.
@@ -53,7 +48,10 @@ class PerformanceLoggingAspect {
      * @param componentType The type of component (Service, Controller, etc.)
      * @return The result of the method execution
      */
-    private fun monitorExecution(joinPoint: ProceedingJoinPoint, componentType: String): Any? {
+    private fun monitorExecution(
+        joinPoint: ProceedingJoinPoint,
+        componentType: String,
+    ): Any? {
         val className = joinPoint.signature.declaringType.simpleName
         val methodName = joinPoint.signature.name
         val startTime = System.currentTimeMillis()
@@ -72,7 +70,7 @@ class PerformanceLoggingAspect {
 
                 logger.warn {
                     "SLOW $componentType METHOD: $className.$methodName took ${duration}ms " +
-                    "(threshold: ${slowThresholdMs}ms)"
+                        "(threshold: ${slowThresholdMs}ms)"
                 }
 
                 MDC.remove("duration_ms")

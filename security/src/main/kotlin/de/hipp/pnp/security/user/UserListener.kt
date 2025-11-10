@@ -19,14 +19,17 @@ import java.io.IOException
 /**
  * RabbitMQ message listener for user-related operations.
  * Handles incoming messages for user retrieval and creation via message queues.
- * 
+ *
  * @param mapper JSON object mapper for message serialization/deserialization
  * @param factory RabbitMQ connection factory for queue management
  * @param userService Service for user operations
  */
 @Component
-class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory, private val userService: UserService) {
-
+class UserListener(
+    private val mapper: ObjectMapper,
+    factory: ConnectionFactory,
+    private val userService: UserService,
+) {
     var log: Logger = LoggerFactory.getLogger(UserListener::class.java)
 
     init {
@@ -35,7 +38,7 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
 
     /**
      * Declares the necessary RabbitMQ queues for user operations.
-     * 
+     *
      * @param channel The RabbitMQ channel to use for queue declaration
      * @throws IOException if there's an error declaring the queues
      */
@@ -48,14 +51,14 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
     /**
      * Handles messages for retrieving internal user information by external ID.
      * Processes incoming requests to find user data and returns user information with roles.
-     * 
+     *
      * @param user JSON string containing the user request message
      * @return JSON string with user information and roles, or empty user data if not found
      * @throws JsonProcessingException if there's an error processing the JSON message
      */
     @RabbitListener(queues = [RoutingKeys.GET_INTERNAL_USER])
     @Throws(
-        JsonProcessingException::class
+        JsonProcessingException::class,
     )
     suspend fun handleGetInternalUserId(user: String?): String {
         val message: DefaultMessage<String> =
@@ -76,14 +79,14 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
     /**
      * Handles messages for creating or retrieving users based on customer data.
      * Creates new users if they don't exist, or returns existing user information.
-     * 
+     *
      * @param user JSON string containing the customer data for user creation
      * @return JSON string with the saved or existing user information
      * @throws JsonProcessingException if there's an error processing the JSON message
      */
     @RabbitListener(queues = [RoutingKeys.SAVE_NEW_USER])
     @Throws(
-        JsonProcessingException::class
+        JsonProcessingException::class,
     )
     suspend fun handleSaveNewUser(user: String?): String {
         val message: DefaultMessage<Customer> =
@@ -96,15 +99,16 @@ class UserListener(private val mapper: ObjectMapper, factory: ConnectionFactory,
         val customer = message.payload
         var user: User? = userService.getUserByExternalId(customer.userId)
         if (user == null) {
-            val userToSafe = User(
-                customer.userId ?: "",
-                customer.vorname,
-                customer.nachname,
-                customer.name,
-                customer.externalIdentifer,
-                customer.mail,
-                customer.role
-            )
+            val userToSafe =
+                User(
+                    customer.userId ?: "",
+                    customer.vorname,
+                    customer.nachname,
+                    customer.name,
+                    customer.externalIdentifer,
+                    customer.mail,
+                    customer.role,
+                )
             user = userService.saveUser(userToSafe)
         }
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user)

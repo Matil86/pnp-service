@@ -16,40 +16,42 @@ private val logger = KotlinLogging.logger {}
  */
 @Component
 class FirebaseHealthIndicator : HealthIndicator {
-
-    override fun health(): Health {
-        return try {
+    override fun health(): Health =
+        try {
             // Attempt to get Firebase Auth instance
             val firebaseAuth = FirebaseAuth.getInstance()
 
             if (firebaseAuth != null) {
                 // Firebase is initialized and accessible
                 logger.debug { "Firebase health check: OK" }
-                Health.up()
+                Health
+                    .up()
                     .withDetail("status", "Firebase Admin SDK initialized")
                     .withDetail("service", "firebase-auth")
                     .build()
             } else {
                 logger.warn { "Firebase health check: Firebase Auth instance is null" }
-                Health.down()
+                Health
+                    .down()
                     .withDetail("status", "Firebase Auth instance is null")
                     .withDetail("service", "firebase-auth")
                     .build()
             }
         } catch (e: IllegalStateException) {
             logger.error(e) { "Firebase health check: Not initialized - ${e.message}" }
-            Health.down()
+            Health
+                .down()
                 .withDetail("status", "Firebase not initialized")
                 .withDetail("error", e.message ?: "Unknown error")
                 .withDetail("service", "firebase-auth")
                 .build()
         } catch (e: Exception) {
             logger.error(e) { "Firebase health check: Failed - ${e.message}" }
-            Health.down()
+            Health
+                .down()
                 .withDetail("status", "Firebase health check failed")
                 .withDetail("error", e.message ?: "Unknown error")
                 .withDetail("service", "firebase-auth")
                 .build()
         }
-    }
 }

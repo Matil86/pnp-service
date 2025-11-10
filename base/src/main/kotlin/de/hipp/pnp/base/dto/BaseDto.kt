@@ -7,16 +7,14 @@ import org.springframework.stereotype.Component
 
 @Component
 abstract class BaseDto {
-
     @JsonIgnore
     private val objectMapper = ObjectMapper()
 
     @JsonIgnore
-    override fun toString(): String {
-        return try {
+    override fun toString(): String =
+        try {
             objectMapper.writeValueAsString(this)
         } catch (e: JsonProcessingException) {
             super.toString()
         }
-    }
 }

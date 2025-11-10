@@ -7,8 +7,11 @@ import jakarta.persistence.Id
 import java.io.Serializable
 
 @Entity
-data class InventoryItem(var name: String = "", var amount: Int = 0, var customLabel: String = "") : Serializable {
-
+data class InventoryItem(
+    var name: String = "",
+    var amount: Int = 0,
+    var customLabel: String = "",
+) : Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null

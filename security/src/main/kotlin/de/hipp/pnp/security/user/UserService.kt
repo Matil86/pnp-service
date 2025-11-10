@@ -5,10 +5,10 @@ import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(private var userRepository: UserRepository) {
-    suspend fun userExists(sub: String?): Boolean {
-        return this.getUserByExternalId(sub) != null
-    }
+class UserService(
+    private var userRepository: UserRepository,
+) {
+    suspend fun userExists(sub: String?): Boolean = this.getUserByExternalId(sub) != null
 
     suspend fun getRole(sub: String?): String {
         var role = "ANNONYMOUS"
@@ -19,11 +19,13 @@ class UserService(private var userRepository: UserRepository) {
         return role
     }
 
-     suspend fun getUserByExternalId(externalUserId: String?): User? = withContext(Dispatchers.IO){
-         userRepository.getUserByExternalIdentifer(externalUserId)
-     }
+    suspend fun getUserByExternalId(externalUserId: String?): User? =
+        withContext(Dispatchers.IO) {
+            userRepository.getUserByExternalIdentifer(externalUserId)
+        }
 
-    suspend fun saveUser(user: User): User? = withContext(Dispatchers.IO) {
-       userRepository.save(user)
-    }
+    suspend fun saveUser(user: User): User? =
+        withContext(Dispatchers.IO) {
+            userRepository.save(user)
+        }
 }

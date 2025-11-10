@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service
 @Service
 open class GeneFunkGenomeService(
     val repository: GeneFunkGenomeRepository,
-    val genefunkInfoProducer: GenefunkInfoProducer
+    val genefunkInfoProducer: GenefunkInfoProducer,
 ) {
-
     private val log = KotlinLogging.logger {}
 
     @PostConstruct
@@ -21,15 +20,16 @@ open class GeneFunkGenomeService(
             log.warn { "No genomes found for GeneFunk" }
             return
         }
-        val geneFunkGenomes = genomes.map { species ->
-            GeneFunkGenome().apply {
-                name = species.name
-                description = species.description
-                attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
-                features = species.features.map { it }.toMutableSet()
-                genomeType = getGenomeType(species.name)
+        val geneFunkGenomes =
+            genomes.map { species ->
+                GeneFunkGenome().apply {
+                    name = species.name
+                    description = species.description
+                    attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
+                    features = species.features.map { it }.toMutableSet()
+                    genomeType = getGenomeType(species.name)
+                }
             }
-        }
         log.info { "Found ${geneFunkGenomes.size} genomes for GeneFunk" }
         save(geneFunkGenomes)
     }

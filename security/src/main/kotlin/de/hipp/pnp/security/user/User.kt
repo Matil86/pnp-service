@@ -17,7 +17,7 @@ open class User(
     open var name: String? = null,
     open var externalIdentifer: String? = null,
     open var mail: String? = null,
-    open var role: String? = null
+    open var role: String? = null,
 ) {
     constructor() : this(
         userId = UUID.randomUUID().toString(),
@@ -26,6 +26,6 @@ open class User(
         name = null,
         externalIdentifer = null,
         mail = null,
-        role = null
+        role = null,
     )
 }

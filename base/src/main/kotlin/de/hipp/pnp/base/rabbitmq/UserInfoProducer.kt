@@ -10,9 +10,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class UserInfoProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
-    BaseProducer<Map<*, *>?>(rabbitTemplate, mapper) {
-
+class UserInfoProducer(
+    rabbitTemplate: RabbitTemplate,
+    mapper: ObjectMapper,
+) : BaseProducer<Map<*, *>?>(rabbitTemplate, mapper) {
     fun getCustomerInfoFor(userId: String?): Customer {
         val map = this.sendMessageForRoutingKey(GET_INTERNAL_USER, null, userId) ?: return Customer()
         return mapper.convertValue(map, Customer::class.java)
@@ -28,7 +29,5 @@ class UserInfoProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
         return mapper.convertValue(map, Customer::class.java)
     }
 
-    override fun getHeader(): MessageHeader {
-        return MessageHeader()
-    }
+    override fun getHeader(): MessageHeader = MessageHeader()
 }

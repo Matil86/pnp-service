@@ -17,9 +17,11 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
     builder.set("paketobuildpacks/builder-jammy-tiny:latest")
-    environment.set(mapOf(
-        "BP_JVM_VERSION" to "24"
-    ))
+    environment.set(
+        mapOf(
+            "BP_JVM_VERSION" to "24",
+        ),
+    )
 }
 
 dependencies {

@@ -30,27 +30,34 @@ open class GeneFunkCharacterService(
     private val classService: GeneFunkClassService,
     private val userInfoProducer: UserInfoProducer,
     private val characterNamesProperties: CharacterNamesProperties,
-    private val meterRegistry: MeterRegistry
+    private val meterRegistry: MeterRegistry,
 ) : FiveECharacterService<GeneFunkCharacter?> {
     private val random = Random.Default
 
     // Metrics
-    private val characterGenerationCounter: Counter = Counter.builder("characters.generated.total")
-        .description("Total number of characters generated")
-        .register(meterRegistry)
+    private val characterGenerationCounter: Counter =
+        Counter
+            .builder("characters.generated.total")
+            .description("Total number of characters generated")
+            .register(meterRegistry)
 
-    private val characterGenerationFailureCounter: Counter = Counter.builder("characters.generation.failures.total")
-        .description("Total number of failed character generations")
-        .register(meterRegistry)
+    private val characterGenerationFailureCounter: Counter =
+        Counter
+            .builder("characters.generation.failures.total")
+            .description("Total number of failed character generations")
+            .register(meterRegistry)
 
-    private val characterDeletionCounter: Counter = Counter.builder("characters.deleted.total")
-        .description("Total number of characters deleted")
-        .register(meterRegistry)
+    private val characterDeletionCounter: Counter =
+        Counter
+            .builder("characters.deleted.total")
+            .description("Total number of characters deleted")
+            .register(meterRegistry)
 
-    private val characterGenerationTimer: Timer = Timer.builder("characters.generation.duration")
-        .description("Time taken to generate a character")
-        .register(meterRegistry)
-
+    private val characterGenerationTimer: Timer =
+        Timer
+            .builder("characters.generation.duration")
+            .description("Time taken to generate a character")
+            .register(meterRegistry)
 
     /**
      * Retrieves all characters for a given user.
@@ -75,9 +82,7 @@ open class GeneFunkCharacterService(
      * @return A newly generated GeneFunk character
      */
     @Timed(value = "characters.generation.duration", description = "Time to generate character")
-    override fun generate(): GeneFunkCharacter {
-        return generate(GeneFunkCharacter(), "unknown")
-    }
+    override fun generate(): GeneFunkCharacter = generate(GeneFunkCharacter(), "unknown")
 
     /**
      * Generates a character with optional pre-filled data.
@@ -90,8 +95,11 @@ open class GeneFunkCharacterService(
      * @return A fully generated and persisted GeneFunk character
      */
     @Timed(value = "characters.generation.duration", description = "Time to generate character")
-    fun generate(character: GeneFunkCharacter?, externalId: String?): GeneFunkCharacter {
-        return characterGenerationTimer.recordCallable {
+    fun generate(
+        character: GeneFunkCharacter?,
+        externalId: String?,
+    ): GeneFunkCharacter =
+        characterGenerationTimer.recordCallable {
             try {
                 logger.debug { "Generating character for user: $externalId" }
 
@@ -129,8 +137,8 @@ open class GeneFunkCharacterService(
                     char.addClass(
                         getGenomeClass(
                             randomClassName = pickRandom(classes.keys.toMutableList()),
-                            classes = classes
-                        )
+                            classes = classes,
+                        ),
                     )
                 }
 
@@ -143,8 +151,8 @@ open class GeneFunkCharacterService(
 
                 logger.info {
                     "Successfully generated character: id=${savedCharacter.id}, " +
-                    "name=${savedCharacter.firstName} ${savedCharacter.lastName}, " +
-                    "userId=$externalId, genome=${savedCharacter.genome?.name}"
+                        "name=${savedCharacter.firstName} ${savedCharacter.lastName}, " +
+                        "userId=$externalId, genome=${savedCharacter.genome?.name}"
                 }
 
                 savedCharacter
@@ -154,7 +162,6 @@ open class GeneFunkCharacterService(
                 throw e
             }
         }!!
-    }
 
     /**
      * Creates a GeneFunkClassEntity from a class definition.
@@ -166,10 +173,11 @@ open class GeneFunkCharacterService(
      */
     private fun getGenomeClass(
         randomClassName: String,
-        classes: MutableMap<String, GeneFunkClass>
+        classes: MutableMap<String, GeneFunkClass>,
     ): GeneFunkClassEntity {
-        val entry = classes[randomClassName]
-            ?: throw IllegalArgumentException("Class with name $randomClassName not found in classes map.")
+        val entry =
+            classes[randomClassName]
+                ?: throw IllegalArgumentException("Class with name $randomClassName not found in classes map.")
         return GeneFunkClassEntity().apply {
             name = randomClassName
             label = entry.label
@@ -220,7 +228,10 @@ open class GeneFunkCharacterService(
      * @param externalId The external user identifier
      * @throws IllegalArgumentException if the character doesn't exist or doesn't belong to the user
      */
-    fun delete(characterId: String, externalId: String) {
+    fun delete(
+        characterId: String,
+        externalId: String,
+    ) {
         logger.debug { "Attempting to delete character: id=$characterId, userId=$externalId" }
 
         val customer = userInfoProducer.getCustomerInfoFor(externalId)

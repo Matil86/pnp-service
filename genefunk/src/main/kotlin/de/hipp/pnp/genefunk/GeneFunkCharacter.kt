@@ -17,7 +17,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 
-
 @Entity
 @JsonSerialize
 class GeneFunkCharacter : BaseCharacter() {
@@ -95,7 +94,9 @@ class GeneFunkCharacter : BaseCharacter() {
     fun addClass(addClass: GeneFunkClassEntity) {
         val classes = this.characterClasses ?: emptySet<BaseCharacterClass?>().toMutableSet()
         if (classes.contains(addClass)) {
-            classes.stream().filter { value: BaseCharacterClass? -> value == addClass }
+            classes
+                .stream()
+                .filter { value: BaseCharacterClass? -> value == addClass }
                 .forEach { charClass: BaseCharacterClass? -> charClass!!.increaseLevel(1) }
         } else {
             classes.add(addClass)
@@ -108,9 +109,10 @@ class GeneFunkCharacter : BaseCharacter() {
             } else {
                 var item = inventory.find { item -> item.name == it }
                 if (item == null) {
-                    item = InventoryItem().apply {
-                        name = it
-                    }
+                    item =
+                        InventoryItem().apply {
+                            name = it
+                        }
                 }
                 item.amount += 1
                 inventory.add(item)
@@ -120,12 +122,13 @@ class GeneFunkCharacter : BaseCharacter() {
 
     @JsonIgnore
     fun addMoney(amountString: String) {
-        val amount = amountString
-            .replace("¥", "")
-            .replace(",", "")
-            .replace(".", "")
-            .replace(":", "")
-            .toIntOrNull() ?: 0
+        val amount =
+            amountString
+                .replace("¥", "")
+                .replace(",", "")
+                .replace(".", "")
+                .replace(":", "")
+                .toIntOrNull() ?: 0
         money += amount
     }
 }

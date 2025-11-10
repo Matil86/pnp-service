@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 data class Feature5e(
     @Column(columnDefinition = "TEXT") var label: String = "",
-    @Column(columnDefinition = "TEXT") var description: String = ""
+    @Column(columnDefinition = "TEXT") var description: String = "",
 ) {
-
     @Id
     @GeneratedValue
     private val id: Long? = null

@@ -11,9 +11,11 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
-    BaseProducer<BaseCharacter?>(rabbitTemplate, mapper), FiveECharacterProducer {
-
+class CharacterProducer(
+    rabbitTemplate: RabbitTemplate,
+    mapper: ObjectMapper,
+) : BaseProducer<BaseCharacter?>(rabbitTemplate, mapper),
+    FiveECharacterProducer {
     private val logger = KotlinLogging.logger {}
 
     /**
@@ -28,8 +30,8 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
         return mapper.writeValueAsString(
             sendMessageForRoutingKey(
                 RoutingKeys.CREATE_CHARACTER_ROUTING_KEY,
-                E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK)
-            )
+                E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK),
+            ),
         )
     }
 
@@ -38,7 +40,7 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
         @Suppress("UNCHECKED_CAST")
         return sendMessageForRoutingKey(
             RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY,
-            E5EGameTypes.GENEFUNK
+            E5EGameTypes.GENEFUNK,
         ) as MutableList<BaseCharacter?>
     }
 
@@ -47,7 +49,7 @@ class CharacterProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
         sendMessageForRoutingKey(
             RoutingKeys.DELETE_CHARACTER_ROUTING_KEY,
             E5EGameTypes.GENEFUNK,
-            characterId
+            characterId,
         )
         logger.info { "Character with ID $characterId deleted successfully." }
     }

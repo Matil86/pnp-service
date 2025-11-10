@@ -7,5 +7,6 @@ import java.util.Optional
 @Repository
 interface GeneFunkGenomeRepository : JpaRepository<GeneFunkGenome?, Int?> {
     fun findByName(name: String?): Optional<GeneFunkGenome?>?
+
     fun existsByName(name: String?): Boolean
 }

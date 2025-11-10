@@ -13,8 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.annotation.PostConstruct
-import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Pattern
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,8 +31,10 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "Locale Management", description = "Operations for managing game localization and language keys")
 @RestController
 @Validated
-class LocaleRestController(val localeProducer: LocaleProducer, val mapper: ObjectMapper) {
-
+class LocaleRestController(
+    val localeProducer: LocaleProducer,
+    val mapper: ObjectMapper,
+) {
     private val log = KotlinLogging.logger {}
 
     /**
@@ -55,36 +57,46 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
      */
     @Operation(
         summary = "Get locale data",
-        description = "Retrieves localized language keys for the specified game type and language. Returns JSON containing all localized strings for UI elements, skills, attributes, and game-specific content."
+        description =
+            "Retrieves localized language keys for the specified game type and language. " +
+                "Returns JSON containing all localized strings for UI elements, skills, attributes, and game-specific content.",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Successfully retrieved locale data",
-                content = [Content(schema = Schema(type = "string", example = "{\"skills\":{\"acrobatics\":\"Acrobatics\",\"athletics\":\"Athletics\"}}"))]
+                content = [
+                    Content(
+                        schema =
+                            Schema(
+                                type = "string",
+                                example = "{\"skills\":{\"acrobatics\":\"Acrobatics\",\"athletics\":\"Athletics\"}}",
+                            ),
+                    ),
+                ],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid parameters (game type must be 0-100, language must match format xx_XX or xx-XX)",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized - valid JWT token required",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Locale data not found for specified game type or language",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Internal server error or JSON serialization failure",
-                content = [Content()]
-            )
-        ]
+                content = [Content()],
+            ),
+        ],
     )
     @GetMapping(LOCALEURL)
     @Throws(JsonProcessingException::class)
@@ -93,11 +105,11 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
             name = "gameType",
             description = "Game type identifier (0 = GeneFunk). Must be between 0-100.",
             example = "0",
-            required = false
+            required = false,
         )
         @RequestParam(
             value = "gameType",
-            defaultValue = "0"
+            defaultValue = "0",
         )
         @Min(0, message = "Game type must be non-negative")
         @Max(100, message = "Game type must not exceed 100")
@@ -106,17 +118,17 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
             name = "language",
             description = "Locale code in format xx_XX or xx-XX (e.g., en_US for English, de_DE for German)",
             example = "en_US",
-            required = false
+            required = false,
         )
         @RequestParam(
             value = "language",
-            defaultValue = "en_US"
+            defaultValue = "en_US",
         )
         @Pattern(
             regexp = "^[a-z]{2}[_-][A-Z]{2}$",
-            message = "Language must be in format xx_XX or xx-XX (e.g., en_US, de_DE)"
+            message = "Language must be in format xx_XX or xx-XX (e.g., en_US, de_DE)",
         )
-        language: String = "en_US"
+        language: String = "en_US",
     ): String {
         val locale = localeProducer.getLanguageKeysByGameTypeAndLanguage(gameType, language)
         return mapper.writeValueAsString(locale)

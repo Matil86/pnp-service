@@ -15,11 +15,12 @@ import java.time.format.DateTimeFormatter
  */
 @Component
 class BuildInfoContributor : InfoContributor {
-
     companion object {
         private val BUILD_TIME = Instant.now()
-        private val DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z")
-            .withZone(ZoneId.of("UTC"))
+        private val DATE_FORMATTER =
+            DateTimeFormatter
+                .ofPattern("yyyy-MM-dd HH:mm:ss z")
+                .withZone(ZoneId.of("UTC"))
     }
 
     override fun contribute(builder: Info.Builder) {
@@ -31,29 +32,36 @@ class BuildInfoContributor : InfoContributor {
         val javaVendor = System.getProperty("java.vendor")
 
         // Add Spring Boot version (from build info if available)
-        val springBootVersion = org.springframework.boot.SpringBootVersion.getVersion()
+        val springBootVersion =
+            org.springframework.boot.SpringBootVersion
+                .getVersion()
 
         // Add build timestamp
         val buildTimestamp = DATE_FORMATTER.format(BUILD_TIME)
 
         // Add runtime information
-        val runtime = mapOf(
-            "processors" to Runtime.getRuntime().availableProcessors(),
-            "maxMemory" to "${Runtime.getRuntime().maxMemory() / 1024 / 1024} MB",
-            "totalMemory" to "${Runtime.getRuntime().totalMemory() / 1024 / 1024} MB",
-            "freeMemory" to "${Runtime.getRuntime().freeMemory() / 1024 / 1024} MB"
-        )
+        val runtime =
+            mapOf(
+                "processors" to Runtime.getRuntime().availableProcessors(),
+                "maxMemory" to "${Runtime.getRuntime().maxMemory() / 1024 / 1024} MB",
+                "totalMemory" to "${Runtime.getRuntime().totalMemory() / 1024 / 1024} MB",
+                "freeMemory" to "${Runtime.getRuntime().freeMemory() / 1024 / 1024} MB",
+            )
 
         // Add all information to the info endpoint
-        builder.withDetail("build", mapOf(
-            "time" to buildTimestamp,
-            "kotlin" to kotlinVersion,
-            "java" to mapOf(
-                "version" to javaVersion,
-                "vendor" to javaVendor
+        builder.withDetail(
+            "build",
+            mapOf(
+                "time" to buildTimestamp,
+                "kotlin" to kotlinVersion,
+                "java" to
+                    mapOf(
+                        "version" to javaVersion,
+                        "vendor" to javaVendor,
+                    ),
+                "springBoot" to springBootVersion,
             ),
-            "springBoot" to springBootVersion
-        ))
+        )
 
         builder.withDetail("runtime", runtime)
 
@@ -66,10 +74,13 @@ class BuildInfoContributor : InfoContributor {
         val gitBranch = System.getenv("GIT_BRANCH") ?: "unknown"
 
         if (gitCommit != "unknown" || gitBranch != "unknown") {
-            builder.withDetail("git", mapOf(
-                "commit" to gitCommit,
-                "branch" to gitBranch
-            ))
+            builder.withDetail(
+                "git",
+                mapOf(
+                    "commit" to gitCommit,
+                    "branch" to gitBranch,
+                ),
+            )
         }
     }
 }

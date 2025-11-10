@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory
 import java.io.IOException
 
 abstract class BaseConverter<Y> : AttributeConverter<Y, String> {
-
     private val objectMapper = ObjectMapper()
     protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -32,10 +31,11 @@ abstract class BaseConverter<Y> : AttributeConverter<Y, String> {
         }
         try {
             type?.let {
-                valueInfo = objectMapper.readValue(
-                    customerInfoJSON,
-                    objectMapper.typeFactory.constructType(it::class.java)
-                )
+                valueInfo =
+                    objectMapper.readValue(
+                        customerInfoJSON,
+                        objectMapper.typeFactory.constructType(it::class.java),
+                    )
             }
         } catch (e: IOException) {
             logger.error("JSON reading error", e)

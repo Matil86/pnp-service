@@ -25,12 +25,12 @@ data class AccessibleButton(
     val disabled: Boolean = false,
     val ariaDescribedBy: String? = null,
     val testId: String,
-    val onClick: String  // Function reference or handler
+    val onClick: String, // Function reference or handler
 ) {
     enum class ButtonType {
         BUTTON,
         SUBMIT,
-        RESET
+        RESET,
     }
 
     /**
@@ -54,7 +54,8 @@ data class AccessibleButton(
         return issues
     }
 
-    fun toHtml(): String = """
+    fun toHtml(): String =
+        """
         <button
             type="${type.name.lowercase()}"
             aria-label="$ariaLabel"
@@ -65,7 +66,7 @@ data class AccessibleButton(
             class="accessible-button">
             $label
         </button>
-    """.trimIndent()
+        """.trimIndent()
 }
 
 /**
@@ -84,7 +85,7 @@ data class AccessibleInput(
     val ariaDescribedBy: String? = null,
     val ariaInvalid: Boolean = false,
     val errorMessage: String? = null,
-    val testId: String
+    val testId: String,
 ) {
     enum class InputType {
         TEXT,
@@ -93,7 +94,7 @@ data class AccessibleInput(
         NUMBER,
         TEL,
         URL,
-        SEARCH
+        SEARCH,
     }
 
     fun validate(): List<String> {
@@ -115,32 +116,34 @@ data class AccessibleInput(
     }
 
     fun toHtml(): String {
-        val errorId = if (ariaInvalid) "${id}-error" else null
+        val errorId = if (ariaInvalid) "$id-error" else null
         val describedBy = listOfNotNull(ariaDescribedBy, errorId).joinToString(" ")
 
         return """
-            <div class="form-group">
-                <label for="$id">
-                    $label
-                    ${if (required) "<span class=\"required\">*</span>" else ""}
-                </label>
-                <input
-                    type="${type.name.lowercase()}"
-                    id="$id"
-                    name="$name"
-                    value="$value"
-                    ${if (placeholder.isNotBlank()) "placeholder=\"$placeholder\"" else ""}
-                    ${if (required) "required" else ""}
-                    ${if (disabled) "disabled" else ""}
-                    ${if (ariaInvalid) "aria-invalid=\"true\"" else ""}
-                    ${if (describedBy.isNotBlank()) "aria-describedby=\"$describedBy\"" else ""}
-                    data-testid="$testId"
-                    class="accessible-input" />
-                ${if (errorMessage != null) {
-                    """<div id="${id}-error" class="error-message" role="alert">$errorMessage</div>"""
-                } else ""}
-            </div>
-        """.trimIndent()
+                                    <div class="form-group">
+                                        <label for="$id">
+                                            $label
+                                            ${if (required) "<span class=\"required\">*</span>" else ""}
+                                        </label>
+                                        <input
+                                            type="${type.name.lowercase()}"
+                                            id="$id"
+                                            name="$name"
+                                            value="$value"
+                                            ${if (placeholder.isNotBlank()) "placeholder=\"$placeholder\"" else ""}
+                                            ${if (required) "required" else ""}
+                                            ${if (disabled) "disabled" else ""}
+                                            ${if (ariaInvalid) "aria-invalid=\"true\"" else ""}
+                                            ${if (describedBy.isNotBlank()) "aria-describedby=\"$describedBy\"" else ""}
+                                            data-testid="$testId"
+                                            class="accessible-input" />
+                                        ${if (errorMessage != null) {
+            """<div id="$id-error" class="error-message" role="alert">$errorMessage</div>"""
+        } else {
+            ""
+        }}
+                                    </div>
+            """.trimIndent()
     }
 }
 
@@ -155,7 +158,7 @@ data class AccessibleModal(
     val content: String,
     val closeButtonLabel: String = "Close dialog",
     val testId: String,
-    val onClose: String  // Function reference
+    val onClose: String, // Function reference
 ) {
     fun validate(): List<String> {
         val issues = mutableListOf<String>()
@@ -175,31 +178,34 @@ data class AccessibleModal(
         return issues
     }
 
-    fun toHtml(): String = """
+    fun toHtml(): String =
+        """
         <div
             id="$id"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="${id}-title"
-            ${if (description != null) "aria-describedby=\"${id}-description\"" else ""}
+            aria-labelledby="$id-title"
+            ${if (description != null) "aria-describedby=\"$id-description\"" else ""}
             data-testid="$testId"
             class="accessible-modal">
 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 id="${id}-title">$title</h2>
+                    <h2 id="$id-title">$title</h2>
                     <button
                         aria-label="$closeButtonLabel"
                         onclick="$onClose"
-                        data-testid="${testId}-close"
+                        data-testid="$testId-close"
                         class="modal-close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 ${if (description != null) {
-                    """<div id="${id}-description" class="modal-description">$description</div>"""
-                } else ""}
+            """<div id="$id-description" class="modal-description">$description</div>"""
+        } else {
+            ""
+        }}
 
                 <div class="modal-body">
                     $content
@@ -208,7 +214,7 @@ data class AccessibleModal(
 
             <div class="modal-backdrop" onclick="$onClose" aria-hidden="true"></div>
         </div>
-    """.trimIndent()
+        """.trimIndent()
 }
 
 /**
@@ -220,19 +226,19 @@ data class AccessibleAlert(
     val type: AlertType = AlertType.INFO,
     val dismissible: Boolean = false,
     val live: LiveRegion = LiveRegion.POLITE,
-    val testId: String
+    val testId: String,
 ) {
     enum class AlertType {
         SUCCESS,
         INFO,
         WARNING,
-        ERROR
+        ERROR,
     }
 
     enum class LiveRegion {
         OFF,
         POLITE,
-        ASSERTIVE
+        ASSERTIVE,
     }
 
     fun validate(): List<String> {
@@ -245,7 +251,8 @@ data class AccessibleAlert(
         return issues
     }
 
-    fun toHtml(): String = """
+    fun toHtml(): String =
+        """
         <div
             role="${if (type == AlertType.ERROR) "alert" else "status"}"
             aria-live="${live.name.lowercase()}"
@@ -260,17 +267,20 @@ data class AccessibleAlert(
             <span class="alert-message">$message</span>
 
             ${if (dismissible) {
-                """<button aria-label="Dismiss alert" class="alert-dismiss">&times;</button>"""
-            } else ""}
+            """<button aria-label="Dismiss alert" class="alert-dismiss">&times;</button>"""
+        } else {
+            ""
+        }}
         </div>
-    """.trimIndent()
+        """.trimIndent()
 
-    private fun getIconForType(type: AlertType): String = when (type) {
-        AlertType.SUCCESS -> "✓"
-        AlertType.INFO -> "ℹ"
-        AlertType.WARNING -> "⚠"
-        AlertType.ERROR -> "✕"
-    }
+    private fun getIconForType(type: AlertType): String =
+        when (type) {
+            AlertType.SUCCESS -> "✓"
+            AlertType.INFO -> "ℹ"
+            AlertType.WARNING -> "⚠"
+            AlertType.ERROR -> "✕"
+        }
 }
 
 /**
@@ -282,7 +292,7 @@ data class AccessibleLink(
     val href: String,
     val ariaLabel: String = text,
     val opensInNewWindow: Boolean = false,
-    val testId: String
+    val testId: String,
 ) {
     fun validate(): List<String> {
         val issues = mutableListOf<String>()
@@ -302,7 +312,8 @@ data class AccessibleLink(
         return issues
     }
 
-    fun toHtml(): String = """
+    fun toHtml(): String =
+        """
         <a
             href="$href"
             aria-label="$ariaLabel"
@@ -311,10 +322,12 @@ data class AccessibleLink(
             class="accessible-link">
             $text
             ${if (opensInNewWindow) {
-                """<span class="visually-hidden">(opens in new window)</span>"""
-            } else ""}
+            """<span class="visually-hidden">(opens in new window)</span>"""
+        } else {
+            ""
+        }}
         </a>
-    """.trimIndent()
+        """.trimIndent()
 }
 
 /**
@@ -327,16 +340,17 @@ object AccessibleComponentFactory {
         testId: String,
         ariaLabel: String = label,
         type: AccessibleButton.ButtonType = AccessibleButton.ButtonType.BUTTON,
-        disabled: Boolean = false
+        disabled: Boolean = false,
     ): Result<AccessibleButton> {
-        val button = AccessibleButton(
-            label = label,
-            ariaLabel = ariaLabel,
-            type = type,
-            disabled = disabled,
-            testId = testId,
-            onClick = onClick
-        )
+        val button =
+            AccessibleButton(
+                label = label,
+                ariaLabel = ariaLabel,
+                type = type,
+                disabled = disabled,
+                testId = testId,
+                onClick = onClick,
+            )
 
         val issues = button.validate()
         return if (issues.isEmpty()) {
@@ -352,16 +366,17 @@ object AccessibleComponentFactory {
         label: String,
         testId: String,
         type: AccessibleInput.InputType = AccessibleInput.InputType.TEXT,
-        required: Boolean = false
+        required: Boolean = false,
     ): Result<AccessibleInput> {
-        val input = AccessibleInput(
-            id = id,
-            name = name,
-            label = label,
-            type = type,
-            required = required,
-            testId = testId
-        )
+        val input =
+            AccessibleInput(
+                id = id,
+                name = name,
+                label = label,
+                type = type,
+                required = required,
+                testId = testId,
+            )
 
         val issues = input.validate()
         return if (issues.isEmpty()) {
@@ -377,16 +392,17 @@ object AccessibleComponentFactory {
         content: String,
         onClose: String,
         testId: String,
-        description: String? = null
+        description: String? = null,
     ): Result<AccessibleModal> {
-        val modal = AccessibleModal(
-            id = id,
-            title = title,
-            content = content,
-            onClose = onClose,
-            testId = testId,
-            description = description
-        )
+        val modal =
+            AccessibleModal(
+                id = id,
+                title = title,
+                content = content,
+                onClose = onClose,
+                testId = testId,
+                description = description,
+            )
 
         val issues = modal.validate()
         return if (issues.isEmpty()) {

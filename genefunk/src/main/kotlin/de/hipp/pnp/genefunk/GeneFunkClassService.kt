@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GeneFunkClassService(
-    private val genefunkInfoProducer: GenefunkInfoProducer
+    private val genefunkInfoProducer: GenefunkInfoProducer,
 ) {
-
     var genefuncClasses = mutableMapOf<String, GeneFunkClass>()
 
     private val log = KotlinLogging.logger {}

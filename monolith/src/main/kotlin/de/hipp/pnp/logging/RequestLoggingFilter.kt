@@ -30,7 +30,6 @@ private val logger = KotlinLogging.logger {}
  */
 @Component
 class RequestLoggingFilter : OncePerRequestFilter() {
-
     companion object {
         private const val REQUEST_ID_HEADER = "X-Request-ID"
         private val EXCLUDED_PATHS = setOf("/health", "/actuator/health", "/actuator/prometheus")
@@ -39,7 +38,7 @@ class RequestLoggingFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         // Skip logging for health check and metrics endpoints
         if (shouldNotFilter(request)) {
@@ -77,11 +76,12 @@ class RequestLoggingFilter : OncePerRequestFilter() {
         }
 
         // Wrap response to capture status code
-        val responseWrapper = if (response is ContentCachingResponseWrapper) {
-            response
-        } else {
-            ContentCachingResponseWrapper(response)
-        }
+        val responseWrapper =
+            if (response is ContentCachingResponseWrapper) {
+                response
+            } else {
+                ContentCachingResponseWrapper(response)
+            }
 
         try {
             // Process the request
@@ -98,29 +98,29 @@ class RequestLoggingFilter : OncePerRequestFilter() {
                 statusCode >= 500 -> {
                     logger.error {
                         "HTTP request completed with server error: " +
-                        "method=${request.method}, path=${request.requestURI}, " +
-                        "status=$statusCode, duration=${duration}ms, requestId=$requestId"
+                            "method=${request.method}, path=${request.requestURI}, " +
+                            "status=$statusCode, duration=${duration}ms, requestId=$requestId"
                     }
                 }
                 statusCode >= 400 -> {
                     logger.warn {
                         "HTTP request completed with client error: " +
-                        "method=${request.method}, path=${request.requestURI}, " +
-                        "status=$statusCode, duration=${duration}ms, requestId=$requestId"
+                            "method=${request.method}, path=${request.requestURI}, " +
+                            "status=$statusCode, duration=${duration}ms, requestId=$requestId"
                     }
                 }
                 duration > 1000 -> {
                     logger.warn {
                         "Slow HTTP request detected: " +
-                        "method=${request.method}, path=${request.requestURI}, " +
-                        "status=$statusCode, duration=${duration}ms, requestId=$requestId"
+                            "method=${request.method}, path=${request.requestURI}, " +
+                            "status=$statusCode, duration=${duration}ms, requestId=$requestId"
                     }
                 }
                 else -> {
                     logger.info {
                         "HTTP request completed: " +
-                        "method=${request.method}, path=${request.requestURI}, " +
-                        "status=$statusCode, duration=${duration}ms, requestId=$requestId"
+                            "method=${request.method}, path=${request.requestURI}, " +
+                            "status=$statusCode, duration=${duration}ms, requestId=$requestId"
                     }
                 }
             }

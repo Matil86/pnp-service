@@ -17,7 +17,7 @@ import java.io.IOException
 class GeneFunkCharakterListener(
     private val service: GeneFunkCharacterService,
     private val mapper: ObjectMapper,
-    factory: ConnectionFactory
+    factory: ConnectionFactory,
 ) {
     private val log = KotlinLogging.logger {}
 
@@ -35,10 +35,12 @@ class GeneFunkCharakterListener(
     @RabbitListener(queues = [RoutingKeys.GET_ALL_CHARACTERS_ROUTING_KEY])
     @Throws(IOException::class)
     fun getAllGenefunkCharacters(messageString: String): String? {
-        val message = mapper.readValue<DefaultMessage<MutableList<GeneFunkCharacter?>?>>(
-            messageString,
-            object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter?>?>?>() {
-            })
+        val message =
+            mapper.readValue<DefaultMessage<MutableList<GeneFunkCharacter?>?>>(
+                messageString,
+                object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter?>?>?>() {
+                },
+            )
         val payload = service.getAllCharacters(message.header.externalId)
         message.action = "finished"
         message.payload = payload
@@ -49,10 +51,12 @@ class GeneFunkCharakterListener(
     @RabbitListener(queues = [RoutingKeys.CREATE_CHARACTER_ROUTING_KEY])
     @Throws(JsonProcessingException::class)
     fun createGenefunkCharacter(messageString: String?): String? {
-        val message = mapper.readValue<DefaultMessage<GeneFunkCharacter?>>(
-            messageString,
-            object : TypeReference<DefaultMessage<GeneFunkCharacter?>?>() {
-            })
+        val message =
+            mapper.readValue<DefaultMessage<GeneFunkCharacter?>>(
+                messageString,
+                object : TypeReference<DefaultMessage<GeneFunkCharacter?>?>() {
+                },
+            )
         if (message.action != E5EGameTypes.GENEFUNK.name) {
             return null
         }
@@ -66,10 +70,12 @@ class GeneFunkCharakterListener(
     @RabbitListener(queues = [RoutingKeys.DELETE_CHARACTER_ROUTING_KEY])
     @Throws(JsonProcessingException::class)
     fun delete(messageString: String?): String? {
-        val message = mapper.readValue<DefaultMessage<String>>(
-            messageString,
-            object : TypeReference<DefaultMessage<String>?>() {
-            })
+        val message =
+            mapper.readValue<DefaultMessage<String>>(
+                messageString,
+                object : TypeReference<DefaultMessage<String>?>() {
+                },
+            )
         if (message.action != E5EGameTypes.GENEFUNK.name) {
             return null
         }

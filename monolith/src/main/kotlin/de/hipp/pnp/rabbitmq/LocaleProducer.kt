@@ -11,8 +11,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class LocaleProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
-    BaseProducer<MutableMap<String, BookLocale>>(rabbitTemplate, mapper),
+class LocaleProducer(
+    rabbitTemplate: RabbitTemplate,
+    mapper: ObjectMapper,
+) : BaseProducer<MutableMap<String, BookLocale>>(rabbitTemplate, mapper),
     FiveEDataProducer {
     override fun getAllLanguageKeys(): MutableMap<String, BookLocale>? {
         val response = this.sendMessageForRoutingKey(RoutingKeys.GET_ALL_LANGUAGE_KEYS_ROUTING_KEY)
@@ -21,7 +23,7 @@ class LocaleProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
 
     override fun getLanguageKeysByGameTypeAndLanguage(
         gameType: Int,
-        locale: String?
+        locale: String?,
     ): MutableMap<String, BookLocale>? {
         val request = LanguageRequest()
         request.gameType = gameType
@@ -30,7 +32,7 @@ class LocaleProducer(rabbitTemplate: RabbitTemplate, mapper: ObjectMapper) :
             this.sendMessageForRoutingKey(
                 RoutingKeys.GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY,
                 E5EGameTypes.fromValue(gameType, E5EGameTypes.GENEFUNK),
-                request
+                request,
             )
         return responseMap
     }

@@ -15,8 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import org.slf4j.MDC
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -41,30 +41,39 @@ private val logger = KotlinLogging.logger {}
 @Validated
 class CharacterRestController(
     val characterProducer: CharacterProducer,
-    meterRegistry: MeterRegistry
+    meterRegistry: MeterRegistry,
 ) {
-
     // API endpoint metrics
-    private val apiCallCounter: Counter = Counter.builder("api.character.calls.total")
-        .description("Total API calls to character endpoints")
-        .tag("endpoint", "all")
-        .register(meterRegistry)
+    private val apiCallCounter: Counter =
+        Counter
+            .builder("api.character.calls.total")
+            .description("Total API calls to character endpoints")
+            .tag("endpoint", "all")
+            .register(meterRegistry)
 
-    private val apiGenerateCounter: Counter = Counter.builder("api.character.generate.total")
-        .description("Total character generation API calls")
-        .register(meterRegistry)
+    private val apiGenerateCounter: Counter =
+        Counter
+            .builder("api.character.generate.total")
+            .description("Total character generation API calls")
+            .register(meterRegistry)
 
-    private val apiDeleteCounter: Counter = Counter.builder("api.character.delete.total")
-        .description("Total character deletion API calls")
-        .register(meterRegistry)
+    private val apiDeleteCounter: Counter =
+        Counter
+            .builder("api.character.delete.total")
+            .description("Total character deletion API calls")
+            .register(meterRegistry)
 
-    private val apiListCounter: Counter = Counter.builder("api.character.list.total")
-        .description("Total character list API calls")
-        .register(meterRegistry)
+    private val apiListCounter: Counter =
+        Counter
+            .builder("api.character.list.total")
+            .description("Total character list API calls")
+            .register(meterRegistry)
 
-    private val apiErrorCounter: Counter = Counter.builder("api.character.errors.total")
-        .description("Total API errors")
-        .register(meterRegistry)
+    private val apiErrorCounter: Counter =
+        Counter
+            .builder("api.character.errors.total")
+            .description("Total API errors")
+            .register(meterRegistry)
 
     /**
      * Retrieves all available characters.
@@ -73,26 +82,26 @@ class CharacterRestController(
      */
     @Operation(
         summary = "Get all characters",
-        description = "Retrieves a list of all available characters in the system"
+        description = "Retrieves a list of all available characters in the system",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Successfully retrieved character list",
-                content = [Content(schema = Schema(implementation = BaseCharacter::class))]
+                content = [Content(schema = Schema(implementation = BaseCharacter::class))],
             ),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized - valid JWT token required",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Internal server error",
-                content = [Content()]
-            )
-        ]
+                content = [Content()],
+            ),
+        ],
     )
     @ResponseBody
     @GetMapping()
@@ -120,31 +129,31 @@ class CharacterRestController(
      */
     @Operation(
         summary = "Generate character",
-        description = "Generates a new character for the specified game type. Returns JSON representation of the created character."
+        description = "Generates a new character for the specified game type. Returns JSON representation of the created character.",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Character successfully generated",
-                content = [Content(schema = Schema(type = "string", example = "{\"id\":1,\"name\":\"Generated Character\"}"))]
+                content = [Content(schema = Schema(type = "string", example = "{\"id\":1,\"name\":\"Generated Character\"}"))],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid game type parameter (must be between 0-100)",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized - valid JWT token required",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Internal server error or character generation failure",
-                content = [Content()]
-            )
-        ]
+                content = [Content()],
+            ),
+        ],
     )
     @GetMapping("/generate")
     @ResponseBody
@@ -155,12 +164,12 @@ class CharacterRestController(
             name = "gameType",
             description = "Game type identifier (0 = GeneFunk). Must be between 0-100.",
             example = "0",
-            required = false
+            required = false,
         )
         @RequestParam(value = "gameType", defaultValue = "0")
         @Min(0, message = "Game type must be non-negative")
         @Max(100, message = "Game type must not exceed 100")
-        gameType: Int
+        gameType: Int,
     ): String {
         apiCallCounter.increment()
         apiGenerateCounter.increment()
@@ -190,36 +199,36 @@ class CharacterRestController(
      */
     @Operation(
         summary = "Delete character",
-        description = "Removes a character from the system by its unique identifier"
+        description = "Removes a character from the system by its unique identifier",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Character successfully deleted",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "400",
                 description = "Invalid character ID (must be a positive integer)",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "401",
                 description = "Unauthorized - valid JWT token required",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "404",
                 description = "Character not found",
-                content = [Content()]
+                content = [Content()],
             ),
             ApiResponse(
                 responseCode = "500",
                 description = "Internal server error",
-                content = [Content()]
-            )
-        ]
+                content = [Content()],
+            ),
+        ],
     )
     @ResponseBody
     @DeleteMapping("/{characterId}")
@@ -229,11 +238,11 @@ class CharacterRestController(
             name = "characterId",
             description = "Unique character identifier (must be a positive integer)",
             required = true,
-            example = "123"
+            example = "123",
         )
         @PathVariable(value = "characterId")
         @Min(1, message = "Character ID must be a positive integer")
-        characterId: Int
+        characterId: Int,
     ) {
         apiCallCounter.increment()
         apiDeleteCounter.increment()

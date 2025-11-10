@@ -16,7 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient
  */
 @Configuration
 open class TracingConfiguration {
-
     @Value("\${spring.application.name:pnp-character-generator}")
     private lateinit var serviceName: String
 
@@ -34,11 +33,11 @@ open class TracingConfiguration {
     @ConditionalOnProperty(prefix = "management.tracing", name = ["enabled"], havingValue = "true", matchIfMissing = true)
     open fun tracedWebClientBuilder(
         tracer: Tracer?,
-        propagator: Propagator?
-    ): WebClient.Builder {
-        return WebClient.builder()
+        propagator: Propagator?,
+    ): WebClient.Builder =
+        WebClient
+            .builder()
             .defaultHeader("X-Service-Name", serviceName)
-    }
 
     /**
      * Provides trace sampling probability based on environment.

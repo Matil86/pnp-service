@@ -3,7 +3,16 @@ package de.hipp.pnp.genefunk.benchmark
 import de.hipp.pnp.genefunk.GeneFunkCharacter
 import de.hipp.pnp.genefunk.GeneFunkCharacterService
 import io.mockk.mockk
-import org.openjdk.jmh.annotations.*
+import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.BenchmarkMode
+import org.openjdk.jmh.annotations.Fork
+import org.openjdk.jmh.annotations.Measurement
+import org.openjdk.jmh.annotations.Mode
+import org.openjdk.jmh.annotations.OutputTimeUnit
+import org.openjdk.jmh.annotations.Scope
+import org.openjdk.jmh.annotations.Setup
+import org.openjdk.jmh.annotations.State
+import org.openjdk.jmh.annotations.Warmup
 import java.util.concurrent.TimeUnit
 
 /**
@@ -29,7 +38,6 @@ import java.util.concurrent.TimeUnit
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Fork(1)
 open class CharacterGenerationBenchmark {
-
     private lateinit var service: GeneFunkCharacterService
 
     @Setup
@@ -42,9 +50,7 @@ open class CharacterGenerationBenchmark {
      * Target: < 50ms
      */
     @Benchmark
-    fun generateCharacterDefault(): GeneFunkCharacter {
-        return service.generate()
-    }
+    fun generateCharacterDefault(): GeneFunkCharacter = service.generate()
 
     /**
      * Generate character with customization
@@ -52,11 +58,12 @@ open class CharacterGenerationBenchmark {
      */
     @Benchmark
     fun generateCharacterWithCustomization(): GeneFunkCharacter {
-        val custom = GeneFunkCharacter().apply {
-            firstName = "John"
-            lastName = "Doe"
-            background = "Ex-Military"
-        }
+        val custom =
+            GeneFunkCharacter().apply {
+                firstName = "John"
+                lastName = "Doe"
+                background = "Ex-Military"
+            }
         return service.generate(custom, "user123")
     }
 
@@ -66,9 +73,7 @@ open class CharacterGenerationBenchmark {
      */
     @Benchmark
     @Measurement(iterations = 3)
-    fun generateMultipleCharacters(): List<GeneFunkCharacter> {
-        return List(10) { service.generate() }
-    }
+    fun generateMultipleCharacters(): List<GeneFunkCharacter> = List(10) { service.generate() }
 
     /**
      * Test performance with long strings (edge case)
@@ -76,11 +81,12 @@ open class CharacterGenerationBenchmark {
      */
     @Benchmark
     fun generateCharacterWithLongStrings(): GeneFunkCharacter {
-        val custom = GeneFunkCharacter().apply {
-            firstName = "A".repeat(100)
-            lastName = "B".repeat(100)
-            background = "C".repeat(500)
-        }
+        val custom =
+            GeneFunkCharacter().apply {
+                firstName = "A".repeat(100)
+                lastName = "B".repeat(100)
+                background = "C".repeat(500)
+            }
         return service.generate(custom, "user123")
     }
 
@@ -90,11 +96,12 @@ open class CharacterGenerationBenchmark {
      */
     @Benchmark
     fun generateCharacterWithUnicode(): GeneFunkCharacter {
-        val custom = GeneFunkCharacter().apply {
-            firstName = "さくら🌸"
-            lastName = "田中⚔️"
-            background = "Cyber ninja from Neo-Tokyo 東京"
-        }
+        val custom =
+            GeneFunkCharacter().apply {
+                firstName = "さくら🌸"
+                lastName = "田中⚔️"
+                background = "Cyber ninja from Neo-Tokyo 東京"
+            }
         return service.generate(custom, "user123")
     }
 }

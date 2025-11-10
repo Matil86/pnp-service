@@ -10,5 +10,7 @@ import java.util.Optional
 @Repository
 interface GeneFunkFeatureRepository : JpaRepository<Feature5e?, Int?> {
     @Query("select f from Feature5e f where f.label = :label")
-    fun findByLabel(@Param("label") label: String?): Optional<Feature5e?>?
+    fun findByLabel(
+        @Param("label") label: String?,
+    ): Optional<Feature5e?>?
 }

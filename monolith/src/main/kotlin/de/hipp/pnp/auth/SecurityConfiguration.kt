@@ -31,14 +31,15 @@ private val logger = KotlinLogging.logger {}
 
 @Configuration
 @EnableWebSecurity
-open class SecurityConfiguration(@param:Autowired private var userInfoProducer: UserInfoProducer) {
-
+open class SecurityConfiguration(
+    @param:Autowired private var userInfoProducer: UserInfoProducer,
+) {
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
         // Add request logging filter
         http.addFilterAfter(
             RequestLoggingFilter(),
-            org.springframework.security.web.authentication.AuthenticationFilter::class.java
+            org.springframework.security.web.authentication.AuthenticationFilter::class.java,
         )
 
         http {
@@ -80,7 +81,8 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
                     policy = org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN
                 }
                 contentSecurityPolicy {
-                    policyDirectives = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+                    policyDirectives =
+                        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
                 }
                 httpStrictTransportSecurity {
                     includeSubDomains = true
@@ -103,9 +105,7 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
     }
 
     @Bean
-    open fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web: WebSecurity -> web.debug(false) }
-    }
+    open fun webSecurityCustomizer(): WebSecurityCustomizer = WebSecurityCustomizer { web: WebSecurity -> web.debug(false) }
 
     @Bean
     open fun corsConfiguration(): CorsConfiguration {
@@ -215,20 +215,21 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
                             throw IllegalArgumentException("Name fields exceed maximum length")
                         }
 
-                        val newCustomer = Customer(
-                            UUID.randomUUID().toString(),
-                            givenName,
-                            familyName,
-                            name,
-                            sub,
-                            email,
-                            "USER"
-                        )
+                        val newCustomer =
+                            Customer(
+                                UUID.randomUUID().toString(),
+                                givenName,
+                                familyName,
+                                name,
+                                sub,
+                                email,
+                                "USER",
+                            )
 
                         // SECURITY: Log new user creation for audit trail
                         logger.info {
                             "SECURITY: Creating new user account - email=$email, subject=$sub, " +
-                            "givenName=$givenName, familyName=$familyName"
+                                "givenName=$givenName, familyName=$familyName"
                         }
 
                         try {

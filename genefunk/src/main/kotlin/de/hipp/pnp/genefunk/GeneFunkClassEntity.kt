@@ -18,5 +18,4 @@ class GeneFunkClassEntity : BaseCharacterClass() {
     var savingThrows: List<String> = emptyList()
     var startingEquipment: List<String> = emptyList()
     var skills: List<String> = emptyList()
-
 }

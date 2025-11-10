@@ -15,11 +15,10 @@ import org.springframework.stereotype.Component
 data class LanguageRequest(
     @field:Pattern(
         regexp = "^[a-z]{2}[_-][A-Z]{2}$",
-        message = "Locale must be in format xx_XX or xx-XX (e.g., en_US, de_DE)"
+        message = "Locale must be in format xx_XX or xx-XX (e.g., en_US, de_DE)",
     )
     var locale: String? = null,
-
     @field:Min(0, message = "Game type must be non-negative")
     @field:Max(100, message = "Game type must not exceed 100")
-    var gameType: Int = 0
+    var gameType: Int = 0,
 )

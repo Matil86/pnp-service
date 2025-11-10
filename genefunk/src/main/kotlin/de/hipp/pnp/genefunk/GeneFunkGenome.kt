@@ -31,5 +31,4 @@ class GeneFunkGenome : Species() {
     fun addFeature(feature5e: Feature5e?) {
         features!!.add(feature5e)
     }
-
 }

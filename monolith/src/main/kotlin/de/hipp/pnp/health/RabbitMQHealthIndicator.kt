@@ -16,11 +16,10 @@ private val logger = KotlinLogging.logger {}
  */
 @Component
 class RabbitMQHealthIndicator(
-    private val connectionFactory: ConnectionFactory
+    private val connectionFactory: ConnectionFactory,
 ) : HealthIndicator {
-
-    override fun health(): Health {
-        return try {
+    override fun health(): Health =
+        try {
             // Attempt to create a connection to verify connectivity
             val connection = connectionFactory.createConnection()
 
@@ -30,33 +29,37 @@ class RabbitMQHealthIndicator(
 
                 logger.debug { "RabbitMQ health check: OK - Connection is open" }
 
-                val builder = Health.up()
-                    .withDetail("status", "RabbitMQ connection is open")
-                    .withDetail("service", "rabbitmq")
-                    .withDetail("maxChannels", channelCount)
+                val builder =
+                    Health
+                        .up()
+                        .withDetail("status", "RabbitMQ connection is open")
+                        .withDetail("service", "rabbitmq")
+                        .withDetail("maxChannels", channelCount)
 
                 // Add host and port details if delegate is available
                 if (delegate != null) {
-                    builder.withDetail("host", delegate.address?.hostName ?: "unknown")
+                    builder
+                        .withDetail("host", delegate.address?.hostName ?: "unknown")
                         .withDetail("port", delegate.port)
                 }
 
                 builder.build()
             } else {
                 logger.warn { "RabbitMQ health check: Connection is closed" }
-                Health.down()
+                Health
+                    .down()
                     .withDetail("status", "RabbitMQ connection is closed")
                     .withDetail("service", "rabbitmq")
                     .build()
             }
         } catch (e: Exception) {
             logger.error(e) { "RabbitMQ health check: Failed - ${e.message}" }
-            Health.down()
+            Health
+                .down()
                 .withDetail("status", "RabbitMQ connection failed")
                 .withDetail("error", e.message ?: "Unknown error")
                 .withDetail("errorType", e.javaClass.simpleName)
                 .withDetail("service", "rabbitmq")
                 .build()
         }
-    }
 }

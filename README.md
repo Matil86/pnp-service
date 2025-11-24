@@ -278,20 +278,199 @@ pnp-service/
    - Request code review
    - Merge after approval
 
-### Running Locally with Docker
+### Docker Build Options
 
+This project supports multiple Docker build strategies to accommodate both CI/CD pipelines and local development.
+
+#### Prerequisites
+
+- Docker 20.10+
+- Docker Compose 2.0+ (optional, for local stack)
+
+#### Build Strategy 1: Pre-built JAR (CI/CD - Fastest)
+
+This is the default approach used in the CI/CD pipeline. Build the JAR first, then create the Docker image.
+
+**Monolith Service:**
 ```bash
-# Build Docker image
-docker build -f monolith/Dockerfile -t pnp-service:latest .
+# Step 1: Build the JAR
+./gradlew :monolith:bootJar -x test
 
-# Run container
+# Step 2: Build Docker image (uses pre-built JAR)
+docker build -f monolith/Dockerfile \
+  --build-arg BUILD_SOURCE=prebuilt \
+  -t pnp-service:latest \
+  .
+```
+
+**Other Services (Security, GeneFunk, Data):**
+```bash
+# Security Service
+./gradlew :security-starter:bootJar -x test
+docker build -f security-starter/Dockerfile \
+  --build-arg BUILD_SOURCE=prebuilt \
+  -t pnp-security:latest \
+  .
+
+# GeneFunk Service
+./gradlew :genefunk-starter:bootJar -x test
+docker build -f genefunk-starter/Dockerfile \
+  --build-arg BUILD_SOURCE=prebuilt \
+  -t pnp-genefunk:latest \
+  .
+
+# Data Service
+./gradlew :data-starter:bootJar -x test
+docker build -f data-starter/Dockerfile \
+  --build-arg BUILD_SOURCE=prebuilt \
+  -t pnp-data:latest \
+  .
+```
+
+**Advantages:**
+- Fastest build time (~30 seconds)
+- Smallest Docker context
+- Matches CI/CD behavior
+- Reuses Gradle cache
+
+#### Build Strategy 2: Multi-Stage Build (Local Development - Most Convenient)
+
+Build everything inside Docker without any prerequisites. No need to have Gradle installed locally.
+
+**Monolith Service:**
+```bash
+# Build from source (no pre-build needed)
+docker build -f monolith/Dockerfile -t pnp-service:dev .
+```
+
+**Other Services:**
+```bash
+docker build -f security-starter/Dockerfile -t pnp-security:dev .
+docker build -f genefunk-starter/Dockerfile -t pnp-genefunk:dev .
+docker build -f data-starter/Dockerfile -t pnp-data:dev .
+```
+
+**Advantages:**
+- No Gradle installation required
+- Self-contained builds
+- Consistent build environment
+- Portable across machines
+
+**Note:** First build will be slower (~5-10 minutes) as Gradle downloads dependencies. Subsequent builds use Docker layer caching.
+
+#### Running the Container
+
+**With environment variables:**
+```bash
 docker run -d \
   --name pnp-service \
   -p 8080:8080 \
-  -e RABBITMQ_HOST=host.docker.internal \
-  -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \
+  -e SPRING_PROFILES_ACTIVE=dev \
+  -e GOOGLE_CLIENT_ID=your-client-id \
+  -e GOOGLE_CLIENT_SECRET=your-client-secret \
+  -e FIREBASE_CREDENTIALS_JSON=your-base64-credentials \
+  -e RABBITMQ_HOST=localhost \
+  -e RABBITMQ_PORT=5672 \
+  -e RABBITMQ_USERNAME=guest \
+  -e RABBITMQ_PASSWORD=guest \
   pnp-service:latest
 ```
+
+**With environment file:**
+```bash
+# Create .env file (see .env.example)
+docker run -d \
+  --name pnp-service \
+  -p 8080:8080 \
+  --env-file .env \
+  pnp-service:latest
+```
+
+**With Docker Compose:**
+```bash
+docker-compose up -d
+```
+
+#### Health Check
+
+Verify the container is healthy:
+```bash
+# Check Docker health status
+docker ps --filter name=pnp-service
+
+# Check application health endpoint
+curl http://localhost:8080/actuator/health
+```
+
+Expected response:
+```json
+{
+  "status": "UP"
+}
+```
+
+#### Docker Image Details
+
+All Docker images include:
+- Base Image: Amazon Corretto 24 (Headless JRE)
+- Security: Non-root user (appuser)
+- Health Checks: Automatic health monitoring
+- Java Flags: Java 24 compatibility flags pre-configured
+- Size: ~400MB (optimized)
+
+#### Troubleshooting
+
+**Issue: Build fails with "gradlew: Permission denied"**
+```bash
+# Fix: Make gradlew executable
+chmod +x gradlew
+git update-index --chmod=+x gradlew
+```
+
+**Issue: "COPY failed: file not found in build context"**
+```bash
+# Cause: Building with BUILD_SOURCE=prebuilt but JAR doesn't exist
+# Solution: Build JAR first OR use multi-stage build (no BUILD_SOURCE arg)
+
+# Option A: Build JAR first
+./gradlew :monolith:bootJar
+
+# Option B: Use multi-stage build (no --build-arg)
+docker build -f monolith/Dockerfile -t pnp-service:latest .
+```
+
+**Issue: Container exits immediately**
+```bash
+# Check logs
+docker logs pnp-service
+
+# Common causes:
+# - Missing environment variables
+# - RabbitMQ not accessible
+# - Invalid Firebase credentials
+```
+
+**Issue: Health check failing**
+```bash
+# Check if port is exposed correctly
+docker ps --filter name=pnp-service
+
+# Check application logs
+docker logs pnp-service
+
+# Verify health endpoint manually
+docker exec pnp-service curl -f http://localhost:8080/actuator/health
+```
+
+#### CI/CD Integration
+
+The GitHub Actions workflow automatically:
+1. Builds the JAR using `./gradlew bootJar`
+2. Creates Docker image using pre-built JAR
+3. Pushes to Google Container Registry
+4. Deploys to Google Cloud Run
+
+See `.github/workflows/monolith.yml` for the full pipeline configuration.
 
 ## Testing
 

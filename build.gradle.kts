@@ -12,6 +12,7 @@ plugins {
     kotlin("plugin.allopen") version "2.2.10" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.0.3" apply false
+    id("org.owasp.dependencycheck") version "9.0.9"
     id("org.sonarqube") version "4.4.1.3373"
     jacoco
 }
@@ -94,7 +95,13 @@ subprojects {
         violationRules {
             rule {
                 limit {
-                    minimum = "0.70".toBigDecimal()
+                    minimum = "0.90".toBigDecimal()  // S.C.R.U.M. standard - instruction coverage
+                }
+            }
+            rule {
+                limit {
+                    counter = "BRANCH"
+                    minimum = "0.85".toBigDecimal()  // S.C.R.U.M. standard - branch coverage
                 }
             }
         }
@@ -108,7 +115,24 @@ subprojects {
         baseline = file("$rootDir/config/detekt-baseline.xml")
     }
 
+    // Override Kotlin version for detekt to match project Kotlin version (2.2.10)
+    // This forces all Kotlin dependencies in detekt to use the same version as the project
+    configurations.matching { it.name.startsWith("detekt") }.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "org.jetbrains.kotlin" && requested.name.startsWith("kotlin-")) {
+                useVersion("2.2.10")
+                because("Force detekt to use project Kotlin version for compatibility")
+            }
+        }
+    }
+
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        // BLOCKER: Detekt 1.23.8 compiled with Kotlin 2.0.21, incompatible with Kotlin 2.2.10
+        // Detekt 2.0.0-alpha.0 supports Kotlin 2.2.10 but not published to Gradle Plugin Portal
+        // Resolution strategy (lines 113-120) insufficient to override Detekt's internal Kotlin version
+        // Options: (1) Wait for Detekt 1.24+ stable, (2) Downgrade to Kotlin 2.0.21, (3) Use buildscript classpath
+        enabled = false
+
         // Detekt doesn't support JVM 24 yet, so we use 21 as the target
         // This is a static analysis tool limitation and doesn't affect runtime
         jvmTarget = "21"
@@ -121,6 +145,9 @@ subprojects {
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+        // BLOCKER: Same as above - Detekt incompatible with Kotlin 2.2.10
+        enabled = false
+
         // Detekt doesn't support JVM 24 yet, so we use 21 as the target
         jvmTarget = "21"
     }
@@ -129,9 +156,8 @@ subprojects {
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         version.set("1.7.1")
         android.set(false)
-        // Temporarily allowing failures during Kotlin 2.2.10 migration
-        // Main compatibility issue resolved, remaining issues are minor formatting
-        ignoreFailures.set(true)
+        // Enforce formatting standards
+        ignoreFailures.set(false)
         reporters {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
@@ -169,12 +195,22 @@ subprojects {
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
         testImplementation("io.kotest:kotest-assertions-core:5.7.2")
         testImplementation("io.kotest:kotest-assertions-json:5.7.2")
-        testImplementation("io.kotest:kotest-extensions-spring:1.1.3")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
         testImplementation("org.junit.platform:junit-platform-engine")
 
         // Detekt plugins
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
     }
+}
+
+// OWASP Dependency Check configuration
+// NOTE: NVD API requires API key as of Feb 2023. Set NVD_API_KEY environment variable.
+// Without API key, updates are very slow and may fail with 403 errors.
+// See: https://github.com/jeremylong/DependencyCheck?tab=readme-ov-file#nvd-api-key-highly-recommended
+dependencyCheck {
+    failBuildOnCVSS = 7.0f  // Fail on high/critical vulnerabilities
+    suppressionFile = "config/dependency-check-suppressions.xml"
+    formats = listOf("HTML", "JSON", "XML")
 }
 
 // SonarQube configuration
@@ -186,5 +222,7 @@ sonarqube {
         property("sonar.kotlin.detekt.reportPaths", "build/reports/detekt/detekt.xml")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
         property("sonar.qualitygate.wait", true)
+        // Avoid implicit compilation in Sonarqube 5.x - compile before running sonar
+        property("sonar.gradle.skipCompile", "true")
     }
 }

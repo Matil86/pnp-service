@@ -52,7 +52,7 @@ class PerformanceLoggingAspect {
         joinPoint: ProceedingJoinPoint,
         componentType: String,
     ): Any? {
-        val className = joinPoint.signature.declaringType.simpleName
+        val className = joinPoint.signature.declaringTypeName.substringAfterLast('.')
         val methodName = joinPoint.signature.name
         val startTime = System.currentTimeMillis()
 

@@ -5,6 +5,6 @@ abstract class BaseCharacterClass {
     open var level: Int? = 1
 
     fun increaseLevel(amount: Int) {
-        this.level = (if (this.level == null) amount else this.level!! + amount)
+        this.level = (this.level?.plus(amount)) ?: amount
     }
 }

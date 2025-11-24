@@ -11,7 +11,7 @@ class UserService(
     suspend fun userExists(sub: String?): Boolean = this.getUserByExternalId(sub) != null
 
     suspend fun getRole(sub: String?): String {
-        var role = "ANNONYMOUS"
+        var role = "ANONYMOUS"
         val user = this.getUserByExternalId(sub)
         if (user != null) {
             role = user.role.toString()

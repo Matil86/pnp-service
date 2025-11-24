@@ -27,17 +27,19 @@ class GenefunkInfoProducer(
     fun getAllClasses(): Map<String, GeneFunkClass> {
         val classes = this.sendMessageForRoutingKey(RoutingKeys.GET_GENEFUNK_CLASSES, E5EGameTypes.GENEFUNK)
         return classes
-            ?.map {
-                it!!
-                    .mapKeys { entry ->
-                        entry.key.toString()
-                    }.mapValues { entry ->
-                        val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry.value)
-                        mapper.readValue(
-                            json,
-                            GeneFunkClass::class.java,
-                        )
-                    }
-            }?.first() ?: emptyMap<String, GeneFunkClass>()
+            ?.mapNotNull { classMap ->
+                classMap?.let {
+                    it
+                        .mapKeys { entry ->
+                            entry.key.toString()
+                        }.mapValues { entry ->
+                            val json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(entry.value)
+                            mapper.readValue(
+                                json,
+                                GeneFunkClass::class.java,
+                            )
+                        }
+                }
+            }?.firstOrNull() ?: emptyMap()
     }
 }

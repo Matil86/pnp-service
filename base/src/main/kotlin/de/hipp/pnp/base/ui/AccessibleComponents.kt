@@ -1,3 +1,5 @@
+@file:JvmName("AccessibleComponents")
+
 package de.hipp.pnp.base.ui
 
 /**
@@ -11,11 +13,11 @@ package de.hipp.pnp.base.ui
  * - Screen reader compatibility
  * - Sufficient color contrast
  * - Touch-friendly target sizes (44x44 minimum)
- */
-
-/**
- * Accessible Button Component
- * Meets WCAG 2.1 Level AA for buttons
+ *
+ * ## Components
+ *
+ * ### AccessibleButton
+ * Accessible Button Component that meets WCAG 2.1 Level AA for buttons
  */
 data class AccessibleButton(
     val label: String,
@@ -118,31 +120,33 @@ data class AccessibleInput(
     fun toHtml(): String {
         val errorId = if (ariaInvalid) "$id-error" else null
         val describedBy = listOfNotNull(ariaDescribedBy, errorId).joinToString(" ")
+        val errorHtml =
+            if (errorMessage != null) {
+                """<div id="$id-error" class="error-message" role="alert">$errorMessage</div>"""
+            } else {
+                ""
+            }
 
         return """
-                                    <div class="form-group">
-                                        <label for="$id">
-                                            $label
-                                            ${if (required) "<span class=\"required\">*</span>" else ""}
-                                        </label>
-                                        <input
-                                            type="${type.name.lowercase()}"
-                                            id="$id"
-                                            name="$name"
-                                            value="$value"
-                                            ${if (placeholder.isNotBlank()) "placeholder=\"$placeholder\"" else ""}
-                                            ${if (required) "required" else ""}
-                                            ${if (disabled) "disabled" else ""}
-                                            ${if (ariaInvalid) "aria-invalid=\"true\"" else ""}
-                                            ${if (describedBy.isNotBlank()) "aria-describedby=\"$describedBy\"" else ""}
-                                            data-testid="$testId"
-                                            class="accessible-input" />
-                                        ${if (errorMessage != null) {
-            """<div id="$id-error" class="error-message" role="alert">$errorMessage</div>"""
-        } else {
-            ""
-        }}
-                                    </div>
+            <div class="form-group">
+                <label for="$id">
+                    $label
+                    ${if (required) "<span class=\"required\">*</span>" else ""}
+                </label>
+                <input
+                    type="${type.name.lowercase()}"
+                    id="$id"
+                    name="$name"
+                    value="$value"
+                    ${if (placeholder.isNotBlank()) "placeholder=\"$placeholder\"" else ""}
+                    ${if (required) "required" else ""}
+                    ${if (disabled) "disabled" else ""}
+                    ${if (ariaInvalid) "aria-invalid=\"true\"" else ""}
+                    ${if (describedBy.isNotBlank()) "aria-describedby=\"$describedBy\"" else ""}
+                    data-testid="$testId"
+                    class="accessible-input" />
+                $errorHtml
+            </div>
             """.trimIndent()
     }
 }

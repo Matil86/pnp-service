@@ -161,7 +161,7 @@ open class GeneFunkCharacterService(
                 logger.error(e) { "Failed to generate character for user: $externalId" }
                 throw e
             }
-        }!!
+        } ?: throw IllegalStateException("Character generation returned null unexpectedly")
 
     /**
      * Creates a GeneFunkClassEntity from a class definition.

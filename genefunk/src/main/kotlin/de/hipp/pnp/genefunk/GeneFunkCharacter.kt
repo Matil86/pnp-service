@@ -51,43 +51,50 @@ class GeneFunkCharacter : BaseCharacter() {
     @JsonIgnore
     fun initialize() {
         this.gameType = E5EGameTypes.GENEFUNK.value
-        if (this.genome == null) {
+        val genomeData = this.genome
+        if (genomeData == null) {
             return
         }
-        applyBaseValues(this.genome!!.attributes)
+        applyBaseValues(genomeData.attributes)
     }
 
     @JsonIgnore
     fun applyBaseValues(attributeChanges: MutableMap<String?, Int?>) {
         setMaxValues(attributeChanges)
 
-        this.strength!!.modifyValue(attributeChanges["strength"] ?: attributeChanges[AttributeConstants.STRENGTH] ?: 0)
-        this.dexterity!!.modifyValue(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
-        this.constitution!!.modifyValue(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
-        this.intelligence!!.modifyValue(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
-        this.wisdom!!.modifyValue(attributeChanges["wisdom"] ?: attributeChanges[AttributeConstants.WISDOM] ?: 0)
-        this.charisma!!.modifyValue(attributeChanges["charisma"] ?: attributeChanges[AttributeConstants.CHARISMA] ?: 0)
+        this.strength?.modifyValue(attributeChanges["strength"] ?: attributeChanges[AttributeConstants.STRENGTH] ?: 0)
+            ?: throw IllegalStateException("Strength attribute must be initialized before applying base values")
+        this.dexterity?.modifyValue(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
+            ?: throw IllegalStateException("Dexterity attribute must be initialized before applying base values")
+        this.constitution?.modifyValue(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
+            ?: throw IllegalStateException("Constitution attribute must be initialized before applying base values")
+        this.intelligence?.modifyValue(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
+            ?: throw IllegalStateException("Intelligence attribute must be initialized before applying base values")
+        this.wisdom?.modifyValue(attributeChanges["wisdom"] ?: attributeChanges[AttributeConstants.WISDOM] ?: 0)
+            ?: throw IllegalStateException("Wisdom attribute must be initialized before applying base values")
+        this.charisma?.modifyValue(attributeChanges["charisma"] ?: attributeChanges[AttributeConstants.CHARISMA] ?: 0)
+            ?: throw IllegalStateException("Charisma attribute must be initialized before applying base values")
     }
 
     @JsonIgnore
     fun setMaxValues(attributeChanges: MutableMap<String?, Int?>) {
-        attributeChanges["strength_max"]?.let { this.strength!!.max = it }
-            ?: attributeChanges[AttributeConstants.STRENGTH_MAX]?.let { this.strength!!.max = it }
+        attributeChanges["strength_max"]?.let { this.strength?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.STRENGTH_MAX]?.let { this.strength?.let { attr -> attr.max = it } }
 
-        attributeChanges["dexterity_max"]?.let { this.dexterity!!.max = it }
-            ?: attributeChanges[AttributeConstants.DEXTERITY_MAX]?.let { this.dexterity!!.max = it }
+        attributeChanges["dexterity_max"]?.let { this.dexterity?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.DEXTERITY_MAX]?.let { this.dexterity?.let { attr -> attr.max = it } }
 
-        attributeChanges["constitution_max"]?.let { this.constitution!!.max = it }
-            ?: attributeChanges[AttributeConstants.CONSTITUTION_MAX]?.let { this.constitution!!.max = it }
+        attributeChanges["constitution_max"]?.let { this.constitution?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.CONSTITUTION_MAX]?.let { this.constitution?.let { attr -> attr.max = it } }
 
-        attributeChanges["intelligence_max"]?.let { this.intelligence!!.max = it }
-            ?: attributeChanges[AttributeConstants.INTELLIGENCE_MAX]?.let { this.intelligence!!.max = it }
+        attributeChanges["intelligence_max"]?.let { this.intelligence?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.INTELLIGENCE_MAX]?.let { this.intelligence?.let { attr -> attr.max = it } }
 
-        attributeChanges["wisdom_max"]?.let { this.wisdom!!.max = it }
-            ?: attributeChanges[AttributeConstants.WISDOM_MAX]?.let { this.wisdom!!.max = it }
+        attributeChanges["wisdom_max"]?.let { this.wisdom?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.WISDOM_MAX]?.let { this.wisdom?.let { attr -> attr.max = it } }
 
-        attributeChanges["charisma_max"]?.let { this.charisma!!.max = it }
-            ?: attributeChanges[AttributeConstants.CHARISMA_MAX]?.let { this.charisma!!.max = it }
+        attributeChanges["charisma_max"]?.let { this.charisma?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.CHARISMA_MAX]?.let { this.charisma?.let { attr -> attr.max = it } }
     }
 
     @JsonIgnore
@@ -97,7 +104,7 @@ class GeneFunkCharacter : BaseCharacter() {
             classes
                 .stream()
                 .filter { value: BaseCharacterClass? -> value == addClass }
-                .forEach { charClass: BaseCharacterClass? -> charClass!!.increaseLevel(1) }
+                .forEach { charClass: BaseCharacterClass? -> charClass?.increaseLevel(1) }
         } else {
             classes.add(addClass)
         }

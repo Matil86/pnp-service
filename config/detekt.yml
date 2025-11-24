@@ -58,7 +58,7 @@ complexity:
     threshold: 4
   ComplexInterface:
     active: false
-  ComplexMethod:
+  CyclomaticComplexMethod:
     active: true
     threshold: 15
   LabeledExpression:
@@ -264,7 +264,7 @@ potential-bugs:
   DoubleMutabilityForCollection:
     active: true
   DuplicateCaseInWhenExpression:
-    active: true
+    active: false # Deprecated: compiler performs this check by default
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
   EqualsWithHashCodeExist:
@@ -294,11 +294,11 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
   MissingWhenCase:
-    active: true
+    active: false # Deprecated: compiler performs this check by default
   NullableToStringCall:
     active: true
   RedundantElseInWhen:
-    active: true
+    active: false # Deprecated: compiler performs this check by default
   UnconditionalJumpStatementInLoop:
     active: true
   UnnecessaryNotNullOperator:
@@ -345,7 +345,7 @@ style:
     active: false
   ForbiddenComment:
     active: true
-    values:
+    comments:
       - 'FIXME:'
       - 'STOPSHIP:'
       - 'TODO:'
@@ -355,15 +355,15 @@ style:
   ForbiddenMethodCall:
     active: false
   ForbiddenPublicDataClass:
-    active: false
+    active: false # Deprecated: migrated to libraries ruleset plugin
   ForbiddenVoid:
     active: true
   FunctionOnlyReturningConstant:
     active: true
   LibraryCodeMustSpecifyReturnType:
-    active: true
+    active: false # Deprecated: migrated to libraries ruleset plugin
   LibraryEntitiesShouldNotBePublic:
-    active: false
+    active: false # Deprecated: migrated to libraries ruleset plugin
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -392,6 +392,8 @@ style:
     ignoreRanges: false
     ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:
+    active: false # Deprecated: use BracesOnIfStatements instead
+  BracesOnIfStatements:
     active: false
   MandatoryBracesLoops:
     active: false
@@ -420,6 +422,8 @@ style:
   OptionalUnit:
     active: false
   OptionalWhenBraces:
+    active: false # Deprecated: use BracesOnWhenStatements instead
+  BracesOnWhenStatements:
     active: false
   PreferToOverPairSyntax:
     active: true

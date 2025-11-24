@@ -17,7 +17,7 @@
 Ensure you have the following installed:
 
 - **Java 24 JDK** (Amazon Corretto 24 recommended)
-- **Maven 3.x**
+- **Gradle 8.x** (or use included Gradle wrapper)
 - **Docker** (for containerized development)
 - **RabbitMQ** (via Docker or local installation)
 - **Git**
@@ -131,44 +131,41 @@ direnv allow .
 
 ```bash
 # Clean and build all modules
-mvn clean install
+./gradlew clean build
 
 # Build without tests (faster)
-mvn clean install -DskipTests
+./gradlew clean build -x test
 
 # Build specific module
-cd monolith
-mvn clean package
+./gradlew :monolith:build
 ```
 
 ### Running Locally
 
-#### Option 1: Maven Spring Boot Plugin
+#### Option 1: Gradle Spring Boot Plugin
 
 ```bash
 # Run the monolith application
-cd monolith
-mvn spring-boot:run
+./gradlew :monolith:bootRun
 
 # Run with specific profiles
-mvn spring-boot:run -Dspring-boot.run.profiles=local,h2-database
+./gradlew :monolith:bootRun --args='--spring.profiles.active=local,h2-database'
 
 # Run with debug enabled (port 5005)
-mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+./gradlew :monolith:bootRun --debug-jvm
 ```
 
 #### Option 2: Run JAR Directly
 
 ```bash
 # Build the JAR
-cd monolith
-mvn clean package
+./gradlew :monolith:build
 
 # Run the JAR
 java --enable-native-access=ALL-UNNAMED \
      --add-opens=java.base/sun.nio.ch=ALL-UNNAMED \
      --add-opens=java.base/java.io=ALL-UNNAMED \
-     -jar target/monolith-1.0-SNAPSHOT-spring-boot.jar
+     -jar monolith/build/libs/monolith-1.0-SNAPSHOT.jar
 ```
 
 #### Option 3: Docker Compose (Full Stack)
@@ -261,11 +258,11 @@ The project uses a multi-stage approach optimized for production.
 #### Step 1: Build the Application JAR
 
 ```bash
-# Build with Maven
-mvn clean package -DskipTests
+# Build with Gradle
+./gradlew :monolith:build -x test
 
 # Verify JAR exists
-ls -lh monolith/target/*-spring-boot.jar
+ls -lh monolith/build/libs/*.jar
 ```
 
 #### Step 2: Build Docker Image
@@ -382,7 +379,8 @@ on:
   workflow_dispatch:  # Manual trigger
   push:
     paths:            # Auto-trigger on changes to these modules
-      - pom.xml
+      - build.gradle.kts
+      - settings.gradle.kts
       - api/**
       - base/**
       - character-generator-starter/**
@@ -421,11 +419,10 @@ git clone --depth=1 <repo>
 actions/setup-java@v4
 ```
 
-#### 3. Maven Build
+#### 3. Gradle Build
 ```bash
 # Build project (includes tests)
-cd monolith
-mvn clean package -DskipTests=false
+./gradlew :monolith:build
 ```
 
 #### 4. Docker Build
@@ -492,7 +489,7 @@ gh workflow run monolith.yml
 ### Pipeline Execution Time
 
 - **Average Duration**: 5-8 minutes
-- **Maven Build**: 2-3 minutes
+- **Gradle Build**: 2-3 minutes
 - **Docker Build**: 1-2 minutes
 - **Push to GCR**: 1-2 minutes
 - **Cloud Run Deploy**: 1-2 minutes
@@ -974,8 +971,12 @@ docker system prune -a --volumes
 
 ---
 
+**Last Updated**: 2025-11-14
+
 **See Also**:
 - [Architecture Documentation](ARCHITECTURE.md)
-- [Technical Debt Tracker](../TECHNICAL_DEBT.md)
+- [Accessibility Documentation](../ACCESSIBILITY.md)
+- [Test Strategy](../TEST_STRATEGY.md)
+- [Claude Code & S.C.R.U.M. Team](../CLAUDE.md)
 - [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/)
 - [Google Cloud Run Documentation](https://cloud.google.com/run/docs)

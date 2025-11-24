@@ -1,2 +1,6 @@
 // API module - contains API interfaces and DTOs
-// No additional dependencies beyond the root configuration
+
+dependencies {
+    // Jackson Kotlin module for JSON serialization/deserialization in tests
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+}

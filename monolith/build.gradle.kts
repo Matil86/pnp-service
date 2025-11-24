@@ -11,8 +11,13 @@ allOpen {
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
-    mainClass.set("de.hipp.pnp.CharacterGeneratorApplication")
+    mainClass.set("de.hipp.pnp.CharacterGeneratorApplicationKt")
     archiveClassifier.set("spring-boot")
+}
+
+// Disable the plain JAR task - we only want the Spring Boot JAR
+tasks.named<Jar>("jar") {
+    enabled = false
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {

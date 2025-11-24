@@ -4,7 +4,10 @@
 # ============================================
 # Stage 1: Builder (for building from source)
 # ============================================
-FROM gradle:8.5-jdk24 AS builder
+FROM amazoncorretto:24 AS builder
+
+# Install build tools required by Gradle Wrapper
+RUN yum install -y findutils && yum clean all
 
 WORKDIR /app
 
@@ -63,9 +66,8 @@ RUN yum install -y --allowerasing shadow-utils curl && \
 # Set working directory
 WORKDIR /app
 
-# Copy JAR from builder or prebuilt stage
-ARG BUILD_SOURCE=builder
-COPY --from=${BUILD_SOURCE} --chown=appuser:appuser /app/service.jar service.jar
+# Copy JAR from builder stage (default for local builds)
+COPY --from=builder --chown=appuser:appuser /app/service.jar service.jar
 
 # Switch to non-root user
 USER appuser

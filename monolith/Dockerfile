@@ -32,8 +32,9 @@ RUN --mount=type=cache,target=/var/cache/yum,sharing=locked \
 
 WORKDIR /app
 
-# Copy pre-built JAR
+# Copy pre-built Spring Boot JAR (only JAR created after disabling plain JAR task)
 # Context is the monolith folder, so build/libs/ is relative to that
+# We explicitly copy the spring-boot JAR to ensure we get the executable JAR with all dependencies
 COPY --chown=appuser:appuser build/libs/*-spring-boot.jar service.jar
 
 # Switch to non-root user for security

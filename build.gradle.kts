@@ -14,7 +14,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.0.3" apply false
     id("org.owasp.dependencycheck") version "9.0.9"
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "7.1.0.6387"
     jacoco
 }
 

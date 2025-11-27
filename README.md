@@ -3,9 +3,9 @@
 A comprehensive service for pen and paper (PnP) role-playing games, providing character generation capabilities based on the 5e license. Built with Spring Boot, Kotlin, and deployed on Google Cloud Run.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Kotlin](https://img.shields.io/badge/kotlin-2.2.10-blue.svg)
-![Spring Boot](https://img.shields.io/badge/spring--boot-3.5.5-green.svg)
-![Java](https://img.shields.io/badge/java-24-orange.svg)
+![Kotlin](https://img.shields.io/badge/kotlin-2.3.0--RC-blue.svg)
+![Spring Boot](https://img.shields.io/badge/spring--boot-4.0.0-green.svg)
+![Java](https://img.shields.io/badge/java-25-orange.svg)
 ![License](https://img.shields.io/badge/license-5e-lightgrey.svg)
 
 ## Table of Contents
@@ -86,7 +86,7 @@ For detailed architecture documentation, see:
 |-----------|---------|---------|
 | **Kotlin** | 2.2.10 | Primary language (100% of codebase) |
 | **Java** | 24 | JVM runtime |
-| **Spring Boot** | 3.5.5 | Application framework |
+| **Spring Boot** | 4.0.0 | Application framework |
 | **Gradle** | 8.x | Build tool (Kotlin DSL) |
 
 ### Key Dependencies
@@ -96,7 +96,7 @@ For detailed architecture documentation, see:
 - **Spring Boot Starter OAuth2 Resource Server**: JWT authentication
 - **Spring Boot Starter AMQP**: RabbitMQ messaging
 - **Spring Boot Actuator**: Health checks and metrics
-- **SpringDoc OpenAPI**: API documentation (Swagger UI)
+- **SpringDoc OpenAPI**: 3.0.0 (Swagger UI)
 - **Firebase Admin SDK** 9.5.0: Firebase authentication
 - **Kotest** 5.7.2: Kotlin testing framework
 - **MockK** 1.13.8: Kotlin mocking library
@@ -114,7 +114,7 @@ For detailed architecture documentation, see:
 
 ### Prerequisites
 
-- **Java 24** (Amazon Corretto recommended)
+- **Java 25** (Amazon Corretto recommended)
 - **Gradle 8.x** (or use included Gradle wrapper)
 - **Docker** (optional, for containerized development)
 - **RabbitMQ** (via Docker or local installation)
@@ -122,13 +122,13 @@ For detailed architecture documentation, see:
 
 ### Quick Start
 
-#### 1. Install Java 24 with SDKman
+#### 1. Install Java 25 with SDKman
 
 ```bash
 # Install SDKman
 curl -s "https://get.sdkman.io" | bash
 
-# Install Java 24
+# Install Java 25
 sdk install java 24-amzn
 sdk use java 24-amzn
 
@@ -415,7 +415,7 @@ All Docker images include:
 - Base Image: Amazon Corretto 24 (Headless JRE)
 - Security: Non-root user (appuser)
 - Health Checks: Automatic health monitoring
-- Java Flags: Java 24 compatibility flags pre-configured
+- Java Flags: Java 25 compatibility flags pre-configured
 - Size: ~400MB (optimized)
 
 #### Troubleshooting
@@ -922,4 +922,4 @@ This project is based on the 5e license. See the [LICENSE](LICENSE) file for det
 
 **Project Status**: Active Development
 
-**Last Updated**: 2025-11-14
+**Last Updated**: 2025-11-27

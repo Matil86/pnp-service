@@ -159,7 +159,7 @@ The project consists of 10 Gradle modules organized into distinct layers:
 |-----------|---------|---------|
 | **Java** | 24 | Primary runtime |
 | **Kotlin** | 2.2.10 | Primary language (100% of codebase) |
-| **Spring Boot** | 3.5.5 | Application framework |
+| **Spring Boot** | 4.0.0 | Application framework |
 | **Gradle** | 8.x | Build tool (Kotlin DSL) |
 
 ### Spring Framework
@@ -209,7 +209,7 @@ The project consists of 10 Gradle modules organized into distinct layers:
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **SpringDoc OpenAPI** | 2.8.11 | Swagger/OpenAPI documentation |
+| **SpringDoc OpenAPI** | 3.0.0 | Swagger/OpenAPI documentation |
 
 ### Testing
 
@@ -647,7 +647,7 @@ External Services:
 - Base: Amazon Corretto 24 (headless)
 - Non-root user: `appuser`
 - Health check: `/actuator/health` (30s interval)
-- JVM flags for Java 24 compatibility:
+- JVM flags for Java 25 compatibility:
   - `--enable-native-access=ALL-UNNAMED`
   - `--add-opens=java.base/sun.nio.ch=ALL-UNNAMED`
   - `--add-opens=java.base/java.io=ALL-UNNAMED`
@@ -744,7 +744,7 @@ Legacy Starters (Deprecated):
 
 ---
 
-**Last Updated**: 2025-11-14
+**Last Updated**: 2025-11-27
 
 **See Also**:
 - [Deployment Documentation](DEPLOYMENT.md)

@@ -9,7 +9,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.Status
+
+// Spring Boot 4.0: Status moved from org.springframework.boot.actuate.health to org.springframework.boot.health.contributor
 
 /**
  * Tests for FirebaseHealthIndicator.

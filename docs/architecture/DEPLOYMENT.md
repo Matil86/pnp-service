@@ -16,13 +16,13 @@
 
 Ensure you have the following installed:
 
-- **Java 24 JDK** (Amazon Corretto 24 recommended)
+- **Java 25 JDK** (Amazon Corretto 24 recommended)
 - **Gradle 8.x** (or use included Gradle wrapper)
 - **Docker** (for containerized development)
 - **RabbitMQ** (via Docker or local installation)
 - **Git**
 
-### Installing Java 24 with SDKman
+### Installing Java 25 with SDKman
 
 ```bash
 # Install SDKman if not already installed
@@ -329,7 +329,7 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-# JVM flags for Java 24 compatibility
+# JVM flags for Java 25 compatibility
 ENTRYPOINT ["java", \
     "--enable-native-access=ALL-UNNAMED", \
     "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED", \
@@ -341,7 +341,7 @@ ENTRYPOINT ["java", \
 **Key Features**:
 - Non-root user (`appuser`) for security
 - Health check using Spring Boot Actuator
-- Java 24 compatibility flags
+- Java 25 compatibility flags
 - Headless JRE for smaller image size
 - Curl installed for health checks
 
@@ -415,7 +415,7 @@ git clone --depth=1 <repo>
 
 #### 2. Setup Java
 ```bash
-# Install Java 24 (Amazon Corretto)
+# Install Java 25 (Amazon Corretto)
 actions/setup-java@v4
 ```
 
@@ -971,7 +971,7 @@ docker system prune -a --volumes
 
 ---
 
-**Last Updated**: 2025-11-14
+**Last Updated**: 2025-11-27
 
 **See Also**:
 - [Architecture Documentation](ARCHITECTURE.md)

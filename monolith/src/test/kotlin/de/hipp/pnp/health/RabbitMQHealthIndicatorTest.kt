@@ -8,8 +8,10 @@ import io.mockk.every
 import io.mockk.mockk
 import org.springframework.amqp.rabbit.connection.Connection
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
-import org.springframework.boot.actuate.health.Status
+import org.springframework.boot.health.contributor.Status
 import java.net.InetAddress
+
+// Spring Boot 4.0: Status moved from org.springframework.boot.actuate.health to org.springframework.boot.health.contributor
 
 /**
  * Tests for RabbitMQHealthIndicator.
@@ -72,13 +74,18 @@ class RabbitMQHealthIndicatorTest :
             health.details["service"] shouldBe "rabbitmq"
         }
 
-        "health - Batman when delegate is null" {
+        "health - Batman when delegate has no channel info" {
             val connectionFactory = mockk<ConnectionFactory>()
             val connection = mockk<Connection>()
+            val delegate = mockk<com.rabbitmq.client.Connection>()
+            val address = InetAddress.getByName("localhost")
 
             every { connectionFactory.createConnection() } returns connection
             every { connection.isOpen } returns true
-            every { connection.delegate } returns null
+            every { connection.delegate } returns delegate
+            every { delegate.channelMax } returns 0
+            every { delegate.address } returns address
+            every { delegate.port } returns 5672
 
             val indicator = RabbitMQHealthIndicator(connectionFactory)
             val health = indicator.health()

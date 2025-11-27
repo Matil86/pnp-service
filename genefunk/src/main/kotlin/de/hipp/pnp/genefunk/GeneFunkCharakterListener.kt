@@ -36,9 +36,9 @@ class GeneFunkCharakterListener(
     @Throws(IOException::class)
     fun getAllGenefunkCharacters(messageString: String): String? {
         val message =
-            mapper.readValue<DefaultMessage<MutableList<GeneFunkCharacter?>?>>(
+            mapper.readValue<DefaultMessage<MutableList<GeneFunkCharacter>>>(
                 messageString,
-                object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter?>?>?>() {
+                object : TypeReference<DefaultMessage<MutableList<GeneFunkCharacter>>?>() {
                 },
             )
         val payload = service.getAllCharacters(message.header.externalId)

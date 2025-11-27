@@ -838,8 +838,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "peter@parker.com",
                         role = "user",
                     )
-                @Suppress("UNCHECKED_CAST")
-                every { repository.findById(1) } returns (Optional.ofNullable(character) as Optional<GeneFunkCharacter?>)
+                every { repository.findById(1) } returns Optional.ofNullable(character)
                 every { repository.deleteById(1) } returns Unit
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
@@ -881,8 +880,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "clark@kent.com",
                         role = "user",
                     )
-                @Suppress("UNCHECKED_CAST")
-                every { repository.findById(1) } returns (Optional.ofNullable(character) as Optional<GeneFunkCharacter?>)
+                every { repository.findById(1) } returns Optional.ofNullable(character)
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
                 val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)
@@ -917,8 +915,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "test@user.com",
                         role = "user",
                     )
-                @Suppress("UNCHECKED_CAST")
-                every { repository.findById(999) } returns (Optional.empty<GeneFunkCharacter>() as Optional<GeneFunkCharacter?>)
+                every { repository.findById(999) } returns Optional.empty<GeneFunkCharacter>()
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
                 val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)

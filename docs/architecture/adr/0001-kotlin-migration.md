@@ -7,7 +7,7 @@ Accepted (Completed)
 The PnP Service was initially developed using Java 22 as the primary programming language. As the project evolved, we identified several opportunities to improve developer productivity, code quality, and maintainability by adopting Kotlin as the primary language.
 
 ### Initial State
-- Java 22 codebase with Spring Boot 3.x
+- Java 22 codebase with Spring Boot 3.x (now Spring Boot 4.0.0)
 - Mix of imperative and functional programming patterns
 - Verbose boilerplate code (getters, setters, builders)
 - Limited null safety (relying on Optional and manual null checks)
@@ -28,7 +28,7 @@ We decided to migrate the entire codebase from Java to Kotlin, making Kotlin the
 2. **100% Kotlin Target**: No mixed Java/Kotlin codebase (except dependencies)
 3. **Kotlin Best Practices**: Leverage data classes, extension functions, coroutines
 4. **Spring Boot Kotlin Support**: Utilize Kotlin-specific Spring features
-5. **JVM Target**: Java 24 (matching previous Java version)
+5. **JVM Target**: Java 25 (matching previous Java version)
 
 ### Key Kotlin Features Adopted
 - **Data Classes**: Replaced Java POJOs with Kotlin data classes
@@ -86,7 +86,7 @@ We decided to migrate the entire codebase from Java to Kotlin, making Kotlin the
    - Rare occurrence with modern libraries
    - Spring Boot fully supports Kotlin
 
-4. **JVM Version Requirements**: Requires Java 24 with specific flags
+4. **JVM Version Requirements**: Requires Java 25 with specific flags
    - `--enable-native-access=ALL-UNNAMED`
    - `--add-opens` flags for reflection access
 

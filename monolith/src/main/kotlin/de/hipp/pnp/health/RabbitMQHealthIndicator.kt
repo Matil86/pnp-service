@@ -2,8 +2,8 @@ package de.hipp.pnp.health
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.stereotype.Component
 
 private val logger = KotlinLogging.logger {}
@@ -13,6 +13,8 @@ private val logger = KotlinLogging.logger {}
  *
  * Verifies that RabbitMQ connection is active and healthy.
  * This is critical for asynchronous messaging and event processing.
+ *
+ * Spring Boot 4.0: Health/HealthIndicator moved from org.springframework.boot.actuate.health
  */
 @Component
 class RabbitMQHealthIndicator(

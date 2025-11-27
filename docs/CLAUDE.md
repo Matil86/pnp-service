@@ -109,12 +109,12 @@ Work Complete → Maria Verifies (8-10/10) → Wong Documents
 - **Factory Pattern**: All components created through validation
 
 #### Code Quality (Tony's Domain)
-- **Language**: Kotlin 2.2.10 (100% Kotlin, 0% Java)
+- **Language**: Kotlin 2.3.0-RC (100% Kotlin, 0% Java)
 - **Build**: Gradle with Kotlin DSL
 - **Linting**: ktlint (enabled, 0 violations)
 - **Coverage**: Jacoco (90% line / 85% branch)
 - **Security**: OWASP Dependency Check
-- **Static Analysis**: Detekt (currently blocked by Kotlin 2.2.10 incompatibility)
+- **Static Analysis**: Detekt (currently blocked by Kotlin 2.3.0-RC incompatibility)
 
 #### Documentation (Wong's Domain)
 - **Accuracy**: All docs current after changes
@@ -183,9 +183,9 @@ Work Complete → Maria Verifies (8-10/10) → Wong Documents
 - OWASP Dependency Check added
 - Detekt configuration updated
 
-**Blocker Identified**: Detekt 1.23.8 incompatible with Kotlin 2.2.10
+**Blocker Identified**: Detekt 1.23.8 incompatible with Kotlin 2.3.0-RC
 - Detekt 1.23.8 compiled with Kotlin 2.0.21
-- Kotlin 2.2.10 introduced breaking changes
+- Kotlin 2.3.0-RC introduced breaking changes
 - 200 known detekt violations exist (from previous scan)
 - Options: Wait for Detekt 1.24+, downgrade Kotlin to 2.0.21, or use Detekt 2.0.0-alpha
 
@@ -261,9 +261,9 @@ Bruce and Tony, fix security vulnerabilities (Bruce finds, Tony fixes)
 ## Known Issues & Blockers
 
 ### Detekt Incompatibility (HIGH PRIORITY)
-**Issue**: Detekt 1.23.8 incompatible with Kotlin 2.2.10
+**Issue**: Detekt 1.23.8 incompatible with Kotlin 2.3.0-RC
 **Impact**: Static code analysis disabled, 200 known violations unaddressed
-**Root Cause**: Detekt 1.23.8 compiled with Kotlin 2.0.21, Kotlin 2.2.10 introduced breaking changes
+**Root Cause**: Detekt 1.23.8 compiled with Kotlin 2.0.21, Kotlin 2.3.0-RC introduced breaking changes
 **Solutions**:
 1. Wait for Detekt 1.24+ (timeline unknown)
 2. Downgrade Kotlin to 2.0.21 (loses 2.2.10 features)
@@ -332,7 +332,7 @@ Bruce and Tony, fix security vulnerabilities (Bruce finds, Tony fixes)
 - **Java Files**: 0
 - **Build Tool**: Gradle (Kotlin DSL)
 - **Kotlin Version**: 2.2.10
-- **Spring Boot**: 3.5.5
+- **Spring Boot**: 4.0.0
 - **Java Runtime**: 24
 
 ### Testing
@@ -474,7 +474,7 @@ The S.C.R.U.M. team enforces quality gates at multiple levels:
 - **Documentation Timing**: Update docs immediately after structural changes (Maven → Gradle)
 
 ### Blockers Encountered
-1. **Detekt Incompatibility**: Kotlin 2.2.10 breaking changes
+1. **Detekt Incompatibility**: Kotlin 2.3.0-RC breaking changes
 2. **Test Failures**: Minor assertion issues (easily fixable)
 3. **NVD API Rate Limits**: Slows dependency scanning (API key needed)
 
@@ -499,7 +499,7 @@ The S.C.R.U.M. team enforces quality gates at multiple levels:
 
 ---
 
-**Last Updated**: 2025-11-14
+**Last Updated**: 2025-11-27
 **Project**: PnP Service
 **S.C.R.U.M. Version**: 1.0.0
 **Maintained by**: Wong (Documentation Specialist)

@@ -54,5 +54,5 @@ open class GeneFunkGenomeService(
         }
     }
 
-    fun allGenomes(): MutableList<GeneFunkGenome?> = repository.findAll()
+    fun allGenomes(): MutableList<GeneFunkGenome> = repository.findAll()
 }

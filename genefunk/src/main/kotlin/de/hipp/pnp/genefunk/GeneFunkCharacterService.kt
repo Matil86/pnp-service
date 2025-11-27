@@ -31,7 +31,7 @@ open class GeneFunkCharacterService(
     private val userInfoProducer: UserInfoProducer,
     private val characterNamesProperties: CharacterNamesProperties,
     private val meterRegistry: MeterRegistry,
-) : FiveECharacterService<GeneFunkCharacter?> {
+) : FiveECharacterService<GeneFunkCharacter> {
     private val random = Random.Default
 
     // Metrics
@@ -67,7 +67,7 @@ open class GeneFunkCharacterService(
      * @param userId The external user identifier
      * @return List of characters accessible to the user
      */
-    override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter?>? {
+    override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter> {
         val customer = userInfoProducer.getCustomerInfoFor(userId)
         return if (customer.role.equals("admin", ignoreCase = true)) {
             repository.findAll()

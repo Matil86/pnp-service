@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.Optional
 
+// Spring Boot 4 requires non-nullable type parameters for JpaRepository<T, ID>
 @Repository
-interface GeneFunkGenomeRepository : JpaRepository<GeneFunkGenome?, Int?> {
+interface GeneFunkGenomeRepository : JpaRepository<GeneFunkGenome, Int> {
     fun findByName(name: String?): Optional<GeneFunkGenome?>?
 
     fun existsByName(name: String?): Boolean

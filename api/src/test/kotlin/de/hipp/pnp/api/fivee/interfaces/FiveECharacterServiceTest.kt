@@ -26,7 +26,7 @@ private class NeoCharacter : BaseCharacter() {
 
 // Test service implementations
 private class FrodoCharacterService : FiveECharacterService<FrodoCharacter> {
-    override fun getAllCharacters(userId: String?): MutableList<FrodoCharacter?> =
+    override fun getAllCharacters(userId: String?): MutableList<FrodoCharacter> =
         if (userId == "frodo") {
             mutableListOf(FrodoCharacter())
         } else {
@@ -37,13 +37,13 @@ private class FrodoCharacterService : FiveECharacterService<FrodoCharacter> {
 }
 
 private class GandalfCharacterService : FiveECharacterService<GandalfCharacter> {
-    override fun getAllCharacters(userId: String?): MutableList<GandalfCharacter?> = mutableListOf(GandalfCharacter(), null)
+    override fun getAllCharacters(userId: String?): MutableList<GandalfCharacter> = mutableListOf(GandalfCharacter())
 
     override fun generate(): GandalfCharacter = GandalfCharacter()
 }
 
 private class NullableCharacterService : FiveECharacterService<BaseCharacter> {
-    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?>? = null
+    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = mutableListOf()
 
     override fun generate(): BaseCharacter? = null
 }
@@ -85,9 +85,8 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("gandalf")
 
                 result shouldNotBe null
-                result?.size shouldBe 2
+                result?.size shouldBe 1
                 result?.get(0) shouldNotBe null
-                result?.get(1) shouldBe null
             }
 
             test("should handle empty string userId") {
@@ -108,7 +107,7 @@ class FiveECharacterServiceTest :
 
             test("should handle unicode userId") {
                 class UnicodeService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> =
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> =
                         if (userId == "孫悟空") {
                             mutableListOf(BaseCharacter())
                         } else {
@@ -126,7 +125,7 @@ class FiveECharacterServiceTest :
 
             test("should handle emoji userId") {
                 class EmojiService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> =
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> =
                         if (userId == "🧙‍♂️") {
                             mutableListOf(BaseCharacter())
                         } else {
@@ -151,12 +150,12 @@ class FiveECharacterServiceTest :
                 result shouldNotBe null
             }
 
-            test("should return null from getAllCharacters") {
+            test("should return empty list from getAllCharacters") {
                 val service = NullableCharacterService()
 
                 val result = service.getAllCharacters("test")
 
-                result shouldBe null
+                result shouldBe emptyList()
             }
         }
 
@@ -185,7 +184,7 @@ class FiveECharacterServiceTest :
 
             test("should generate Neo character") {
                 class NeoService : FiveECharacterService<NeoCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<NeoCharacter?> = mutableListOf()
+                    override fun getAllCharacters(userId: String?): MutableList<NeoCharacter> = mutableListOf()
 
                     override fun generate(): NeoCharacter = NeoCharacter()
                 }
@@ -205,7 +204,7 @@ class FiveECharacterServiceTest :
                 }
 
                 class TrinityService : FiveECharacterService<TrinityCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<TrinityCharacter?> = mutableListOf()
+                    override fun getAllCharacters(userId: String?): MutableList<TrinityCharacter> = mutableListOf()
 
                     override fun generate(): TrinityCharacter = TrinityCharacter()
                 }
@@ -257,7 +256,7 @@ class FiveECharacterServiceTest :
             test("should work with BaseCharacter type") {
                 val service: FiveECharacterService<BaseCharacter> =
                     object : FiveECharacterService<BaseCharacter> {
-                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> = mutableListOf()
+                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = mutableListOf()
 
                         override fun generate(): BaseCharacter = BaseCharacter()
                     }
@@ -268,9 +267,9 @@ class FiveECharacterServiceTest :
             }
 
             test("should support nullable generic type") {
-                val service: FiveECharacterService<BaseCharacter?> =
-                    object : FiveECharacterService<BaseCharacter?> {
-                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?>? = mutableListOf()
+                val service: FiveECharacterService<BaseCharacter> =
+                    object : FiveECharacterService<BaseCharacter> {
+                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = mutableListOf()
 
                         override fun generate(): BaseCharacter? = null
                     }
@@ -291,13 +290,13 @@ class FiveECharacterServiceTest :
                 result?.size shouldBe 2
             }
 
-            test("should allow adding null to mutable list") {
+            test("should allow adding to mutable list") {
                 val service = FrodoCharacterService()
 
                 val result = service.getAllCharacters("frodo")
 
-                result?.add(null)
-                result?.last() shouldBe null
+                result?.add(FrodoCharacter())
+                result?.last() shouldNotBe null
             }
 
             test("should allow clearing mutable list") {
@@ -315,14 +314,14 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("test")
 
                 result?.removeAt(0)
-                result?.size shouldBe 1
+                result?.size shouldBe 0
             }
         }
 
         context("User ID Filtering") {
             test("should filter by exact user ID match") {
                 class FilteringService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> =
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> =
                         when (userId) {
                             "aragorn" -> mutableListOf(BaseCharacter(), BaseCharacter())
                             "legolas" -> mutableListOf(BaseCharacter())
@@ -341,7 +340,7 @@ class FiveECharacterServiceTest :
 
             test("should handle case-sensitive user IDs") {
                 class CaseSensitiveService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> =
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> =
                         if (userId == "Frodo") {
                             mutableListOf(BaseCharacter())
                         } else {
@@ -361,7 +360,7 @@ class FiveECharacterServiceTest :
         context("Edge Cases") {
             test("should handle large character lists") {
                 class LargeListService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> = MutableList(1000) { BaseCharacter() }
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = MutableList(1000) { BaseCharacter() }
 
                     override fun generate(): BaseCharacter = BaseCharacter()
                 }
@@ -374,7 +373,7 @@ class FiveECharacterServiceTest :
 
             test("should handle empty character list") {
                 class EmptyListService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> = mutableListOf()
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = mutableListOf()
 
                     override fun generate(): BaseCharacter = BaseCharacter()
                 }
@@ -385,18 +384,18 @@ class FiveECharacterServiceTest :
                 result.size shouldBe 0
             }
 
-            test("should handle list with all null entries") {
-                class AllNullService : FiveECharacterService<BaseCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> = MutableList(5) { null }
+            test("should handle list with multiple entries") {
+                class MultiEntryService : FiveECharacterService<BaseCharacter> {
+                    override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> = MutableList(5) { BaseCharacter() }
 
                     override fun generate(): BaseCharacter? = null
                 }
 
-                val service = AllNullService()
+                val service = MultiEntryService()
                 val result = service.getAllCharacters("test")
 
                 result.size shouldBe 5
-                result.all { it == null } shouldBe true
+                result.all { it != null } shouldBe true
             }
         }
 
@@ -420,7 +419,7 @@ class FiveECharacterServiceTest :
             test("should support polymorphism") {
                 val service: FiveECharacterService<BaseCharacter> =
                     object : FiveECharacterService<BaseCharacter> {
-                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter?> =
+                        override fun getAllCharacters(userId: String?): MutableList<BaseCharacter> =
                             mutableListOf(FrodoCharacter(), GandalfCharacter())
 
                         override fun generate(): BaseCharacter = NeoCharacter()
@@ -444,7 +443,7 @@ class FiveECharacterServiceTest :
                 }
 
                 class ExtendedService : FiveECharacterService<ExtendedCharacter> {
-                    override fun getAllCharacters(userId: String?): MutableList<ExtendedCharacter?> = mutableListOf(ExtendedCharacter())
+                    override fun getAllCharacters(userId: String?): MutableList<ExtendedCharacter> = mutableListOf(ExtendedCharacter())
 
                     override fun generate(): ExtendedCharacter = ExtendedCharacter()
                 }

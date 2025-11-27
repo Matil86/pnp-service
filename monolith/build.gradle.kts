@@ -24,6 +24,7 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("boot
     builder.set("paketobuildpacks/builder-jammy-tiny:latest")
     environment.set(
         mapOf(
+            // Note: Keeping Java 24 until Kotlin 2.3+ adds JVM 25 support
             "BP_JVM_VERSION" to "24",
         ),
     )
@@ -40,6 +41,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework:spring-webflux")
 
+    // Spring Boot 4.0: Modularized health and metrics into separate artifacts
+    implementation("org.springframework.boot:spring-boot-health")
+    implementation("org.springframework.boot:spring-boot-micrometer-metrics")
+
     // Observability: Metrics
     implementation("io.micrometer:micrometer-registry-prometheus")
 
@@ -51,7 +56,8 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
     // Observability: AOP for Performance Monitoring
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    // Spring Boot 4.0: Renamed from spring-boot-starter-aop to spring-boot-starter-aspectj
+    implementation("org.springframework.boot:spring-boot-starter-aspectj")
 
     // Testing
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.7.2")

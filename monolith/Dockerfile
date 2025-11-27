@@ -21,7 +21,9 @@
 #   ./gradlew :monolith:bootJar -x test
 #   docker build -f monolith/Dockerfile -t pnp-monolith:latest monolith/
 
-FROM amazoncorretto:24-headless
+# Using Java 25 with Kotlin 2.3.0-RC which adds JVM 25 support
+# Spring Boot 4.0.0 requires Java 21+, Java 25 LTS is recommended
+FROM amazoncorretto:25-headless
 
 # Install dependencies with cache mount for faster rebuilds
 RUN --mount=type=cache,target=/var/cache/yum,sharing=locked \
@@ -57,7 +59,7 @@ LABEL maintainer="hipp" \
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:${SERVER_PORT}/actuator/health || exit 1
 
-# Java 24 requires specific JVM arguments for native access and module access
+# Java 25 requires specific JVM arguments for native access and module access
 ENTRYPOINT ["java", \
     "--enable-native-access=ALL-UNNAMED", \
     "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED", \

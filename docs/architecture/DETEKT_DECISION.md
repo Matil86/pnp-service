@@ -9,20 +9,20 @@
 
 ## Context and Problem Statement
 
-The pnp-service project upgraded to Kotlin 2.2.10 for latest language features and performance improvements. However, Detekt 1.23.8 (the latest stable version available via Gradle Plugin Portal) was compiled with Kotlin 2.0.21, causing compatibility issues during build.
+The pnp-service project upgraded to Kotlin 2.3.0-RC for latest language features and performance improvements. However, Detekt 1.23.8 (the latest stable version available via Gradle Plugin Portal) was compiled with Kotlin 2.0.21, causing compatibility issues during build.
 
 ### Error Observed
 ```
 java.lang.NoSuchMethodError: 'void kotlin.collections.CollectionsKt.removeFirst(java.util.List)'
 ```
 
-This occurs because Detekt's internal Kotlin dependencies (compiled with 2.0.21) conflict with the project's Kotlin 2.2.10 runtime.
+This occurs because Detekt's internal Kotlin dependencies (compiled with 2.0.21) conflict with the project's Kotlin 2.3.0-RC runtime.
 
 ---
 
 ## Decision Drivers
 
-1. **Project Priority**: Maintain Kotlin 2.2.10 for latest language features
+1. **Project Priority**: Maintain Kotlin 2.3.0-RC for latest language features
 2. **Build Stability**: Must have clean, reliable builds for CI/CD
 3. **Code Quality**: Must maintain high code quality standards
 4. **Timeline**: Cannot wait indefinitely for Detekt update
@@ -38,7 +38,7 @@ This occurs because Detekt's internal Kotlin dependencies (compiled with 2.0.21)
 - No code changes needed
 
 **Cons**:
-- Loss of Kotlin 2.2.10 features and improvements
+- Loss of Kotlin 2.3.0-RC features and improvements
 - Regression in language version
 - Not aligned with project modernization goals
 - Would need to upgrade again later
@@ -74,7 +74,7 @@ configurations.matching { it.name.startsWith("detekt") }.all {
 ---
 
 ### Option 3: Use Detekt 2.0.0-alpha.0 via Buildscript ❌
-**Details**: Detekt 2.0.0-alpha.0 supports Kotlin 2.2.10 but is not published to Gradle Plugin Portal
+**Details**: Detekt 2.0.0-alpha.0 supports Kotlin 2.3.0-RC but is not published to Gradle Plugin Portal
 
 **Pros**:
 - Technical compatibility exists
@@ -95,8 +95,8 @@ configurations.matching { it.name.startsWith("detekt") }.all {
 **Implementation**:
 ```kotlin
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-    // BLOCKER: Detekt 1.23.8 compiled with Kotlin 2.0.21, incompatible with Kotlin 2.2.10
-    // Detekt 2.0.0-alpha.0 supports Kotlin 2.2.10 but not published to Gradle Plugin Portal
+    // BLOCKER: Detekt 1.23.8 compiled with Kotlin 2.0.21, incompatible with Kotlin 2.3.0-RC
+    // Detekt 2.0.0-alpha.0 supports Kotlin 2.3.0-RC but not published to Gradle Plugin Portal
     // Resolution strategy (lines 113-120) insufficient to override Detekt's internal Kotlin version
     // Options: (1) Wait for Detekt 1.24+ stable, (2) Downgrade to Kotlin 2.0.21, (3) Use buildscript classpath
     enabled = false
@@ -107,7 +107,7 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 ```
 
 **Pros**:
-- ✅ Maintains Kotlin 2.2.10 (project priority)
+- ✅ Maintains Kotlin 2.3.0-RC (project priority)
 - ✅ Clean, reliable builds
 - ✅ Well-documented decision with inline rationale
 - ✅ Configuration preserved for easy re-enable
@@ -142,7 +142,7 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 
 3. **Temporary Solution**: Detekt development is active
    - Detekt 2.0.0 is in development
-   - Kotlin 2.2.10 support will be in stable release soon
+   - Kotlin 2.3.0-RC support will be in stable release soon
    - Our configuration is preserved and ready
 
 4. **Pragmatic**: Balances quality, stability, and progress
@@ -159,7 +159,7 @@ Detekt will be re-enabled when **ANY** of the following conditions are met:
 
 ### Condition 1: Detekt 1.24+ Stable Release
 - **Monitor**: https://github.com/detekt/detekt/releases
-- **Check**: Supports Kotlin 2.2.10+
+- **Check**: Supports Kotlin 2.3.0-RC+
 - **Action**:
   1. Update `build.gradle.kts` line 13: `id("io.gitlab.arturbosch.detekt") version "1.24.0"`
   2. Set `enabled = true` on lines 134 and 149
@@ -209,8 +209,8 @@ Detekt will be re-enabled when **ANY** of the following conditions are met:
 ## References
 
 - **Detekt Repository**: https://github.com/detekt/detekt
-- **Detekt Issue #7655**: Kotlin 2.2.10 compatibility tracking
-- **Kotlin 2.2.10 Release**: https://github.com/JetBrains/kotlin/releases/tag/v2.2.10
+- **Detekt Issue #7655**: Kotlin 2.3.0-RC compatibility tracking
+- **Kotlin 2.3.0-RC Release**: https://github.com/JetBrains/kotlin/releases/tag/v2.2.10
 - **Project Build Configuration**: `/Users/hipp/git/private/pnp-service/build.gradle.kts`
 
 ---
@@ -218,7 +218,7 @@ Detekt will be re-enabled when **ANY** of the following conditions are met:
 ## Conclusion
 
 This decision prioritizes:
-1. **Project goals** (Kotlin 2.2.10 features)
+1. **Project goals** (Kotlin 2.3.0-RC features)
 2. **Build stability** (reliable CI/CD)
 3. **Code quality** (multi-tool enforcement)
 4. **Pragmatism** (temporary disable with clear re-enable path)

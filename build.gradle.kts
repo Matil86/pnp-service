@@ -4,12 +4,13 @@ import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 plugins {
-    id("org.springframework.boot") version "3.5.5" apply false
+    // Upgraded to Spring Boot 4.0.0 for Jakarta EE 11, Spring Framework 7, and Java 25 support
+    id("org.springframework.boot") version "4.0.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    kotlin("jvm") version "2.2.10" apply false
-    kotlin("plugin.spring") version "2.2.10" apply false
-    kotlin("plugin.jpa") version "2.2.10" apply false
-    kotlin("plugin.allopen") version "2.2.10" apply false
+    kotlin("jvm") version "2.3.0-RC" apply false
+    kotlin("plugin.spring") version "2.3.0-RC" apply false
+    kotlin("plugin.jpa") version "2.3.0-RC" apply false
+    kotlin("plugin.allopen") version "2.3.0-RC" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.0.3" apply false
     id("org.owasp.dependencycheck") version "9.0.9"
@@ -34,14 +35,17 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_24
-        targetCompatibility = JavaVersion.VERSION_24
+        // Attempting Java 25 upgrade (requires Kotlin 2.3.0+ for JVM_25 target)
+        // Spring Boot 4 supports Java 25
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
     tasks.withType<KotlinCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xjsr305=strict")
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_24)
+            // Attempting JVM_25 - will fail if Kotlin 2.2.10 doesn't support it
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25)
         }
     }
 
@@ -115,22 +119,22 @@ subprojects {
         baseline = file("$rootDir/config/detekt-baseline.xml")
     }
 
-    // Override Kotlin version for detekt to match project Kotlin version (2.2.10)
+    // Override Kotlin version for detekt to match project Kotlin version (2.3.0-RC)
     // This forces all Kotlin dependencies in detekt to use the same version as the project
     configurations.matching { it.name.startsWith("detekt") }.all {
         resolutionStrategy.eachDependency {
             if (requested.group == "org.jetbrains.kotlin" && requested.name.startsWith("kotlin-")) {
-                useVersion("2.2.10")
+                useVersion("2.3.0-RC")
                 because("Force detekt to use project Kotlin version for compatibility")
             }
         }
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-        // BLOCKER: Detekt 1.23.8 compiled with Kotlin 2.0.21, incompatible with Kotlin 2.2.10
-        // Detekt 2.0.0-alpha.0 supports Kotlin 2.2.10 but not published to Gradle Plugin Portal
-        // Resolution strategy (lines 113-120) insufficient to override Detekt's internal Kotlin version
-        // Options: (1) Wait for Detekt 1.24+ stable, (2) Downgrade to Kotlin 2.0.21, (3) Use buildscript classpath
+        // BLOCKER: Detekt 1.23.8 compiled with Kotlin 2.0.21, incompatible with Kotlin 2.3.0-RC
+        // Detekt 2.0.0-alpha.0 supports Kotlin 2.3.0-RC but not published to Gradle Plugin Portal
+        // Resolution strategy (lines 122-131) insufficient to override Detekt's internal Kotlin version
+        // Options: (1) Wait for Detekt 1.24+ stable, (2) Downgrade Kotlin, (3) Use buildscript classpath
         enabled = false
 
         // Detekt doesn't support JVM 24 yet, so we use 21 as the target
@@ -145,7 +149,7 @@ subprojects {
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-        // BLOCKER: Same as above - Detekt incompatible with Kotlin 2.2.10
+        // BLOCKER: Same as above - Detekt incompatible with Kotlin 2.3.0-RC
         enabled = false
 
         // Detekt doesn't support JVM 24 yet, so we use 21 as the target
@@ -172,7 +176,7 @@ subprojects {
         val runtimeOnly by configurations
         val detektPlugins by configurations
 
-        implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.5"))
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:4.0.0"))
         implementation("com.fasterxml.jackson.core:jackson-databind")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("org.springframework.boot:spring-boot-starter-web")
@@ -180,10 +184,11 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-configuration-processor")
         implementation("io.github.oshai:kotlin-logging-jvm:7.0.12")
         implementation("io.projectreactor:reactor-core:3.7.9")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.10")
-        runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.2.10")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0-RC")
+        runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.3.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
-        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11")
+        // Upgraded to 3.0.0 for Spring Boot 4.0.0 compatibility
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
         implementation("com.google.firebase:firebase-admin:9.5.0")
 
         testImplementation("org.springframework.boot:spring-boot-starter-test") {

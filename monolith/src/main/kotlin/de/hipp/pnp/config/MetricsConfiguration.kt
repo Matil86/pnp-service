@@ -4,7 +4,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tag
 import io.micrometer.core.instrument.config.MeterFilter
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer
+import org.springframework.boot.micrometer.metrics.autoconfigure.MeterRegistryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration
  *
  * Provides custom metrics setup with common tags, metric filters, and
  * application-specific metric definitions for character generation tracking.
+ *
+ * Spring Boot 4.0: MeterRegistryCustomizer moved from org.springframework.boot.actuate.autoconfigure.metrics
  */
 @Configuration
 open class MetricsConfiguration {

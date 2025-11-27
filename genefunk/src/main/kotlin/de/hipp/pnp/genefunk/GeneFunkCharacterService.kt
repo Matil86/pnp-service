@@ -6,125 +6,178 @@ import de.hipp.pnp.base.entity.Skills
 import de.hipp.pnp.base.fivee.Attribute5e
 import de.hipp.pnp.base.fivee.DiceRoller
 import de.hipp.pnp.base.rabbitmq.UserInfoProducer
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.micrometer.core.annotation.Timed
+import io.micrometer.core.instrument.Counter
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Timer
 import org.springframework.stereotype.Service
-import java.util.Objects
-import java.util.Random
 import kotlin.math.max
+import kotlin.random.Random
 
+private val logger = KotlinLogging.logger {}
+
+/**
+ * Service for managing GeneFunk character generation and operations.
+ *
+ * Provides functionality for creating, retrieving, and deleting GeneFunk characters
+ * with random attribute generation based on 5e rules.
+ */
 @Service
 open class GeneFunkCharacterService(
     private val repository: GeneFunkCharacterRepository,
     private val genomeService: GeneFunkGenomeService,
-    private val classService: GeneFunkClassService, private val userInfoProducer: UserInfoProducer
-) : FiveECharacterService<GeneFunkCharacter?> {
-    private val random = Random()
+    private val classService: GeneFunkClassService,
+    private val userInfoProducer: UserInfoProducer,
+    private val characterNamesProperties: CharacterNamesProperties,
+    private val meterRegistry: MeterRegistry,
+) : FiveECharacterService<GeneFunkCharacter> {
+    private val random = Random.Default
 
-    private val names = mutableListOf<String>(
-        "Aaden", "Aarav", "Aaren", "Aaron", "Abbie", "Abby", "Abdiel", "Abdullah", "Abel", "Abigail",
-        "Abraham", "Abram", "Ace", "Adam", "Adan", "Addison", "Aden", "Aditya", "Adonis", "Adrian",
-        "Adriel", "Adrien", "Agustin", "Ahmad", "Ahmed", "Aidan", "Aiden", "Aidyn", "Aimee", "Alan",
-        "Albert", "Alberto", "Alec", "Alejandro", "Alessandro", "Alex", "Alexander", "Alexis", "Alexzander", "Alfie",
-        "Alfonso", "Alfred", "Alfredo", "Ali", "Alijah", "Allan", "Allen", "Alonso", "Alonzo", "Alvaro",
-        "Alvin", "Amari", "Ameer", "Amir", "Amos", "Amy", "Anders", "Anderson", "Andre", "Andrew",
-        "Andrews", "Andy", "Angel", "Angus", "Anna", "Anthony", "Antoine", "Antonio", "Archie", "Ari",
-        "Ariana", "Arian", "Arianna", "Ariel", "Arjun", "Arlo", "Armando", "Armani", "Arnav", "Aron",
-        "Arthur", "Arturo", "Aryan", "Asa", "Ash", "Asher", "Ashley", "Ashton", "Aubrey", "Aubree",
-        "Audrey", "August", "Augustine", "Augustus", "Austin", "Austyn", "Ava", "Avery", "Axel", "Axton",
-        "Ayana", "Ayaan", "Ayden", "Aydin", "Azaria", "Bailey", "Barbara", "Beatrice", "Bev", "Bella",
-        "Ben", "Benjamin", "Bennett", "Bennie", "Benny", "Bethany", "Betsy", "Betty", "Beverly", "Billie",
-        "Billy", "Blair", "Blake", "Bo", "Bob", "Bobby", "Bradley", "Brandon", "Brayden", "Bret",
-        "Brett", "Brian", "Brice", "Bridget", "Brooke", "Brook", "Brooklyn", "Bryce", "Brynn", "Caden",
-        "Caitlin", "Cameron", "Carmen", "Carol", "Casey", "Catherine", "Charlie", "Charlotte", "Chloe", "Chris",
-        "Christopher", "Claire", "Clem", "Courtney", "Cory", "Daniel", "Danny", "Danni", "David", "Dawn",
-        "Demi", "Denny", "Dexter", "Diana", "Dominic", "Drew", "Dylan", "Eden", "Edward", "Eleanor",
-        "Elena", "Eliana", "Eli", "Elias", "Elijah", "Elisa", "Elise", "Elizabeth", "Ella", "Ellie",
-        "Elliot", "Emerson", "Emilia", "Emily", "Emma", "Erin", "Esme", "Ethan", "Eva", "Eve",
-        "Evelyn", "Evie", "Faith", "Finlay", "Finley", "Fiona", "Francis", "Frankie", "Fred", "Freddie",
-        "Frederick", "Freya", "Gabby", "Gabriel", "Gabe", "Gail", "George", "Georgia", "Gerald", "Gideon",
-        "Grace", "Gracie", "Haiden", "Hailey", "Hannah", "Harley", "Harper", "Harrison", "Harry", "Harvey",
-        "Hayden", "Hazel", "Heidi", "Henry", "Hope", "Imogen", "Isabel", "Isabella", "Isabelle", "Isaac",
-        "Isla", "Ismael", "Jack", "Jackson", "Jacob", "Jade", "Jaden", "Jaime", "Jake", "James",
-        "Jamie", "Jane", "Jasmine", "Jason", "Jasper", "Jay", "Jayden", "Jenna", "Jennifer", "Jessica",
-        "Joe", "Joel", "John", "Jonathan", "Jordan", "Joseph", "Josh", "Joshua", "Josie", "Jude",
-        "Julia", "Julian", "Julie", "Justin", "Kai", "Kaitlyn", "Kayla", "Kaylee", "Kelsey", "Kendall",
-        "Kian", "Kieran", "Kim", "Kimberly", "Kris", "Kristina", "Kyle", "Lacey", "Lara", "Laura",
-        "Lauren", "Layla", "Leah", "Leo", "Leon", "Lewis", "Liam", "Libby", "Lily", "Lola",
-        "Louis", "Lucas", "Lucia", "Lucy", "Luna", "Luke", "Lyla", "Maddison", "Madeline", "Madelyn",
-        "Madison", "Mae", "Maria", "Martha", "Martin", "Mary", "Matilda", "Matthew", "Megan", "Melissa",
-        "Mia", "Michael", "Michelle", "Molly", "Morgan", "Naomi", "Natalie", "Nathan", "Nicholas", "Nicole",
-        "Noah", "Oliver", "Olivia", "Oscar", "Owen", "Paige", "Patrick", "Peter", "Phoebe", "Rachel",
-        "Rebecca", "Reese", "Reuben", "Rhys", "Riley", "Robert", "Rose", "Rosie", "Ruby", "Ryan",
-        "Sam", "Samantha", "Samuel", "Sara", "Sarah", "Scarlett", "Scott", "Sean", "Sebastian", "Sienna",
-        "Skye", "Sofia", "Sophia", "Sophie", "Spencer", "Stanley", "Summer", "Taylor", "Theo", "Thomas",
-        "Toby", "Tom", "Tommy", "Tyler", "Victoria", "William", "Willow", "Zac", "Zachary", "Zak", "Zoe", "Zoey"
-    )
+    // Metrics
+    private val characterGenerationCounter: Counter =
+        Counter
+            .builder("characters.generated.total")
+            .description("Total number of characters generated")
+            .register(meterRegistry)
 
+    private val characterGenerationFailureCounter: Counter =
+        Counter
+            .builder("characters.generation.failures.total")
+            .description("Total number of failed character generations")
+            .register(meterRegistry)
 
-    override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter?>? {
+    private val characterDeletionCounter: Counter =
+        Counter
+            .builder("characters.deleted.total")
+            .description("Total number of characters deleted")
+            .register(meterRegistry)
+
+    private val characterGenerationTimer: Timer =
+        Timer
+            .builder("characters.generation.duration")
+            .description("Time taken to generate a character")
+            .register(meterRegistry)
+
+    /**
+     * Retrieves all characters for a given user.
+     *
+     * Admin users receive all characters, while regular users only receive their own.
+     *
+     * @param userId The external user identifier
+     * @return List of characters accessible to the user
+     */
+    override fun getAllCharacters(userId: String?): MutableList<GeneFunkCharacter> {
         val customer = userInfoProducer.getCustomerInfoFor(userId)
-        if (customer.role.equals("admin", ignoreCase = true)) {
-            return repository.findAll()
+        return if (customer.role.equals("admin", ignoreCase = true)) {
+            repository.findAll()
+        } else {
+            repository.findByUserId(customer.externalIdentifier)
         }
-        return repository.findByUserId(customer.externalIdentifer)
     }
 
-    override fun generate(): GeneFunkCharacter {
-        return this.generate(GeneFunkCharacter(), "unknown")
-    }
+    /**
+     * Generates a new character with default settings.
+     *
+     * @return A newly generated GeneFunk character
+     */
+    @Timed(value = "characters.generation.duration", description = "Time to generate character")
+    override fun generate(): GeneFunkCharacter = generate(GeneFunkCharacter(), "unknown")
 
-    fun generate(character: GeneFunkCharacter?, externalId: String?): GeneFunkCharacter {
-        var character = character
-        val genomes = genomeService.allGenomes()
-        val classes = classService.getAllClasses()
+    /**
+     * Generates a character with optional pre-filled data.
+     *
+     * Populates any null attributes with randomly generated values according to 5e rules.
+     * Uses 4d6 drop lowest for attribute generation.
+     *
+     * @param character Optional character object with pre-filled data
+     * @param externalId The external user identifier to associate with the character
+     * @return A fully generated and persisted GeneFunk character
+     */
+    @Timed(value = "characters.generation.duration", description = "Time to generate character")
+    fun generate(
+        character: GeneFunkCharacter?,
+        externalId: String?,
+    ): GeneFunkCharacter =
+        characterGenerationTimer.recordCallable {
+            try {
+                logger.debug { "Generating character for user: $externalId" }
 
-        if (Objects.isNull(character)) {
-            character = GeneFunkCharacter()
-            character.firstName = this.pickRandom(this.names)
-            character.lastName = this.pickRandom(this.names)
-        }
-        if (Objects.isNull(character!!.level)) {
-            character.level = 1
-        }
-        if (Objects.isNull(character.strength)) {
-            character.strength = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (Objects.isNull(character.dexterity)) {
-            character.dexterity = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (Objects.isNull(character.constitution)) {
-            character.constitution = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (Objects.isNull(character.intelligence)) {
-            character.intelligence = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (Objects.isNull(character.wisdom)) {
-            character.wisdom = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (Objects.isNull(character.charisma)) {
-            character.charisma = Attribute5e(DiceRoller.roll(4, 6, 3, true))
-        }
-        if (!genomes.isEmpty() && Objects.isNull(character.genome)) {
-            character.genome = pickRandom(genomes)
-        }
-        if (!classes.isEmpty()) {
-            character.addClass(
-                getGenomeClass(
-                    randomClassName = pickRandom(classes.keys.toMutableList()),
-                    classes = classes
-                )
-            )
-        }
-        character.userId = externalId
-        character.initialize()
-        return repository.saveAndFlush<GeneFunkCharacter>(character)
-    }
+                val char = character ?: GeneFunkCharacter()
 
+                // Set names if not already provided
+                if (char.firstName == null) {
+                    char.firstName = pickRandom(characterNamesProperties.names.toMutableList())
+                }
+                if (char.lastName == null) {
+                    char.lastName = pickRandom(characterNamesProperties.names.toMutableList())
+                }
+
+                val genomes = genomeService.allGenomes()
+                val classes = classService.getAllClasses()
+
+                // Set default level if not provided
+                char.level = char.level ?: 1
+
+                // Generate attributes using 4d6 drop lowest if not already set
+                char.strength = char.strength ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+                char.dexterity = char.dexterity ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+                char.constitution = char.constitution ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+                char.intelligence = char.intelligence ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+                char.wisdom = char.wisdom ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+                char.charisma = char.charisma ?: Attribute5e(DiceRoller.roll(4, 6, 3, true))
+
+                // Assign random genome if available and not set
+                if (genomes.isNotEmpty() && char.genome == null) {
+                    char.genome = pickRandom(genomes)
+                }
+
+                // Assign random class if available
+                if (classes.isNotEmpty()) {
+                    char.addClass(
+                        getGenomeClass(
+                            randomClassName = pickRandom(classes.keys.toMutableList()),
+                            classes = classes,
+                        ),
+                    )
+                }
+
+                char.userId = externalId
+                char.initialize()
+                val savedCharacter = repository.saveAndFlush(char)
+
+                // Increment success counter
+                characterGenerationCounter.increment()
+
+                logger.info {
+                    "Successfully generated character: id=${savedCharacter.id}, " +
+                        "name=${savedCharacter.firstName} ${savedCharacter.lastName}, " +
+                        "userId=$externalId, genome=${savedCharacter.genome?.name}"
+                }
+
+                savedCharacter
+            } catch (e: Exception) {
+                characterGenerationFailureCounter.increment()
+                logger.error(e) { "Failed to generate character for user: $externalId" }
+                throw e
+            }
+        } ?: throw IllegalStateException("Character generation returned null unexpectedly")
+
+    /**
+     * Creates a GeneFunkClassEntity from a class definition.
+     *
+     * @param randomClassName The name of the class to create
+     * @param classes Map of available class definitions
+     * @return A fully configured GeneFunkClassEntity
+     * @throws IllegalArgumentException if the class name is not found
+     */
     private fun getGenomeClass(
         randomClassName: String,
-        classes: MutableMap<String, GeneFunkClass>
+        classes: MutableMap<String, GeneFunkClass>,
     ): GeneFunkClassEntity {
-        val entry: GeneFunkClass = classes[randomClassName]
-            ?: throw IllegalArgumentException("Class with name $randomClassName not found in classes map.")
+        val entry =
+            classes[randomClassName]
+                ?: throw IllegalArgumentException("Class with name $randomClassName not found in classes map.")
         return GeneFunkClassEntity().apply {
             name = randomClassName
             label = entry.label
@@ -135,34 +188,71 @@ open class GeneFunkCharacterService(
         }
     }
 
+    /**
+     * Randomly selects skills from available options.
+     *
+     * @param skills The skill selection rules
+     * @return List of randomly chosen skill names
+     */
     private fun chooseRandomSkills(skills: Skills): List<String> {
         val skillList = skills.from.toMutableList()
         if (skills.choose > 0 && skillList.size > skills.choose) {
             val chosenSkills = mutableListOf<String>()
-            for (i in 0 until skills.choose) {
-                chosenSkills.add(pickRandom(skillList))
-                skillList.remove(chosenSkills.last())
+            repeat(skills.choose) {
+                val skill = pickRandom(skillList)
+                chosenSkills.add(skill)
+                skillList.remove(skill)
             }
             return chosenSkills
         }
         return skillList
     }
 
+    /**
+     * Picks a random element from a list.
+     *
+     * @param list The list to pick from
+     * @return A randomly selected element
+     */
     private fun <X> pickRandom(list: MutableList<X>): X {
         val randomInt = random.nextInt(list.size)
         return list[max(randomInt, 0)]
     }
 
-    fun delete(characterId: String, externalId: String) {
+    /**
+     * Deletes a character by ID.
+     *
+     * Admin users can delete any character, while regular users can only delete their own.
+     *
+     * @param characterId The ID of the character to delete
+     * @param externalId The external user identifier
+     * @throws IllegalArgumentException if the character doesn't exist or doesn't belong to the user
+     */
+    fun delete(
+        characterId: String,
+        externalId: String,
+    ) {
+        logger.debug { "Attempting to delete character: id=$characterId, userId=$externalId" }
+
         val customer = userInfoProducer.getCustomerInfoFor(externalId)
-        if ("admin".equals(customer.role, ignoreCase = true)) {
-            repository.deleteById(characterId.toInt())
+        val charId = characterId.toInt()
+
+        if (customer.role.equals("admin", ignoreCase = true)) {
+            repository.deleteById(charId)
+            characterDeletionCounter.increment()
+            logger.info { "Admin deleted character: id=$characterId, adminId=$externalId" }
             return
         }
-        val character = repository.findById(characterId.toInt())
-        if (character.isPresent && character.get().userId == customer.externalIdentifer) {
-            repository.deleteById(characterId.toInt())
+
+        val character = repository.findById(charId)
+        if (character.isPresent && character.get().userId == customer.externalIdentifier) {
+            repository.deleteById(charId)
+            characterDeletionCounter.increment()
+            logger.info { "User deleted character: id=$characterId, userId=$externalId" }
         } else {
+            logger.warn {
+                "Unauthorized character deletion attempt: id=$characterId, userId=$externalId"
+            }
             throw IllegalArgumentException("Character with ID $characterId does not exist or does not belong to user.")
         }
     }

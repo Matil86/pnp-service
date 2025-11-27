@@ -17,7 +17,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 
-
 @Entity
 @JsonSerialize
 class GeneFunkCharacter : BaseCharacter() {
@@ -52,52 +51,60 @@ class GeneFunkCharacter : BaseCharacter() {
     @JsonIgnore
     fun initialize() {
         this.gameType = E5EGameTypes.GENEFUNK.value
-        if (this.genome == null) {
+        val genomeData = this.genome
+        if (genomeData == null) {
             return
         }
-        applyBaseValues(this.genome!!.attributes)
+        applyBaseValues(genomeData.attributes)
     }
 
     @JsonIgnore
     fun applyBaseValues(attributeChanges: MutableMap<String?, Int?>) {
         setMaxValues(attributeChanges)
 
-        this.strength!!.modifyValue(attributeChanges[AttributeConstants.STRENGTH] ?: 0)
-        this.dexterity!!.modifyValue(attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
-        this.constitution!!.modifyValue(attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
-        this.intelligence!!.modifyValue(attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
-        this.wisdom!!.modifyValue(attributeChanges[AttributeConstants.WISDOM] ?: 0)
-        this.charisma!!.modifyValue(attributeChanges[AttributeConstants.CHARISMA] ?: 0)
+        this.strength?.modifyValue(attributeChanges["strength"] ?: attributeChanges[AttributeConstants.STRENGTH] ?: 0)
+            ?: throw IllegalStateException("Strength attribute must be initialized before applying base values")
+        this.dexterity?.modifyValue(attributeChanges["dexterity"] ?: attributeChanges[AttributeConstants.DEXTERITY] ?: 0)
+            ?: throw IllegalStateException("Dexterity attribute must be initialized before applying base values")
+        this.constitution?.modifyValue(attributeChanges["constitution"] ?: attributeChanges[AttributeConstants.CONSTITUTION] ?: 0)
+            ?: throw IllegalStateException("Constitution attribute must be initialized before applying base values")
+        this.intelligence?.modifyValue(attributeChanges["intelligence"] ?: attributeChanges[AttributeConstants.INTELLIGENCE] ?: 0)
+            ?: throw IllegalStateException("Intelligence attribute must be initialized before applying base values")
+        this.wisdom?.modifyValue(attributeChanges["wisdom"] ?: attributeChanges[AttributeConstants.WISDOM] ?: 0)
+            ?: throw IllegalStateException("Wisdom attribute must be initialized before applying base values")
+        this.charisma?.modifyValue(attributeChanges["charisma"] ?: attributeChanges[AttributeConstants.CHARISMA] ?: 0)
+            ?: throw IllegalStateException("Charisma attribute must be initialized before applying base values")
     }
 
     @JsonIgnore
     fun setMaxValues(attributeChanges: MutableMap<String?, Int?>) {
-        if (attributeChanges.containsKey(AttributeConstants.STRENGTH_MAX)) {
-            this.strength!!.max = attributeChanges.get(AttributeConstants.STRENGTH_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.DEXTERITY_MAX)) {
-            this.dexterity!!.max = attributeChanges.get(AttributeConstants.DEXTERITY_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.CONSTITUTION_MAX)) {
-            this.constitution!!.max = attributeChanges.get(AttributeConstants.CONSTITUTION_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.INTELLIGENCE_MAX)) {
-            this.intelligence!!.max = attributeChanges.get(AttributeConstants.INTELLIGENCE_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.WISDOM_MAX)) {
-            this.wisdom!!.max = attributeChanges.get(AttributeConstants.WISDOM_MAX)!!
-        }
-        if (attributeChanges.containsKey(AttributeConstants.CHARISMA_MAX)) {
-            this.charisma!!.max = attributeChanges.get(AttributeConstants.CHARISMA_MAX)!!
-        }
+        attributeChanges["strength_max"]?.let { this.strength?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.STRENGTH_MAX]?.let { this.strength?.let { attr -> attr.max = it } }
+
+        attributeChanges["dexterity_max"]?.let { this.dexterity?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.DEXTERITY_MAX]?.let { this.dexterity?.let { attr -> attr.max = it } }
+
+        attributeChanges["constitution_max"]?.let { this.constitution?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.CONSTITUTION_MAX]?.let { this.constitution?.let { attr -> attr.max = it } }
+
+        attributeChanges["intelligence_max"]?.let { this.intelligence?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.INTELLIGENCE_MAX]?.let { this.intelligence?.let { attr -> attr.max = it } }
+
+        attributeChanges["wisdom_max"]?.let { this.wisdom?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.WISDOM_MAX]?.let { this.wisdom?.let { attr -> attr.max = it } }
+
+        attributeChanges["charisma_max"]?.let { this.charisma?.let { attr -> attr.max = it } }
+            ?: attributeChanges[AttributeConstants.CHARISMA_MAX]?.let { this.charisma?.let { attr -> attr.max = it } }
     }
 
     @JsonIgnore
     fun addClass(addClass: GeneFunkClassEntity) {
         val classes = this.characterClasses ?: emptySet<BaseCharacterClass?>().toMutableSet()
         if (classes.contains(addClass)) {
-            classes.stream().filter { value: BaseCharacterClass? -> value == addClass }
-                .forEach { charClass: BaseCharacterClass? -> charClass!!.increaseLevel(1) }
+            classes
+                .stream()
+                .filter { value: BaseCharacterClass? -> value == addClass }
+                .forEach { charClass: BaseCharacterClass? -> charClass?.increaseLevel(1) }
         } else {
             classes.add(addClass)
         }
@@ -109,9 +116,10 @@ class GeneFunkCharacter : BaseCharacter() {
             } else {
                 var item = inventory.find { item -> item.name == it }
                 if (item == null) {
-                    item = InventoryItem().apply {
-                        name = it
-                    }
+                    item =
+                        InventoryItem().apply {
+                            name = it
+                        }
                 }
                 item.amount += 1
                 inventory.add(item)
@@ -121,12 +129,13 @@ class GeneFunkCharacter : BaseCharacter() {
 
     @JsonIgnore
     fun addMoney(amountString: String) {
-        val amount = amountString
-            .replace("¥", "")
-            .replace(",", "")
-            .replace(".", "")
-            .replace(":", "")
-            .toIntOrNull() ?: 0
+        val amount =
+            amountString
+                .replace("¥", "")
+                .replace(",", "")
+                .replace(".", "")
+                .replace(":", "")
+                .toIntOrNull() ?: 0
         money += amount
     }
 }

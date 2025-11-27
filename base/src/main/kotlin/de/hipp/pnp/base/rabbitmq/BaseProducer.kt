@@ -12,49 +12,53 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.UUID
 
 @Component
 abstract class BaseProducer<T>(
     protected val template: RabbitTemplate,
-    protected val mapper: ObjectMapper
+    protected val mapper: ObjectMapper,
 ) {
-
     protected val log: Logger = LoggerFactory.getLogger(BaseProducer::class.java)
 
-    protected fun sendMessageForRoutingKey(routingKey: String): T? {
-        return sendMessageForRoutingKey(routingKey, null)
-    }
+    protected fun sendMessageForRoutingKey(routingKey: String): T? = sendMessageForRoutingKey(routingKey, null)
 
-    protected fun sendMessageForRoutingKey(routingKey: String, e5EGameTypes: E5EGameTypes?): T? {
-        return sendMessageForRoutingKey(routingKey, e5EGameTypes, null)
-    }
+    protected fun sendMessageForRoutingKey(
+        routingKey: String,
+        e5EGameTypes: E5EGameTypes?,
+    ): T? = sendMessageForRoutingKey(routingKey, e5EGameTypes, null)
 
-    protected fun sendMessageForRoutingKey(routingKey: String, e5EGameTypes: E5EGameTypes?, payload: Any?): T? {
-        val message = DefaultMessage<Any>().apply {
-            header = getHeader()
-            uuid = UUID.randomUUID().toString()
-            if (e5EGameTypes != null) {
-                action = e5EGameTypes.name
+    protected fun sendMessageForRoutingKey(
+        routingKey: String,
+        e5EGameTypes: E5EGameTypes?,
+        payload: Any?,
+    ): T? {
+        val message =
+            DefaultMessage<Any>().apply {
+                header = getHeader()
+                uuid = UUID.randomUUID().toString()
+                if (e5EGameTypes != null) {
+                    action = e5EGameTypes.name
+                }
+                if (payload != null) {
+                    this.payload = payload
+                }
             }
-            if (payload != null) {
-                this.payload = payload
-            }
-        }
-        
+
         prepareTemplate(routingKey)
 
         var responseObject: DefaultMessage<T>? = null
         try {
             val response: String? = template.convertSendAndReceive(mapper.writeValueAsString(message))?.toString()
-            responseObject = mapper.readValue(
-                response,
-                object : TypeReference<DefaultMessage<T>>() {}
-            )
+            responseObject =
+                mapper.readValue(
+                    response,
+                    object : TypeReference<DefaultMessage<T>>() {},
+                )
         } catch (e: JsonProcessingException) {
             log.error("couldn't send message: {}", message, e)
         }
-        
+
         log.debug("Response was => {}", responseObject)
         return responseObject?.payload
     }

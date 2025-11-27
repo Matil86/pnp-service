@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConfigurationProperties(prefix = "genefunk")
 open class GameConfiguration {
-
     var books: List<GameBooks> = emptyList()
     private val log = KotlinLogging.logger {}
 

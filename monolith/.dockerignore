@@ -1,0 +1,52 @@
+# .dockerignore for monolith module
+#
+# This file reduces the Docker build context size by excluding files
+# that are not needed for building the Docker image.
+#
+# The Dockerfile only needs the pre-built JAR from build/libs/
+# Everything else can be excluded to speed up the build.
+
+# Source code (not needed - we use pre-built JAR)
+src/
+
+# Build artifacts (except the JAR)
+build/classes/
+build/kotlin/
+build/generated/
+build/tmp/
+build/intermediates/
+
+# Test results and reports
+build/test-results/
+build/reports/
+build/jacoco/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Version control
+.git/
+.gitignore
+
+# Documentation (not needed in container)
+*.md
+docs/
+
+# Gradle wrapper (not needed in container)
+gradle/
+gradlew
+gradlew.bat
+
+# Build configuration (not needed in container)
+build.gradle.kts
+settings.gradle.kts
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+*~

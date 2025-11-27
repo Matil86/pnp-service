@@ -29,7 +29,9 @@ import java.util.UUID
 
 @Configuration
 @EnableWebSecurity
-open class SecurityConfiguration(@param:Autowired private var userInfoProducer: UserInfoProducer) {
+open class SecurityConfiguration(
+    @param:Autowired private var userInfoProducer: UserInfoProducer,
+) {
     var log: Logger = LoggerFactory.getLogger(SecurityConfiguration::class.java)
 
     @Bean
@@ -37,7 +39,7 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
         // Add request logging filter
         http.addFilterAfter(
             RequestLoggingFilter(),
-            org.springframework.security.web.authentication.AuthenticationFilter::class.java
+            org.springframework.security.web.authentication.AuthenticationFilter::class.java,
         )
 
         http {
@@ -84,9 +86,7 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
     }
 
     @Bean
-    open fun webSecurityCustomizer(): WebSecurityCustomizer {
-        return WebSecurityCustomizer { web: WebSecurity -> web.debug(false) }
-    }
+    open fun webSecurityCustomizer(): WebSecurityCustomizer = WebSecurityCustomizer { web: WebSecurity -> web.debug(false) }
 
     @Bean
     open fun corsConfiguration(): CorsConfiguration {
@@ -148,15 +148,16 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
                     }
                 } else {
                     // Create a new user if not found
-                    val newCustomer = Customer(
-                        UUID.randomUUID().toString(),
-                        jwt.claims["given_name"] as? String ?: "",
-                        jwt.claims["family_name"] as? String ?: "",
-                        jwt.claims["name"] as? String ?: "",
-                        jwt.claims["sub"] as? String ?: "",
-                        jwt.claims["email"] as? String ?: "",
-                        "USER"
-                    )
+                    val newCustomer =
+                        Customer(
+                            UUID.randomUUID().toString(),
+                            jwt.claims["given_name"] as? String ?: "",
+                            jwt.claims["family_name"] as? String ?: "",
+                            jwt.claims["name"] as? String ?: "",
+                            jwt.claims["sub"] as? String ?: "",
+                            jwt.claims["email"] as? String ?: "",
+                            "USER",
+                        )
                     userInfoProducer.saveNewUser(newCustomer)
                     authorities?.add(SimpleGrantedAuthority("USER"))
                 }
@@ -167,6 +168,4 @@ open class SecurityConfiguration(@param:Autowired private var userInfoProducer: 
 
         return jwtConverter
     }
-
-
 }

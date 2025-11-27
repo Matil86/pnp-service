@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties
 data class LocalizationProperties(
-    var systems: Map<String, SystemLocale> = emptyMap()
+    var systems: Map<String, SystemLocale> = emptyMap(),
 )

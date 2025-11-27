@@ -29,7 +29,7 @@ class GeneFunkGenome : Species() {
     var features: MutableSet<Feature5e?>? = HashSet<Feature5e?>()
 
     fun addFeature(feature5e: Feature5e?) {
-        features!!.add(feature5e)
+        val featureSet = this.features ?: HashSet<Feature5e?>().also { this.features = it }
+        featureSet.add(feature5e)
     }
-
 }

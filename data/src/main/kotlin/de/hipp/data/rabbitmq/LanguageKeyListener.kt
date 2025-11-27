@@ -36,7 +36,7 @@ class LanguageKeyListener(
             false,
             false,
             true,
-            null
+            null,
         )
     }
 
@@ -56,19 +56,21 @@ class LanguageKeyListener(
 
     @RabbitListener(queues = [RoutingKeys.GET_ALL_LANGUAGE_KEYS_BY_GAME_AND_LANGUAGE_ROUTING_KEY])
     @Throws(
-        IOException::class
+        IOException::class,
     )
     fun getAllLanguageKeysByGameTypeAndLanguage(message: String): String {
-        val messageObject: DefaultMessage<LanguageRequest> = mapper
-            .readValue(message, object : TypeReference<DefaultMessage<LanguageRequest>>() {})
+        val messageObject: DefaultMessage<LanguageRequest> =
+            mapper
+                .readValue(message, object : TypeReference<DefaultMessage<LanguageRequest>>() {})
 
         log.info(messageObject.toString())
         val payload = messageObject.payload
         val allLocale = localizationProperties.systems
 
-        val gameName = E5EGameTypes.fromValue(payload?.gameType).toString().lowercase()
-        val game = allLocale[gameName]
-            ?: throw IllegalArgumentException("Game type $gameName not found in localization properties")
+        val gameName = E5EGameTypes.fromValue(payload.gameType).toString().lowercase()
+        val game =
+            allLocale[gameName]
+                ?: throw IllegalArgumentException("Game type $gameName not found in localization properties")
         val response: DefaultMessage<SystemLocale> = DefaultMessage()
         response.action = "finished"
         response.payload = game

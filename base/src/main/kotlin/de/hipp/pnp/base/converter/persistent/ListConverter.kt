@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 @Converter(autoApply = true)
 @Component
 class ListConverter : BaseConverter<List<Any>>() {
-
     init {
         this.type = ArrayList<Any>()
     }

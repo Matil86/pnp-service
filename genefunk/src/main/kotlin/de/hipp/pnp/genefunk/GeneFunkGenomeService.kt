@@ -9,28 +9,28 @@ import org.springframework.stereotype.Service
 @Service
 open class GeneFunkGenomeService(
     val repository: GeneFunkGenomeRepository,
-    val genefunkInfoProducer: GenefunkInfoProducer
+    val genefunkInfoProducer: GenefunkInfoProducer,
 ) {
-
     private val log = KotlinLogging.logger {}
 
     @PostConstruct
     fun init() {
         val genomes: List<CharacterSpeciesEntity>? = genefunkInfoProducer.getAllSpecies()
         if (genomes.isNullOrEmpty()) {
-            println("No genomes found for GeneFunk")
+            log.warn { "No genomes found for GeneFunk" }
             return
         }
-        val geneFunkGenomes = genomes.map { species ->
-            GeneFunkGenome().apply {
-                name = species.name
-                description = species.description
-                attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
-                features = species.features.map { it }.toMutableSet()
-                genomeType = getGenomeType(species.name)
+        val geneFunkGenomes =
+            genomes.map { species ->
+                GeneFunkGenome().apply {
+                    name = species.name
+                    description = species.description
+                    attributes = species.attributes.mapValues { entry -> entry.value.toInt() }.toMutableMap()
+                    features = species.features.map { it }.toMutableSet()
+                    genomeType = getGenomeType(species.name)
+                }
             }
-        }
-        println("genomes found for GeneFunk: ${geneFunkGenomes.size}")
+        log.info { "Found ${geneFunkGenomes.size} genomes for GeneFunk" }
         save(geneFunkGenomes)
     }
 
@@ -54,5 +54,5 @@ open class GeneFunkGenomeService(
         }
     }
 
-    fun allGenomes(): MutableList<GeneFunkGenome?> = repository.findAll()
+    fun allGenomes(): MutableList<GeneFunkGenome> = repository.findAll()
 }

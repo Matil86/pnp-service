@@ -1,14 +1,75 @@
+# Observability Configuration
 management:
   endpoints:
     web:
-      base-path: /
+      base-path: /actuator
       path-mapping:
         health: health
       exposure:
         include:
           - "health"
-server:
-  port: ${SERVER_PORT:0}
+          - "info"
+          - "metrics"
+          - "prometheus"
+
+  # Health Endpoint Configuration
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+
+  # Metrics Configuration
+  metrics:
+    enable:
+      jvm: true
+      system: true
+      process: true
+      http: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+    tags:
+      application: ${spring.application.name:pnp-character-generator}
+      environment: ${ENVIRONMENT:development}
+
+  # Distributed Tracing Configuration
+  tracing:
+    enabled: true
+    sampling:
+      probability: ${TRACING_SAMPLING_RATE:0.1}
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+
+# Application Information
+info:
+  app:
+    name: PnP Character Generator
+    description: Pen & Paper RPG Character Generator Service (GeneFunk 2090)
+    version: @project.version@
+    encoding: @project.build.sourceEncoding@
+    java:
+      version: @java.version@
+
+# Performance Monitoring
+performance:
+  slow-threshold-ms: ${SLOW_THRESHOLD_MS:1000}
+
+# Application Configuration
 spring:
+  application:
+    name: pnp-character-generator
   profiles:
     include: rabbitmq,h2-database,logging,genefunk-crb-locale, genefunk-crb,oauth
+
+server:
+  port: ${SERVER_PORT:0}

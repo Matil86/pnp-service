@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 @Converter(autoApply = true)
 @Component
 class HashMapConverter : BaseConverter<Map<String, Any>>() {
-
     init {
         this.type = HashMap<String, Any>()
     }

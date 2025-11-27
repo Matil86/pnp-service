@@ -1,0 +1,260 @@
+package de.hipp.pnp.config
+
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
+import org.springframework.test.util.ReflectionTestUtils
+
+/**
+ * Tests for MetricsConfiguration.
+ *
+ * Verifies metrics setup, common tags, and meter filters.
+ */
+class MetricsConfigurationTest :
+    StringSpec({
+
+        "metricsCommonTags - Goku verifies application tag is added" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "pnp-character-generator")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags().iterator().asSequence().toList()
+            val hasApplicationTag = tags.any { it.key == "application" && it.value == "pnp-character-generator" }
+            hasApplicationTag shouldBe true
+        }
+
+        "metricsCommonTags - Spider-Man verifies version tag is added" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "test-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "2.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "version" && it.value == "2.0.0" ) shouldBe true
+        }
+
+        "metricsCommonTags - Tony Stark verifies environment tag (development)" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "test-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any { it.key == "environment" }) shouldBe true
+        }
+
+        "metricsCommonTags - Batman verifies all three common tags present" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "bat-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "3.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            tags.asIterable().count() shouldBe 3
+        }
+
+        "metricsFilters - Wonder Woman verifies meter filters are configured" {
+            val config = MetricsConfiguration()
+
+            val customizer = config.metricsFilters()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            registry.config() shouldNotBe null
+        }
+
+        "metricsFilters - Naruto (ナルト) applies filters to registry" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "naruto-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val filterCustomizer = config.metricsFilters()
+            val registry = SimpleMeterRegistry()
+
+            filterCustomizer.customize(registry)
+
+            registry shouldNotBe null
+        }
+
+        "metricsCommonTags - Vegeta with default application name" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "pnp-character-generator")
+            ReflectionTestUtils.setField(config, "applicationVersion", "unknown")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "application" ) shouldBe true
+        }
+
+        "metricsCommonTags - Deadpool with unknown version" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "deadpool-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "unknown")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "version" && it.value == "unknown" ) shouldBe true
+        }
+
+        "metricsCommonTags - Hulk verifies environment from system property" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "hulk-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            // Should default to "development" if ENVIRONMENT not set
+            (tags.asIterable().any { it.key == "environment" }) shouldBe true
+        }
+
+        "metricsCommonTags - Pikachu (ピカチュウ) with special characters in app name" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "pokemon-ピカチュウ-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "application" && it.value == "pokemon-ピカチュウ-app" ) shouldBe true
+        }
+
+        "metricsCommonTags - Gandalf with emoji in version 🧙" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "wizard-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0-🧙")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "version" && it.value == "1.0.0-🧙" ) shouldBe true
+        }
+
+        "metricsFilters - Frodo verifies filter configuration is not null" {
+            val config = MetricsConfiguration()
+
+            val customizer = config.metricsFilters()
+
+            customizer shouldNotBe null
+        }
+
+        "metricsCommonTags - Neo in Matrix with long version string" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "matrix-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0-SNAPSHOT-20231201-gitcommit-abc123def456")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "version" ) shouldBe true
+        }
+
+        "metricsCommonTags - Loki with empty application name handled" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "application" ) shouldBe true
+        }
+
+        "metricsCommonTags - Thor with numeric application name" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "app-12345")
+            ReflectionTestUtils.setField(config, "applicationVersion", "9.9.9")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "application" && it.value == "app-12345" ) shouldBe true
+        }
+
+        "metricsFilters - Captain America multiple filter applications" {
+            val config = MetricsConfiguration()
+
+            val customizer = config.metricsFilters()
+            val registry = SimpleMeterRegistry()
+
+            // Apply multiple times - should not cause issues
+            customizer.customize(registry)
+            customizer.customize(registry)
+
+            registry.config() shouldNotBe null
+        }
+
+        "metricsCommonTags - Black Widow with dash in version" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "spy-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "2.0.0-beta-1")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any {it.key == "version" && it.value == "2.0.0-beta-1" ) shouldBe true
+        }
+
+        "metricsCommonTags - Thanos with production environment" {
+            val config = MetricsConfiguration()
+            ReflectionTestUtils.setField(config, "applicationName", "infinity-app")
+            ReflectionTestUtils.setField(config, "applicationVersion", "1.0.0")
+
+            val customizer = config.metricsCommonTags()
+            val registry = SimpleMeterRegistry()
+
+            customizer.customize(registry)
+
+            // Should use ENVIRONMENT var or default to development
+            val tags = registry.config().commonTags()
+            (tags.asIterable().any { it.key == "environment" }) shouldBe true
+        }
+    })

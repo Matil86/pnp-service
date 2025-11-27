@@ -9,6 +9,11 @@ on:
       - 'monolith/**'
   workflow_dispatch:  # Allow manual triggers
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   performance-benchmarks:
     name: Run Performance Benchmarks
@@ -16,12 +21,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Need history for comparison
 
-      - name: Set up JDK 24
-        uses: actions/setup-java@v3
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
@@ -37,7 +42,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: jmh-results
@@ -84,7 +89,7 @@ jobs:
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const status = '${{ steps.compare.outputs.status }}';
@@ -151,17 +156,21 @@ jobs:
   load-testing:
     name: Load Testing (Optional)
     runs-on: ubuntu-latest
-    if: github.event.pull_request.labels.*.name contains 'performance-critical'
+    if: contains(github.event.pull_request.labels.*.name, 'performance-critical')
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 24
-        uses: actions/setup-java@v3
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
         with:
           java-version: '25'
           distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Build application
         run: ./gradlew build -x test

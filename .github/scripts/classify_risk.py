@@ -141,10 +141,6 @@ def main():
             f.write(f"risk_level={risk_level}\n")
             f.write(f"reason={reason}\n")
 
-    # Set labels for GitHub Actions
-    print(f"\n::set-output name=risk_level::{risk_level}")
-    print(f"::set-output name=label::risk:{risk_level}")
-
 
 if __name__ == "__main__":
     main()

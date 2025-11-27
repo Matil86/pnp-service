@@ -189,7 +189,7 @@ subprojects {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
         // Upgraded to 3.0.0 for Spring Boot 4.0.0 compatibility
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
-        implementation("com.google.firebase:firebase-admin:9.5.0")
+        implementation("com.google.firebase:firebase-admin:9.7.0")
 
         testImplementation("org.springframework.boot:spring-boot-starter-test") {
             exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

@@ -29,8 +29,9 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "Character Management", description = "Operations for managing RPG characters")
 @RestController
 @RequestMapping(UrlConstants.CHARACTERURL)
-class CharacterRestController(val characterProducer: CharacterProducer) {
-
+class CharacterRestController(
+    val characterProducer: CharacterProducer,
+) {
     /**
      * Retrieves all available characters.
      *
@@ -38,20 +39,22 @@ class CharacterRestController(val characterProducer: CharacterProducer) {
      */
     @Operation(
         summary = "Get all characters",
-        description = "Retrieves a list of all available characters"
+        description = "Retrieves a list of all available characters",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Successfully retrieved list of characters",
-                content = [Content(
-                    mediaType = "application/json",
-                    array = ArraySchema(schema = Schema(implementation = BaseCharacter::class))
-                )]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = BaseCharacter::class)),
+                    ),
+                ],
             ),
-            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()])
-        ]
+            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()]),
+        ],
     )
     @ResponseBody
     @GetMapping()
@@ -66,27 +69,25 @@ class CharacterRestController(val characterProducer: CharacterProducer) {
      */
     @Operation(
         summary = "Generate character",
-        description = "Generates a new character for the specified game type"
+        description = "Generates a new character for the specified game type",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Successfully generated character",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = String::class))]
+                content = [Content(mediaType = "application/json", schema = Schema(implementation = String::class))],
             ),
-            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()])
-        ]
+            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()]),
+        ],
     )
     @GetMapping("/generate")
     @ResponseBody
     @Throws(JsonProcessingException::class)
     fun generateCharacter(
         @Parameter(name = "gameType", description = "Game type identifier", example = "0")
-        @RequestParam(value = "gameType", defaultValue = "0") gameType: Int
-    ): String {
-        return characterProducer.generate(gameType)
-    }
+        @RequestParam(value = "gameType", defaultValue = "0") gameType: Int,
+    ): String = characterProducer.generate(gameType)
 
     /**
      * Deletes a character by its ID.
@@ -95,20 +96,20 @@ class CharacterRestController(val characterProducer: CharacterProducer) {
      */
     @Operation(
         summary = "Delete character",
-        description = "Removes a character from the system"
+        description = "Removes a character from the system",
     )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "204", description = "Successfully deleted character", content = [Content()]),
             ApiResponse(responseCode = "404", description = "Character not found", content = [Content()]),
-            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()])
-        ]
+            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()]),
+        ],
     )
     @ResponseBody
     @DeleteMapping("/{characterId}")
     fun deleteCharacter(
         @Parameter(name = "characterId", description = "Unique character identifier", required = true)
-        @PathVariable(value = "characterId") characterId: Int
+        @PathVariable(value = "characterId") characterId: Int,
     ) {
         characterProducer.deleteCharacter(characterId)
     }

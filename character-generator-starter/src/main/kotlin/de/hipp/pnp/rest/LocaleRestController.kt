@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.RestController
  */
 @Tag(name = "Locale Management", description = "Operations for managing game localization")
 @RestController
-class LocaleRestController(val localeProducer: LocaleProducer, val mapper: ObjectMapper) {
-
+class LocaleRestController(
+    val localeProducer: LocaleProducer,
+    val mapper: ObjectMapper,
+) {
     private val log = KotlinLogging.logger {}
 
     /**
@@ -49,17 +51,17 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
      */
     @Operation(
         summary = "Get locale data",
-        description = "Retrieves localized language keys for the specified game type"
+        description = "Retrieves localized language keys for the specified game type",
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 description = "Successfully retrieved locale data",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = String::class))]
+                content = [Content(mediaType = "application/json", schema = Schema(implementation = String::class))],
             ),
-            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()])
-        ]
+            ApiResponse(responseCode = "500", description = "Internal server error", content = [Content()]),
+        ],
     )
     @GetMapping(LOCALEURL)
     @Throws(JsonProcessingException::class)
@@ -67,8 +69,8 @@ class LocaleRestController(val localeProducer: LocaleProducer, val mapper: Objec
         @Parameter(name = "gameType", description = "Game type identifier", example = "0")
         @RequestParam(
             value = "gameType",
-            defaultValue = "0"
-        ) gameType: Int
+            defaultValue = "0",
+        ) gameType: Int,
     ): String {
         val locale = localeProducer.getLanguageKeysByGameTypeAndLanguage(gameType, "en_US")
         return mapper.writeValueAsString(locale)

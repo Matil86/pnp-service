@@ -18,4 +18,3 @@ class CharacterGeneratorApplication
 fun main(args: Array<String>) {
     SpringApplication.run(CharacterGeneratorApplication::class.java, *args)
 }
-

@@ -41,14 +41,16 @@ tasks.named<ProcessResources>("processResources") {
     // This approach only replaces the specific @<value>@ patterns and leaves ${...} alone
     filesMatching("**/application.yaml") {
         filter { line ->
-            line.replace("@project.version@", projectVersion)
+            line
+                .replace("@project.version@", projectVersion)
                 .replace("@project.build.sourceEncoding@", sourceEncoding)
                 .replace("@java.version@", javaVersion)
         }
     }
     filesMatching("**/application.yml") {
         filter { line ->
-            line.replace("@project.version@", projectVersion)
+            line
+                .replace("@project.version@", projectVersion)
                 .replace("@project.build.sourceEncoding@", sourceEncoding)
                 .replace("@java.version@", javaVersion)
         }

@@ -11,7 +11,6 @@ private val logger = KotlinLogging.logger {}
 
 @SpringBootApplication
 class CharacterGeneratorApplication {
-
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -19,8 +18,8 @@ class CharacterGeneratorApplication {
         }
 
         @Bean
-        fun commandLineRunner(ctx: ApplicationContext): CommandLineRunner {
-            return CommandLineRunner { _: Array<String?>? ->
+        fun commandLineRunner(ctx: ApplicationContext): CommandLineRunner =
+            CommandLineRunner { _: Array<String?>? ->
                 logger.info { "Inspecting beans provided by Spring Boot (non-Spring beans):" }
                 val beanNames: List<String?> =
                     ctx.getBeanDefinitionNames().filter { bean -> !bean.toString().contains("spring") }
@@ -29,6 +28,5 @@ class CharacterGeneratorApplication {
                 }
                 logger.info { "Total non-Spring beans registered: ${beanNames.size}" }
             }
-        }
     }
 }

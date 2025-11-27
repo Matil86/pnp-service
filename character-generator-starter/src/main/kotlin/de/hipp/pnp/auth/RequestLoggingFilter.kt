@@ -19,7 +19,7 @@ class RequestLoggingFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val auth = SecurityContextHolder.getContext().getAuthentication()
         val isAuthenticated = auth != null && auth.isAuthenticated
@@ -39,7 +39,7 @@ class RequestLoggingFilter : OncePerRequestFilter() {
             response.status,
             isAuthenticated,
             if (isAuthenticated) auth?.name else "anonymous",
-            request.remoteAddr
+            request.remoteAddr,
         )
     }
 }

@@ -34,6 +34,12 @@ RUN --mount=type=cache,target=/var/cache/yum,sharing=locked \
 
 WORKDIR /app
 
+# Create database directory with proper permissions for non-root user
+# The H2 database writes to ./database/ (relative to WORKDIR)
+RUN mkdir -p /app/database && \
+    chown -R appuser:appuser /app/database && \
+    chmod 755 /app/database
+
 # Copy pre-built Spring Boot JAR (only JAR created after disabling plain JAR task)
 # Context is the monolith folder, so build/libs/ is relative to that
 # We explicitly copy the spring-boot JAR to ensure we get the executable JAR with all dependencies

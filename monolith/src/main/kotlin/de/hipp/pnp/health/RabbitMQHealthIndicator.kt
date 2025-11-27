@@ -27,7 +27,7 @@ class RabbitMQHealthIndicator(
 
             if (connection.isOpen) {
                 val delegate = connection.delegate
-                val channelCount = delegate?.channelMax ?: 0
+                val channelCount = delegate.channelMax
 
                 logger.debug { "RabbitMQ health check: OK - Connection is open" }
 
@@ -38,12 +38,10 @@ class RabbitMQHealthIndicator(
                         .withDetail("service", "rabbitmq")
                         .withDetail("maxChannels", channelCount)
 
-                // Add host and port details if delegate is available
-                if (delegate != null) {
-                    builder
-                        .withDetail("host", delegate.address?.hostName ?: "unknown")
-                        .withDetail("port", delegate.port)
-                }
+                // Add host and port details
+                builder
+                    .withDetail("host", delegate.address?.hostName ?: "unknown")
+                    .withDetail("port", delegate.port)
 
                 builder.build()
             } else {

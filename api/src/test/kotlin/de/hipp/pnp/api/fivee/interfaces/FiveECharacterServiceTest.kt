@@ -2,6 +2,7 @@ package de.hipp.pnp.api.fivee.interfaces
 
 import de.hipp.pnp.api.fivee.abstracts.BaseCharacter
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -58,8 +59,8 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("frodo")
 
                 result shouldNotBe null
-                result?.size shouldBe 1
-                result?.get(0)?.firstName shouldBe "Frodo"
+                result.size shouldBe 1
+                result[0].firstName shouldBe "Frodo"
             }
 
             test("should return empty list for unknown user") {
@@ -68,7 +69,7 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("unknown")
 
                 result shouldNotBe null
-                result?.size shouldBe 0
+                result.size shouldBe 0
             }
 
             test("should handle null userId") {
@@ -85,8 +86,8 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("gandalf")
 
                 result shouldNotBe null
-                result?.size shouldBe 1
-                result?.get(0) shouldNotBe null
+                result.size shouldBe 1
+                result[0] shouldNotBe null
             }
 
             test("should handle empty string userId") {
@@ -166,9 +167,9 @@ class FiveECharacterServiceTest :
                 val result = service.generate()
 
                 result shouldNotBe null
-                result?.firstName shouldBe "Frodo"
-                result?.lastName shouldBe "Baggins"
-                result?.level shouldBe 3
+                result.firstName shouldBe "Frodo"
+                result.lastName shouldBe "Baggins"
+                result.level shouldBe 3
             }
 
             test("should generate Gandalf character") {
@@ -177,9 +178,9 @@ class FiveECharacterServiceTest :
                 val result = service.generate()
 
                 result shouldNotBe null
-                result?.firstName shouldBe "Gandalf"
-                result?.lastName shouldBe "the Grey"
-                result?.level shouldBe 20
+                result.firstName shouldBe "Gandalf"
+                result.lastName shouldBe "the Grey"
+                result.level shouldBe 20
             }
 
             test("should generate Neo character") {
@@ -192,8 +193,8 @@ class FiveECharacterServiceTest :
                 val service = NeoService()
                 val result = service.generate()
 
-                result?.firstName shouldBe "Neo"
-                result?.level shouldBe 99
+                result.firstName shouldBe "Neo"
+                result.level shouldBe 99
             }
 
             test("should generate Trinity character") {
@@ -212,7 +213,7 @@ class FiveECharacterServiceTest :
                 val service = TrinityService()
                 val result = service.generate()
 
-                result?.firstName shouldBe "Trinity"
+                result.firstName shouldBe "Trinity"
             }
 
             test("should return null from generate") {
@@ -286,8 +287,8 @@ class FiveECharacterServiceTest :
 
                 val result = service.getAllCharacters("frodo")
 
-                result?.add(FrodoCharacter())
-                result?.size shouldBe 2
+                result.add(FrodoCharacter())
+                result.size shouldBe 2
             }
 
             test("should allow adding to mutable list") {
@@ -295,8 +296,8 @@ class FiveECharacterServiceTest :
 
                 val result = service.getAllCharacters("frodo")
 
-                result?.add(FrodoCharacter())
-                result?.last() shouldNotBe null
+                result.add(FrodoCharacter())
+                result.last() shouldNotBe null
             }
 
             test("should allow clearing mutable list") {
@@ -304,8 +305,8 @@ class FiveECharacterServiceTest :
 
                 val result = service.getAllCharacters("frodo")
 
-                result?.clear()
-                result?.size shouldBe 0
+                result.clear()
+                result.size shouldBe 0
             }
 
             test("should allow removing from mutable list") {
@@ -313,8 +314,8 @@ class FiveECharacterServiceTest :
 
                 val result = service.getAllCharacters("test")
 
-                result?.removeAt(0)
-                result?.size shouldBe 0
+                result.removeAt(0)
+                result.size shouldBe 0
             }
         }
 
@@ -333,9 +334,9 @@ class FiveECharacterServiceTest :
 
                 val service = FilteringService()
 
-                service.getAllCharacters("aragorn")?.size shouldBe 2
-                service.getAllCharacters("legolas")?.size shouldBe 1
-                service.getAllCharacters("gimli")?.size shouldBe 0
+                service.getAllCharacters("aragorn").size shouldBe 2
+                service.getAllCharacters("legolas").size shouldBe 1
+                service.getAllCharacters("gimli").size shouldBe 0
             }
 
             test("should handle case-sensitive user IDs") {
@@ -352,8 +353,8 @@ class FiveECharacterServiceTest :
 
                 val service = CaseSensitiveService()
 
-                service.getAllCharacters("Frodo")?.size shouldBe 1
-                service.getAllCharacters("frodo")?.size shouldBe 0
+                service.getAllCharacters("Frodo").size shouldBe 1
+                service.getAllCharacters("frodo").size shouldBe 0
             }
         }
 
@@ -395,7 +396,7 @@ class FiveECharacterServiceTest :
                 val result = service.getAllCharacters("test")
 
                 result.size shouldBe 5
-                result.all { it != null } shouldBe true
+                result.shouldNotBeEmpty()
             }
         }
 
@@ -412,8 +413,8 @@ class FiveECharacterServiceTest :
                 val frodoService = FrodoCharacterService()
                 val gandalfService = GandalfCharacterService()
 
-                frodoService.generate()?.firstName shouldBe "Frodo"
-                gandalfService.generate()?.firstName shouldBe "Gandalf"
+                frodoService.generate().firstName shouldBe "Frodo"
+                gandalfService.generate().firstName shouldBe "Gandalf"
             }
 
             test("should support polymorphism") {
@@ -428,7 +429,7 @@ class FiveECharacterServiceTest :
                 val characters = service.getAllCharacters("test")
                 val generated = service.generate()
 
-                characters?.size shouldBe 2
+                characters.size shouldBe 2
                 generated shouldNotBe null
             }
         }

@@ -175,8 +175,8 @@ class FiveECharacterProducerTest :
                 val result = producer.allCharacters()
 
                 result shouldNotBe null
-                result?.size shouldBe 1
-                result?.get(0) shouldNotBe null
+                result.size shouldBe 1
+                result[0] shouldNotBe null
             }
 
             test("should return list with null entries for Gandalf") {
@@ -185,9 +185,9 @@ class FiveECharacterProducerTest :
                 val result = producer.allCharacters()
 
                 result shouldNotBe null
-                result?.size shouldBe 2
-                result?.get(0) shouldNotBe null
-                result?.get(1) shouldBe null
+                result.size shouldBe 2
+                result[0] shouldNotBe null
+                result[1] shouldBe null
             }
 
             test("should return empty list") {
@@ -196,7 +196,7 @@ class FiveECharacterProducerTest :
                 val result = producer.allCharacters()
 
                 result shouldNotBe null
-                result?.size shouldBe 0
+                result.size shouldBe 0
             }
 
             test("should return mutable list") {
@@ -206,8 +206,8 @@ class FiveECharacterProducerTest :
 
                 result shouldNotBe null
                 // Test mutability
-                result?.add(null)
-                result?.size shouldBe 2
+                result.add(null)
+                result.size shouldBe 2
             }
 
             test("should return list of Trinity's characters") {
@@ -228,7 +228,7 @@ class FiveECharacterProducerTest :
 
                 val result = producer.allCharacters()
 
-                result?.size shouldBe 2
+                result.size shouldBe 2
             }
 
             test("should handle Aragorn's party of characters") {
@@ -253,7 +253,7 @@ class FiveECharacterProducerTest :
 
                 val result = producer.allCharacters()
 
-                result?.size shouldBe 3
+                result.size shouldBe 3
             }
         }
 
@@ -304,7 +304,7 @@ class FiveECharacterProducerTest :
 
                 val result = producer.allCharacters()
 
-                result?.size shouldBe 0
+                result.size shouldBe 0
             }
 
             test("should handle large character list") {
@@ -317,7 +317,7 @@ class FiveECharacterProducerTest :
 
                 val result = producer.allCharacters()
 
-                result?.size shouldBe 100
+                result.size shouldBe 100
             }
 
             test("should handle unicode in generated JSON") {
@@ -379,7 +379,7 @@ class FiveECharacterProducerTest :
 
                 val characters = producer.allCharacters()
 
-                characters?.get(0) shouldNotBe null
+                characters[0] shouldNotBe null
             }
 
             test("should allow interface reference") {

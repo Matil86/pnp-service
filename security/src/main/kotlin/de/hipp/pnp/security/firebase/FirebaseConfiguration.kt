@@ -22,11 +22,11 @@ import java.io.IOException
  * 4. Fallback to local file for development (not recommended for production)
  */
 @Configuration
-class FirebaseConfiguration {
+open class FirebaseConfiguration {
     private val log = KotlinLogging.logger {}
 
     @Bean
-    fun firebaseApp(): FirebaseApp {
+    open fun firebaseApp(): FirebaseApp {
         // Check if Firebase is already initialized
         if (FirebaseApp.getApps().isNotEmpty()) {
             log.info { "Firebase already initialized, using existing instance" }
@@ -46,7 +46,7 @@ class FirebaseConfiguration {
     }
 
     @Bean
-    fun fireStore(): Firestore {
+    open fun fireStore(): Firestore {
         val credentials = loadCredentials()
 
         return FirestoreOptions

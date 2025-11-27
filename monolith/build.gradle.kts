@@ -30,6 +30,31 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("boot
     )
 }
 
+// Configure resource filtering to replace @<value>@ placeholders in YAML files
+tasks.named<ProcessResources>("processResources") {
+    // Capture project properties in configuration phase for configuration cache compatibility
+    val projectVersion = project.version.toString()
+    val sourceEncoding = "UTF-8"
+    val javaVersion = JavaVersion.VERSION_25.toString()
+
+    // Use filter to replace @<value>@ placeholders without treating the file as a Groovy template
+    // This approach only replaces the specific @<value>@ patterns and leaves ${...} alone
+    filesMatching("**/application.yaml") {
+        filter { line ->
+            line.replace("@project.version@", projectVersion)
+                .replace("@project.build.sourceEncoding@", sourceEncoding)
+                .replace("@java.version@", javaVersion)
+        }
+    }
+    filesMatching("**/application.yml") {
+        filter { line ->
+            line.replace("@project.version@", projectVersion)
+                .replace("@project.build.sourceEncoding@", sourceEncoding)
+                .replace("@java.version@", javaVersion)
+        }
+    }
+}
+
 dependencies {
     implementation(project(":api"))
     implementation(project(":base"))

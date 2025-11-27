@@ -7,11 +7,11 @@ include(
     "data",
     "genefunk",
     "monolith",
-    "security"
+    "security",
+    "character-generator-starter"
 )
 
-// Deprecated microservice starter modules removed:
-// - character-generator-starter (replaced by monolith)
+// Deprecated microservice starter modules removed (replaced by monolith):
 // - data-starter (replaced by monolith)
 // - genefunk-starter (replaced by monolith)
 // - security-starter (replaced by monolith)

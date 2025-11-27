@@ -698,7 +698,7 @@ class GeneFunkCharacterServiceTest :
                 val characters = service.getAllCharacters("admin123")
 
                 characters.shouldNotBeNull()
-                characters!!.size shouldBe 2
+                characters.size shouldBe 2
             }
 
             test("should return only user's characters for regular user") {
@@ -739,8 +739,8 @@ class GeneFunkCharacterServiceTest :
                 val characters = service.getAllCharacters("user123")
 
                 characters.shouldNotBeNull()
-                characters!!.size shouldBe 1
-                characters[0]!!.firstName shouldBe "Tony"
+                characters.size shouldBe 1
+                characters[0].firstName shouldBe "Tony"
             }
 
             test("should handle case-insensitive admin role check") {

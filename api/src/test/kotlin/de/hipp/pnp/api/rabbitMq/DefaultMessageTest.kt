@@ -85,7 +85,7 @@ class DefaultMessageTest :
                 message.uuid = "uuid-789"
 
                 message.action shouldBe "UPDATE"
-                message.payload?.name shouldBe "test"
+                message.payload.name shouldBe "test"
             }
         }
 

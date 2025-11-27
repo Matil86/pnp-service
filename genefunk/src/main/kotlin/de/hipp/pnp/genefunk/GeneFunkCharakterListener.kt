@@ -79,7 +79,7 @@ class GeneFunkCharakterListener(
         if (message.action != E5EGameTypes.GENEFUNK.name) {
             return null
         }
-        val characterId = message.payload ?: throw IllegalArgumentException("Character ID must not be null")
+        val characterId = message.payload
         service.delete(characterId, message.header.externalId)
         message.action = "finished"
         log.debug { "${RoutingKeys.DELETE_CHARACTER_ROUTING_KEY} finished" }

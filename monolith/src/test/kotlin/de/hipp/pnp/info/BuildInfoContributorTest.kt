@@ -12,6 +12,7 @@ import org.springframework.boot.actuate.info.Info
  *
  * Verifies build and runtime information is correctly added to actuator info endpoint.
  */
+@Suppress("UNCHECKED_CAST")
 class BuildInfoContributorTest :
     StringSpec({
 

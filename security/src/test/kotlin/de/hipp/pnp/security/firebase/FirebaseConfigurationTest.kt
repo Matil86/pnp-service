@@ -23,6 +23,7 @@ import java.io.File
  * Note: These tests verify the configuration logic and error handling.
  * Actual Firebase initialization requires valid credentials and is tested separately.
  */
+@Suppress("RUNTIME_REFLECTION_CALL")
 class FirebaseConfigurationTest :
     FunSpec({
 

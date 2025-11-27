@@ -10,6 +10,7 @@ import org.springframework.aot.hint.RuntimeHints
  *
  * Verifies application class structure and GraalVM runtime hints registration.
  */
+@Suppress("RUNTIME_REFLECTION_CALL")
 class CharacterGeneratorApplicationTest :
     StringSpec({
 

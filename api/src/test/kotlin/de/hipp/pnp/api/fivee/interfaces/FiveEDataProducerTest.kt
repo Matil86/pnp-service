@@ -70,8 +70,8 @@ class FiveEDataProducerTest :
                 val result = producer.getAllLanguageKeys()
 
                 result shouldNotBe null
-                result?.shouldContainKey("hobbit_lore")
-                result?.shouldHaveSize(1)
+                result.shouldContainKey("hobbit_lore")
+                result.shouldHaveSize(1)
             }
 
             test("should get all language keys for Gandalf") {
@@ -80,9 +80,9 @@ class FiveEDataProducerTest :
                 val result = producer.getAllLanguageKeys()
 
                 result shouldNotBe null
-                result?.shouldContainKey("istari")
-                result?.shouldContainKey("maiar")
-                result?.shouldHaveSize(2)
+                result.shouldContainKey("istari")
+                result.shouldContainKey("maiar")
+                result.shouldHaveSize(2)
             }
 
             test("should return null from getAllLanguageKeys") {
@@ -129,7 +129,7 @@ class FiveEDataProducerTest :
                 val producer = NeoDataProducer()
                 val result = producer.getAllLanguageKeys()
 
-                result?.shouldContainKey("matrix")
+                result.shouldContainKey("matrix")
             }
 
             test("should handle Trinity's data") {
@@ -151,7 +151,7 @@ class FiveEDataProducerTest :
                 val producer = TrinityDataProducer()
                 val result = producer.getAllLanguageKeys()
 
-                result?.size shouldBe 1
+                result.size shouldBe 1
             }
         }
 
@@ -162,8 +162,8 @@ class FiveEDataProducerTest :
                 val result = producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US")
 
                 result shouldNotBe null
-                result?.shouldContainKey("shire")
-                result?.shouldHaveSize(1)
+                result.shouldContainKey("shire")
+                result.shouldHaveSize(1)
             }
 
             test("should return empty map for unknown game type") {
@@ -172,7 +172,7 @@ class FiveEDataProducerTest :
                 val result = producer.getLanguageKeysByGameTypeAndLanguage(999, "en_US")
 
                 result shouldNotBe null
-                result?.shouldHaveSize(0)
+                result.shouldHaveSize(0)
             }
 
             test("should return empty map for unknown locale") {
@@ -181,7 +181,7 @@ class FiveEDataProducerTest :
                 val result = producer.getLanguageKeysByGameTypeAndLanguage(0, "xx_XX")
 
                 result shouldNotBe null
-                result?.shouldHaveSize(0)
+                result.shouldHaveSize(0)
             }
 
             test("should return null for Gandalf's implementation") {
@@ -277,9 +277,9 @@ class FiveEDataProducerTest :
 
                 val producer = FilteringProducer()
 
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US")?.shouldContainKey("genefunk")
-                producer.getLanguageKeysByGameTypeAndLanguage(1, "en_US")?.shouldContainKey("campaign1")
-                producer.getLanguageKeysByGameTypeAndLanguage(2, "en_US")?.shouldHaveSize(0)
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US").shouldContainKey("genefunk")
+                producer.getLanguageKeysByGameTypeAndLanguage(1, "en_US").shouldContainKey("campaign1")
+                producer.getLanguageKeysByGameTypeAndLanguage(2, "en_US").shouldHaveSize(0)
             }
 
             test("should handle negative game type") {
@@ -347,9 +347,9 @@ class FiveEDataProducerTest :
 
                 val producer = LocaleProducer()
 
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US")?.shouldContainKey("american")
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_GB")?.shouldContainKey("british")
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "de_DE")?.shouldContainKey("german")
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US").shouldContainKey("american")
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_GB").shouldContainKey("british")
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "de_DE").shouldContainKey("german")
             }
 
             test("should handle hyphen format locale") {
@@ -390,8 +390,8 @@ class FiveEDataProducerTest :
 
                 val producer = CaseSensitiveProducer()
 
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US")?.shouldHaveSize(1)
-                producer.getLanguageKeysByGameTypeAndLanguage(0, "EN_US")?.shouldHaveSize(0)
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US").shouldHaveSize(1)
+                producer.getLanguageKeysByGameTypeAndLanguage(0, "EN_US").shouldHaveSize(0)
             }
         }
 
@@ -401,8 +401,8 @@ class FiveEDataProducerTest :
 
                 val result = producer.getAllLanguageKeys()
 
-                result?.put("new_key", BookLocale())
-                result?.shouldContainKey("new_key")
+                result.put("new_key", BookLocale())
+                result.shouldContainKey("new_key")
             }
 
             test("should return mutable map from getLanguageKeysByGameTypeAndLanguage") {
@@ -410,8 +410,8 @@ class FiveEDataProducerTest :
 
                 val result = producer.getLanguageKeysByGameTypeAndLanguage(0, "en_US")
 
-                result?.put("new_key", BookLocale())
-                result?.shouldContainKey("new_key")
+                result.put("new_key", BookLocale())
+                result.shouldContainKey("new_key")
             }
 
             test("should allow clearing mutable map") {
@@ -419,8 +419,8 @@ class FiveEDataProducerTest :
 
                 val result = producer.getAllLanguageKeys()
 
-                result?.clear()
-                result?.shouldHaveSize(0)
+                result.clear()
+                result.shouldHaveSize(0)
             }
 
             test("should allow removing from mutable map") {
@@ -428,8 +428,8 @@ class FiveEDataProducerTest :
 
                 val result = producer.getAllLanguageKeys()
 
-                result?.remove("hobbit_lore")
-                result?.shouldHaveSize(0)
+                result.remove("hobbit_lore")
+                result.shouldHaveSize(0)
             }
         }
 
@@ -438,7 +438,7 @@ class FiveEDataProducerTest :
                 val producer = FrodoDataProducer()
 
                 val result = producer.getAllLanguageKeys()
-                val bookLocale = result?.get("hobbit_lore")
+                val bookLocale = result.get("hobbit_lore")
 
                 bookLocale shouldNotBe null
                 bookLocale?.classes?.shouldContainKey("rogue")
@@ -494,7 +494,7 @@ class FiveEDataProducerTest :
                 val producer = GandalfDataProducer()
 
                 val result = producer.getAllLanguageKeys()
-                val bookLocale = result?.get("maiar")
+                val bookLocale = result.get("maiar")
 
                 bookLocale shouldNotBe null
                 bookLocale?.classes?.size shouldBe 0
@@ -584,8 +584,8 @@ class FiveEDataProducerTest :
                 val frodoProducer = FrodoDataProducer()
                 val gandalfProducer = GandalfDataProducer()
 
-                frodoProducer.getAllLanguageKeys()?.shouldHaveSize(1)
-                gandalfProducer.getAllLanguageKeys()?.shouldHaveSize(2)
+                frodoProducer.getAllLanguageKeys().shouldHaveSize(1)
+                gandalfProducer.getAllLanguageKeys().shouldHaveSize(2)
             }
 
             test("should support polymorphism") {

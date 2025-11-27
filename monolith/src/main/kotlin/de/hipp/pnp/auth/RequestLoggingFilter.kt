@@ -38,7 +38,7 @@ class RequestLoggingFilter : OncePerRequestFilter() {
             queryString,
             response.status,
             isAuthenticated,
-            if (isAuthenticated) auth?.name else "anonymous",
+            if (isAuthenticated) auth.name else "anonymous",
             request.remoteAddr,
         )
     }

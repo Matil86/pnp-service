@@ -59,7 +59,7 @@ class UserListenerTest :
                             vorname = "John",
                             nachname = "Doe",
                             name = "John Doe",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "john@example.com",
                             role = "USER",
                         )
@@ -155,7 +155,7 @@ class UserListenerTest :
                     val user =
                         User(
                             userId = "user-hiragana",
-                            externalIdentifer = hiraganaId,
+                            externalIdentifier = hiraganaId,
                             role = "USER",
                         )
 
@@ -178,7 +178,7 @@ class UserListenerTest :
                     val user =
                         User(
                             userId = "user-katakana",
-                            externalIdentifer = katakanaId,
+                            externalIdentifier = katakanaId,
                             role = "USER",
                         )
 
@@ -252,7 +252,7 @@ class UserListenerTest :
                     val user =
                         User(
                             userId = "admin-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "ADMIN",
                         )
 
@@ -275,7 +275,7 @@ class UserListenerTest :
                     val user =
                         User(
                             userId = "user-norole",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = null,
                         )
 
@@ -333,7 +333,7 @@ class UserListenerTest :
                             vorname = "Jane",
                             nachname = "Smith",
                             name = "Jane Smith",
-                            externalIdentifer = "auth0|987654321",
+                            externalIdentifier = "auth0|987654321",
                             mail = "jane@example.com",
                             role = "USER",
                         )
@@ -348,7 +348,7 @@ class UserListenerTest :
                             vorname = "Jane",
                             nachname = "Smith",
                             name = "Jane Smith",
-                            externalIdentifer = "auth0|987654321",
+                            externalIdentifier = "auth0|987654321",
                             mail = "jane@example.com",
                             role = "USER",
                         )
@@ -406,7 +406,7 @@ class UserListenerTest :
                             vorname = null,
                             nachname = null,
                             name = null,
-                            externalIdentifer = "auth0|null",
+                            externalIdentifier = "auth0|null",
                             mail = "null@example.com",
                             role = "USER",
                         )
@@ -418,7 +418,7 @@ class UserListenerTest :
                     val savedUser =
                         User(
                             userId = "customer-null",
-                            externalIdentifer = "auth0|null",
+                            externalIdentifier = "auth0|null",
                             mail = "null@example.com",
                             role = "USER",
                         )
@@ -441,7 +441,7 @@ class UserListenerTest :
                             vorname = "",
                             nachname = "",
                             name = "",
-                            externalIdentifer = "auth0|empty",
+                            externalIdentifier = "auth0|empty",
                             mail = "empty@example.com",
                             role = "USER",
                         )
@@ -456,7 +456,7 @@ class UserListenerTest :
                             vorname = "",
                             nachname = "",
                             name = "",
-                            externalIdentifer = "auth0|empty",
+                            externalIdentifier = "auth0|empty",
                             mail = "empty@example.com",
                             role = "USER",
                         )
@@ -478,7 +478,7 @@ class UserListenerTest :
                             vorname = "さくら",
                             nachname = "はるの",
                             name = "はるのさくら",
-                            externalIdentifer = "auth0|hiragana",
+                            externalIdentifier = "auth0|hiragana",
                             mail = "sakura@example.jp",
                             role = "USER",
                         )
@@ -493,7 +493,7 @@ class UserListenerTest :
                             vorname = "さくら",
                             nachname = "はるの",
                             name = "はるのさくら",
-                            externalIdentifer = "auth0|hiragana",
+                            externalIdentifier = "auth0|hiragana",
                             mail = "sakura@example.jp",
                             role = "USER",
                         )
@@ -514,7 +514,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-katakana",
                             name = "サクラハルノ",
-                            externalIdentifer = "auth0|katakana",
+                            externalIdentifier = "auth0|katakana",
                             mail = "katakana@example.jp",
                             role = "USER",
                         )
@@ -527,7 +527,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-katakana",
                             name = "サクラハルノ",
-                            externalIdentifer = "auth0|katakana",
+                            externalIdentifier = "auth0|katakana",
                             mail = "katakana@example.jp",
                             role = "USER",
                         )
@@ -548,7 +548,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-emoji",
                             name = "Cool User 😎",
-                            externalIdentifer = "auth0|emoji",
+                            externalIdentifier = "auth0|emoji",
                             mail = "cool@example.com",
                             role = "USER",
                         )
@@ -561,7 +561,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-emoji",
                             name = "Cool User 😎",
-                            externalIdentifer = "auth0|emoji",
+                            externalIdentifier = "auth0|emoji",
                             mail = "cool@example.com",
                             role = "USER",
                         )
@@ -581,7 +581,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-sql",
                             name = "'; DROP TABLE users; --",
-                            externalIdentifer = "auth0|sql",
+                            externalIdentifier = "auth0|sql",
                             mail = "sql@example.com",
                             role = "USER",
                         )
@@ -594,7 +594,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-sql",
                             name = "'; DROP TABLE users; --",
-                            externalIdentifer = "auth0|sql",
+                            externalIdentifier = "auth0|sql",
                             mail = "sql@example.com",
                             role = "USER",
                         )
@@ -615,7 +615,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-xss",
                             name = "<script>alert('XSS')</script>",
-                            externalIdentifer = "auth0|xss",
+                            externalIdentifier = "auth0|xss",
                             mail = "xss@example.com",
                             role = "USER",
                         )
@@ -628,7 +628,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-xss",
                             name = "<script>alert('XSS')</script>",
-                            externalIdentifer = "auth0|xss",
+                            externalIdentifier = "auth0|xss",
                             mail = "xss@example.com",
                             role = "USER",
                         )
@@ -663,7 +663,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-long",
                             mail = longEmail,
-                            externalIdentifer = "auth0|long",
+                            externalIdentifier = "auth0|long",
                             role = "USER",
                         )
 
@@ -675,7 +675,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-long",
                             mail = longEmail,
-                            externalIdentifer = "auth0|long",
+                            externalIdentifier = "auth0|long",
                             role = "USER",
                         )
 
@@ -694,7 +694,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-admin",
                             name = "Admin User",
-                            externalIdentifer = "auth0|admin",
+                            externalIdentifier = "auth0|admin",
                             mail = "admin@example.com",
                             role = "ADMIN",
                         )
@@ -707,7 +707,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-admin",
                             name = "Admin User",
-                            externalIdentifer = "auth0|admin",
+                            externalIdentifier = "auth0|admin",
                             mail = "admin@example.com",
                             role = "ADMIN",
                         )
@@ -728,7 +728,7 @@ class UserListenerTest :
                         Customer(
                             userId = "customer-special",
                             name = "O'Connor-Smith (Jr.)",
-                            externalIdentifer = "auth0|special",
+                            externalIdentifier = "auth0|special",
                             mail = "oconnor@example.com",
                             role = "USER",
                         )
@@ -741,7 +741,7 @@ class UserListenerTest :
                         User(
                             userId = "customer-special",
                             name = "O'Connor-Smith (Jr.)",
-                            externalIdentifer = "auth0|special",
+                            externalIdentifier = "auth0|special",
                             mail = "oconnor@example.com",
                             role = "USER",
                         )

@@ -38,16 +38,16 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "test@example.com",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val result = userService.userExists(externalId)
 
                     result shouldBe true
-                    coVerify(exactly = 1) { userRepository.getUserByExternalIdentifer(externalId) }
+                    coVerify(exactly = 1) { userRepository.getUserByExternalIdentifier(externalId) }
                 }
             }
 
@@ -55,7 +55,7 @@ class UserServiceTest :
                 runTest {
                     val externalId = "nonexistent-user"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns null
 
                     val result = userService.userExists(externalId)
 
@@ -65,7 +65,7 @@ class UserServiceTest :
 
             test("should return false when external ID is null") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val result = userService.userExists(null)
 
@@ -75,7 +75,7 @@ class UserServiceTest :
 
             test("should return false when external ID is empty string") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer("") } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier("") } returns null
 
                     val result = userService.userExists("")
 
@@ -86,7 +86,7 @@ class UserServiceTest :
             test("should handle external ID with only whitespace") {
                 runTest {
                     val whitespaceId = "   "
-                    coEvery { userRepository.getUserByExternalIdentifer(whitespaceId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(whitespaceId) } returns null
 
                     val result = userService.userExists(whitespaceId)
 
@@ -97,7 +97,7 @@ class UserServiceTest :
             test("should handle external ID with hiragana characters") {
                 runTest {
                     val hiraganaId = "ひらがな123"
-                    coEvery { userRepository.getUserByExternalIdentifer(hiraganaId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(hiraganaId) } returns null
 
                     val result = userService.userExists(hiraganaId)
 
@@ -108,7 +108,7 @@ class UserServiceTest :
             test("should handle external ID with katakana characters") {
                 runTest {
                     val katakanaId = "カタカナ456"
-                    coEvery { userRepository.getUserByExternalIdentifer(katakanaId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(katakanaId) } returns null
 
                     val result = userService.userExists(katakanaId)
 
@@ -119,7 +119,7 @@ class UserServiceTest :
             test("should handle external ID with emoji") {
                 runTest {
                     val emojiId = "user😊123"
-                    coEvery { userRepository.getUserByExternalIdentifer(emojiId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(emojiId) } returns null
 
                     val result = userService.userExists(emojiId)
 
@@ -130,7 +130,7 @@ class UserServiceTest :
             test("should handle external ID with SQL injection attempt") {
                 runTest {
                     val sqlInjectionId = "'; DROP TABLE users; --"
-                    coEvery { userRepository.getUserByExternalIdentifer(sqlInjectionId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(sqlInjectionId) } returns null
 
                     val result = userService.userExists(sqlInjectionId)
 
@@ -141,7 +141,7 @@ class UserServiceTest :
             test("should handle external ID with XSS attempt") {
                 runTest {
                     val xssId = "<script>alert('XSS')</script>"
-                    coEvery { userRepository.getUserByExternalIdentifer(xssId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(xssId) } returns null
 
                     val result = userService.userExists(xssId)
 
@@ -157,11 +157,11 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -175,11 +175,11 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "admin-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "ADMIN",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -191,7 +191,7 @@ class UserServiceTest :
                 runTest {
                     val externalId = "nonexistent-user"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns null
 
                     val role = userService.getRole(externalId)
 
@@ -201,7 +201,7 @@ class UserServiceTest :
 
             test("should return ANONYMOUS when external ID is null") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val role = userService.getRole(null)
 
@@ -211,7 +211,7 @@ class UserServiceTest :
 
             test("should return ANONYMOUS when external ID is empty") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer("") } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier("") } returns null
 
                     val role = userService.getRole("")
 
@@ -225,11 +225,11 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = null,
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -243,11 +243,11 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -261,11 +261,11 @@ class UserServiceTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "ユーザー",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -284,12 +284,12 @@ class UserServiceTest :
                             vorname = "John",
                             nachname = "Doe",
                             name = "John Doe",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "john.doe@example.com",
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns expectedUser
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns expectedUser
 
                     val result = userService.getUserByExternalId(externalId)
 
@@ -305,7 +305,7 @@ class UserServiceTest :
                 runTest {
                     val externalId = "nonexistent-user"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns null
 
                     val result = userService.getUserByExternalId(externalId)
 
@@ -315,7 +315,7 @@ class UserServiceTest :
 
             test("should return null when external ID is null") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val result = userService.getUserByExternalId(null)
 
@@ -332,12 +332,12 @@ class UserServiceTest :
                             vorname = "たろう",
                             nachname = "やまだ",
                             name = "やまだたろう",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "yamada@example.jp",
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val result = userService.getUserByExternalId(externalId)
 
@@ -354,12 +354,12 @@ class UserServiceTest :
                         User(
                             userId = "user-kt",
                             name = "タロウヤマダ",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "katakana@example.jp",
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val result = userService.getUserByExternalId(externalId)
 
@@ -375,12 +375,12 @@ class UserServiceTest :
                         User(
                             userId = "user-emoji",
                             name = "Cool User 😎",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "cool@example.com",
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val result = userService.getUserByExternalId(externalId)
 
@@ -399,7 +399,7 @@ class UserServiceTest :
                             vorname = "Jane",
                             nachname = "Smith",
                             name = "Jane Smith",
-                            externalIdentifer = "auth0|987654321",
+                            externalIdentifier = "auth0|987654321",
                             mail = "jane.smith@example.com",
                             role = "USER",
                         )
@@ -435,7 +435,7 @@ class UserServiceTest :
                             vorname = null,
                             nachname = null,
                             name = null,
-                            externalIdentifer = "auth0|nullfields",
+                            externalIdentifier = "auth0|nullfields",
                             mail = null,
                             role = null,
                         )
@@ -457,7 +457,7 @@ class UserServiceTest :
                             vorname = "",
                             nachname = "",
                             name = "",
-                            externalIdentifer = "auth0|empty",
+                            externalIdentifier = "auth0|empty",
                             mail = "",
                             role = "",
                         )
@@ -479,7 +479,7 @@ class UserServiceTest :
                             vorname = "さくら",
                             nachname = "はるの",
                             name = "はるのさくら",
-                            externalIdentifer = "auth0|hiragana",
+                            externalIdentifier = "auth0|hiragana",
                             mail = "sakura@example.jp",
                             role = "USER",
                         )
@@ -499,7 +499,7 @@ class UserServiceTest :
                         User(
                             userId = "user-katakana",
                             name = "サクラハルノ",
-                            externalIdentifer = "auth0|katakana2",
+                            externalIdentifier = "auth0|katakana2",
                             mail = "katakana2@example.jp",
                             role = "USER",
                         )
@@ -519,7 +519,7 @@ class UserServiceTest :
                         User(
                             userId = "user-emoji-mail",
                             name = "Test User",
-                            externalIdentifer = "auth0|emoji",
+                            externalIdentifier = "auth0|emoji",
                             mail = "test😀@example.com",
                             role = "USER",
                         )
@@ -540,7 +540,7 @@ class UserServiceTest :
                         User(
                             userId = "user-long-email",
                             mail = longEmail,
-                            externalIdentifer = "auth0|long",
+                            externalIdentifier = "auth0|long",
                             role = "USER",
                         )
 
@@ -559,7 +559,7 @@ class UserServiceTest :
                         User(
                             userId = "user-special",
                             name = "O'Connor-Smith (Jr.)",
-                            externalIdentifer = "auth0|special",
+                            externalIdentifier = "auth0|special",
                             mail = "oconnor@example.com",
                             role = "USER",
                         )
@@ -581,7 +581,7 @@ class UserServiceTest :
                             vorname = "  John  ",
                             nachname = "  Doe  ",
                             name = "  John Doe  ",
-                            externalIdentifer = "auth0|whitespace",
+                            externalIdentifier = "auth0|whitespace",
                             mail = "john@example.com",
                             role = "USER",
                         )

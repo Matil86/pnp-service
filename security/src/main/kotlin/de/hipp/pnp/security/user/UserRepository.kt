@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 class UserRepository(
     private val firestore: Firestore,
 ) {
-    suspend fun getUserByExternalIdentifer(externalId: String?): User? {
+    suspend fun getUserByExternalIdentifier(externalId: String?): User? {
         val firestoreUser =
             firestore
                 .collection("users")

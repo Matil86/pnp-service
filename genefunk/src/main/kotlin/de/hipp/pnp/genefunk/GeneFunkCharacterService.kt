@@ -72,7 +72,7 @@ open class GeneFunkCharacterService(
         return if (customer.role.equals("admin", ignoreCase = true)) {
             repository.findAll()
         } else {
-            repository.findByUserId(customer.externalIdentifer)
+            repository.findByUserId(customer.externalIdentifier)
         }
     }
 
@@ -245,7 +245,7 @@ open class GeneFunkCharacterService(
         }
 
         val character = repository.findById(charId)
-        if (character.isPresent && character.get().userId == customer.externalIdentifer) {
+        if (character.isPresent && character.get().userId == customer.externalIdentifier) {
             repository.deleteById(charId)
             characterDeletionCounter.increment()
             logger.info { "User deleted character: id=$characterId, userId=$externalId" }

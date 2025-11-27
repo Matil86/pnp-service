@@ -21,7 +21,7 @@ class UserService(
 
     suspend fun getUserByExternalId(externalUserId: String?): User? =
         withContext(Dispatchers.IO) {
-            userRepository.getUserByExternalIdentifer(externalUserId)
+            userRepository.getUserByExternalIdentifier(externalUserId)
         }
 
     suspend fun saveUser(user: User): User? =

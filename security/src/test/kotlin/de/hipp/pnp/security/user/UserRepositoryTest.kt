@@ -48,7 +48,7 @@ class UserRepositoryTest :
             userRepository = UserRepository(firestore)
         }
 
-        context("getUserByExternalIdentifer - User Retrieval") {
+        context("getUserByExternalIdentifier - User Retrieval") {
             test("should return user when found by external identifier") {
                 runTest {
                     val externalId = "auth0|123456789"
@@ -58,7 +58,7 @@ class UserRepositoryTest :
                             userId = "user-123",
                             vorname = "John",
                             nachname = "Doe",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             mail = "john@example.com",
                             role = "USER",
                         )
@@ -71,12 +71,12 @@ class UserRepositoryTest :
                     every { querySnapshot.documents } returns mutableListOf(documentSnapshot)
                     every { documentSnapshot.toObject(User::class.java) } returns expectedUser
 
-                    val result = userRepository.getUserByExternalIdentifer(externalId)
+                    val result = userRepository.getUserByExternalIdentifier(externalId)
 
                     result shouldNotBe null
                     result?.userId shouldBe "user-123"
                     result?.vorname shouldBe "John"
-                    result?.externalIdentifer shouldBe externalId
+                    result?.externalIdentifier shouldBe externalId
 
                     verify(exactly = 1) { firestore.collection("users") }
                     verify(exactly = 1) { query.limit(1) }
@@ -94,7 +94,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(externalId)
+                    val result = userRepository.getUserByExternalIdentifier(externalId)
 
                     result shouldBe null
                 }
@@ -109,7 +109,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(null)
+                    val result = userRepository.getUserByExternalIdentifier(null)
 
                     result shouldBe null
                 }
@@ -124,7 +124,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer("")
+                    val result = userRepository.getUserByExternalIdentifier("")
 
                     result shouldBe null
                 }
@@ -141,7 +141,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(whitespaceId)
+                    val result = userRepository.getUserByExternalIdentifier(whitespaceId)
 
                     result shouldBe null
                 }
@@ -154,7 +154,7 @@ class UserRepositoryTest :
                     val user =
                         User(
                             userId = "user-hiragana",
-                            externalIdentifer = hiraganaId,
+                            externalIdentifier = hiraganaId,
                             role = "USER",
                         )
 
@@ -166,10 +166,10 @@ class UserRepositoryTest :
                     every { querySnapshot.documents } returns mutableListOf(documentSnapshot)
                     every { documentSnapshot.toObject(User::class.java) } returns user
 
-                    val result = userRepository.getUserByExternalIdentifer(hiraganaId)
+                    val result = userRepository.getUserByExternalIdentifier(hiraganaId)
 
                     result shouldNotBe null
-                    result?.externalIdentifer shouldBe hiraganaId
+                    result?.externalIdentifier shouldBe hiraganaId
                 }
             }
 
@@ -180,7 +180,7 @@ class UserRepositoryTest :
                     val user =
                         User(
                             userId = "user-katakana",
-                            externalIdentifer = katakanaId,
+                            externalIdentifier = katakanaId,
                             role = "USER",
                         )
 
@@ -192,10 +192,10 @@ class UserRepositoryTest :
                     every { querySnapshot.documents } returns mutableListOf(documentSnapshot)
                     every { documentSnapshot.toObject(User::class.java) } returns user
 
-                    val result = userRepository.getUserByExternalIdentifer(katakanaId)
+                    val result = userRepository.getUserByExternalIdentifier(katakanaId)
 
                     result shouldNotBe null
-                    result?.externalIdentifer shouldBe katakanaId
+                    result?.externalIdentifier shouldBe katakanaId
                 }
             }
 
@@ -210,7 +210,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(emojiId)
+                    val result = userRepository.getUserByExternalIdentifier(emojiId)
 
                     // Should safely handle emoji in query without errors
                     result shouldBe null
@@ -228,7 +228,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(sqlInjectionId)
+                    val result = userRepository.getUserByExternalIdentifier(sqlInjectionId)
 
                     // Firestore API is safe from SQL injection as it's NoSQL
                     result shouldBe null
@@ -246,7 +246,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(xssId)
+                    val result = userRepository.getUserByExternalIdentifier(xssId)
 
                     result shouldBe null
                 }
@@ -263,7 +263,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(longId)
+                    val result = userRepository.getUserByExternalIdentifier(longId)
 
                     result shouldBe null
                 }
@@ -276,7 +276,7 @@ class UserRepositoryTest :
                     val user =
                         User(
                             userId = "user-special",
-                            externalIdentifer = specialId,
+                            externalIdentifier = specialId,
                             role = "USER",
                         )
 
@@ -288,10 +288,10 @@ class UserRepositoryTest :
                     every { querySnapshot.documents } returns mutableListOf(documentSnapshot)
                     every { documentSnapshot.toObject(User::class.java) } returns user
 
-                    val result = userRepository.getUserByExternalIdentifer(specialId)
+                    val result = userRepository.getUserByExternalIdentifier(specialId)
 
                     result shouldNotBe null
-                    result?.externalIdentifer shouldBe specialId
+                    result?.externalIdentifier shouldBe specialId
                 }
             }
 
@@ -306,7 +306,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(newlineId)
+                    val result = userRepository.getUserByExternalIdentifier(newlineId)
 
                     result shouldBe null
                 }
@@ -323,7 +323,7 @@ class UserRepositoryTest :
                     every { apiFuture.get() } returns querySnapshot
                     every { querySnapshot.documents } returns emptyList()
 
-                    val result = userRepository.getUserByExternalIdentifer(tabId)
+                    val result = userRepository.getUserByExternalIdentifier(tabId)
 
                     result shouldBe null
                 }
@@ -338,7 +338,7 @@ class UserRepositoryTest :
                             userId = "new-user-123",
                             vorname = "Jane",
                             nachname = "Smith",
-                            externalIdentifer = "auth0|987654321",
+                            externalIdentifier = "auth0|987654321",
                             mail = "jane@example.com",
                             role = "USER",
                         )
@@ -384,7 +384,7 @@ class UserRepositoryTest :
                             vorname = null,
                             nachname = null,
                             name = null,
-                            externalIdentifer = null,
+                            externalIdentifier = null,
                             mail = null,
                             role = null,
                         )
@@ -409,7 +409,7 @@ class UserRepositoryTest :
                             vorname = "",
                             nachname = "",
                             name = "",
-                            externalIdentifer = "",
+                            externalIdentifier = "",
                             mail = "",
                             role = "",
                         )
@@ -434,7 +434,7 @@ class UserRepositoryTest :
                             vorname = "さくら",
                             nachname = "はるの",
                             name = "はるのさくら",
-                            externalIdentifer = "auth0|hiragana",
+                            externalIdentifier = "auth0|hiragana",
                             mail = "sakura@example.jp",
                             role = "USER",
                         )
@@ -457,7 +457,7 @@ class UserRepositoryTest :
                         User(
                             userId = "user-katakana",
                             name = "サクラハルノ",
-                            externalIdentifer = "auth0|katakana",
+                            externalIdentifier = "auth0|katakana",
                             mail = "katakana@example.jp",
                             role = "USER",
                         )
@@ -480,7 +480,7 @@ class UserRepositoryTest :
                         User(
                             userId = "user-emoji",
                             name = "Cool User 😎",
-                            externalIdentifer = "auth0|emoji",
+                            externalIdentifier = "auth0|emoji",
                             mail = "cool😊@example.com",
                             role = "USER",
                         )
@@ -503,7 +503,7 @@ class UserRepositoryTest :
                         User(
                             userId = "user-special",
                             name = "O'Connor-Smith (Jr.)",
-                            externalIdentifer = "auth0|special",
+                            externalIdentifier = "auth0|special",
                             mail = "oconnor@example.com",
                             role = "USER",
                         )
@@ -527,7 +527,7 @@ class UserRepositoryTest :
                         User(
                             userId = "user-long-email",
                             mail = longEmail,
-                            externalIdentifer = "auth0|long",
+                            externalIdentifier = "auth0|long",
                             role = "USER",
                         )
                     val apiFuture = mockk<ApiFuture<com.google.cloud.firestore.WriteResult>>()
@@ -551,7 +551,7 @@ class UserRepositoryTest :
                             vorname = "  John  ",
                             nachname = "  Doe  ",
                             name = "  John Doe  ",
-                            externalIdentifer = "auth0|whitespace",
+                            externalIdentifier = "auth0|whitespace",
                             mail = "john@example.com",
                             role = "USER",
                         )

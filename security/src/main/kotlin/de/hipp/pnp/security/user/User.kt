@@ -15,7 +15,7 @@ open class User(
     open var vorname: String? = null,
     open var nachname: String? = null,
     open var name: String? = null,
-    open var externalIdentifer: String? = null,
+    open var externalIdentifier: String? = null,
     open var mail: String? = null,
     open var role: String? = null,
 ) {
@@ -24,7 +24,7 @@ open class User(
         vorname = null,
         nachname = null,
         name = null,
-        externalIdentifer = null,
+        externalIdentifier = null,
         mail = null,
         role = null,
     )

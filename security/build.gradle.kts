@@ -1,3 +1,7 @@
+plugins {
+    kotlin("plugin.spring")
+}
+
 dependencies {
     implementation(project(":api"))
     implementation(project(":base"))

@@ -43,7 +43,7 @@ class OwaspSecurityTest :
             userService = UserService(userRepository)
 
             // Configure mock for null parameter calls to prevent MockK errors
-            coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+            coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
         }
 
         context("A01:2021 - Broken Access Control") {
@@ -51,7 +51,7 @@ class OwaspSecurityTest :
                 runTest {
                     val unauthorizedExternalId = "malicious-user"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(unauthorizedExternalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(unauthorizedExternalId) } returns null
 
                     val result = userService.getUserByExternalId(unauthorizedExternalId)
 
@@ -66,11 +66,11 @@ class OwaspSecurityTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role = userService.getRole(externalId)
 
@@ -83,7 +83,7 @@ class OwaspSecurityTest :
                 runTest {
                     val maliciousId = "user-123?role=ADMIN"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(maliciousId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(maliciousId) } returns null
 
                     val role = userService.getRole(maliciousId)
 
@@ -94,7 +94,7 @@ class OwaspSecurityTest :
 
             test("should enforce default ANONYMOUS role for unauthenticated users") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val role = userService.getRole(null)
 
@@ -107,7 +107,7 @@ class OwaspSecurityTest :
                     val internalId = "internal-user-123"
 
                     // Querying by external ID should not reveal internal structure
-                    coEvery { userRepository.getUserByExternalIdentifer(internalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(internalId) } returns null
 
                     val result = userService.getUserByExternalId(internalId)
 
@@ -121,7 +121,7 @@ class OwaspSecurityTest :
                 runTest {
                     val sqlInjection = "'; DROP TABLE users; --"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(sqlInjection) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(sqlInjection) } returns null
 
                     val result = userService.getUserByExternalId(sqlInjection)
 
@@ -134,7 +134,7 @@ class OwaspSecurityTest :
                 runTest {
                     val unionAttack = "' UNION SELECT * FROM admin_users; --"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(unionAttack) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(unionAttack) } returns null
 
                     val result = userService.getUserByExternalId(unionAttack)
 
@@ -146,7 +146,7 @@ class OwaspSecurityTest :
                 runTest {
                     val noSqlInjection = """{"${'$'}ne": null}"""
 
-                    coEvery { userRepository.getUserByExternalIdentifer(noSqlInjection) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(noSqlInjection) } returns null
 
                     val result = userService.getUserByExternalId(noSqlInjection)
 
@@ -162,7 +162,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-cmd",
                             name = commandInjection,
-                            externalIdentifer = "auth0|cmd",
+                            externalIdentifier = "auth0|cmd",
                             role = "USER",
                         )
 
@@ -180,7 +180,7 @@ class OwaspSecurityTest :
                 runTest {
                     val ldapInjection = "*)(uid=*))(|(uid=*"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(ldapInjection) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(ldapInjection) } returns null
 
                     val result = userService.getUserByExternalId(ldapInjection)
 
@@ -192,7 +192,7 @@ class OwaspSecurityTest :
                 runTest {
                     val xpathInjection = "' or '1'='1"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(xpathInjection) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(xpathInjection) } returns null
 
                     val result = userService.getUserByExternalId(xpathInjection)
 
@@ -207,7 +207,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xml",
                             name = xmlInjection,
-                            externalIdentifer = "auth0|xml",
+                            externalIdentifier = "auth0|xml",
                             role = "USER",
                         )
 
@@ -227,7 +227,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-template",
                             name = templateInjection,
-                            externalIdentifer = "auth0|template",
+                            externalIdentifier = "auth0|template",
                             role = "USER",
                         )
 
@@ -249,7 +249,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xss",
                             name = xssPayload,
-                            externalIdentifer = "auth0|xss",
+                            externalIdentifier = "auth0|xss",
                             role = "USER",
                         )
 
@@ -270,7 +270,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xss-event",
                             name = xssEvent,
-                            externalIdentifer = "auth0|xss-event",
+                            externalIdentifier = "auth0|xss-event",
                             role = "USER",
                         )
 
@@ -289,7 +289,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xss-uri",
                             name = xssDataUri,
-                            externalIdentifer = "auth0|xss-uri",
+                            externalIdentifier = "auth0|xss-uri",
                             role = "USER",
                         )
 
@@ -308,7 +308,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xss-js",
                             name = xssJsProtocol,
-                            externalIdentifer = "auth0|xss-js",
+                            externalIdentifier = "auth0|xss-js",
                             role = "USER",
                         )
 
@@ -327,7 +327,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-xss-email",
                             mail = xssEmail,
-                            externalIdentifer = "auth0|xss-email",
+                            externalIdentifier = "auth0|xss-email",
                             role = "USER",
                         )
 
@@ -343,7 +343,7 @@ class OwaspSecurityTest :
         context("A04:2021 - Insecure Design") {
             test("should have secure default role") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val role = userService.getRole(null)
 
@@ -358,12 +358,12 @@ class OwaspSecurityTest :
                     User(
                         userId = "user-no-ext",
                         name = "Test User",
-                        externalIdentifer = null,
+                        externalIdentifier = null,
                         role = "USER",
                     )
 
                 // Design allows null, but application should validate this
-                user.externalIdentifer shouldBe null
+                user.externalIdentifier shouldBe null
             }
 
             test("should handle concurrent user creation safely") {
@@ -372,12 +372,12 @@ class OwaspSecurityTest :
                     val user =
                         User(
                             userId = "user-concurrent",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "USER",
                         )
 
                     // First check, then create pattern prevents race conditions
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns null
                     coEvery { userRepository.save(user) } returns user
 
                     val exists = userService.userExists(externalId)
@@ -411,11 +411,11 @@ class OwaspSecurityTest :
                     val user =
                         User(
                             userId = "user-123",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val exists = userService.userExists(externalId)
                     exists shouldBe true
@@ -424,7 +424,7 @@ class OwaspSecurityTest :
 
             test("should not allow authentication bypass with null") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer(null) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(null) } returns null
 
                     val exists = userService.userExists(null)
                     exists shouldBe false
@@ -433,7 +433,7 @@ class OwaspSecurityTest :
 
             test("should not allow authentication bypass with empty string") {
                 runTest {
-                    coEvery { userRepository.getUserByExternalIdentifer("") } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier("") } returns null
 
                     val exists = userService.userExists("")
                     exists shouldBe false
@@ -447,11 +447,11 @@ class OwaspSecurityTest :
                     val user =
                         User(
                             userId = "user-session",
-                            externalIdentifer = externalId,
+                            externalIdentifier = externalId,
                             role = "USER",
                         )
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns user
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns user
 
                     val role1 = userService.getRole(externalId)
                     val role2 = userService.getRole(externalId)
@@ -467,13 +467,13 @@ class OwaspSecurityTest :
                     val existingUser = "auth0|exists"
                     val nonExistingUser = "auth0|not-exists"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(existingUser) } returns
+                    coEvery { userRepository.getUserByExternalIdentifier(existingUser) } returns
                         User(
                             userId = "user-1",
-                            externalIdentifer = existingUser,
+                            externalIdentifier = existingUser,
                             role = "USER",
                         )
-                    coEvery { userRepository.getUserByExternalIdentifer(nonExistingUser) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(nonExistingUser) } returns null
 
                     val exists1 = userService.userExists(existingUser)
                     val exists2 = userService.userExists(nonExistingUser)
@@ -494,7 +494,7 @@ class OwaspSecurityTest :
                             vorname = "John",
                             nachname = "Doe",
                             name = "John Doe",
-                            externalIdentifer = "auth0|integrity",
+                            externalIdentifier = "auth0|integrity",
                             mail = "john@example.com",
                             role = "USER",
                         )
@@ -520,7 +520,7 @@ class OwaspSecurityTest :
                             vorname = null,
                             nachname = null,
                             name = null,
-                            externalIdentifer = "auth0|nulls",
+                            externalIdentifier = "auth0|nulls",
                             mail = null,
                             role = null,
                         )
@@ -546,7 +546,7 @@ class OwaspSecurityTest :
                             vorname = "さくら",
                             nachname = "春野",
                             name = "春野さくら",
-                            externalIdentifer = "auth0|unicode",
+                            externalIdentifier = "auth0|unicode",
                             mail = "sakura@例え.jp",
                             role = "USER",
                         )
@@ -568,7 +568,7 @@ class OwaspSecurityTest :
                 runTest {
                     val externalId = "auth0|login-attempt"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(externalId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(externalId) } returns null
 
                     // Should be logged for security monitoring
                     val result = userService.getUserByExternalId(externalId)
@@ -581,7 +581,7 @@ class OwaspSecurityTest :
                 runTest {
                     val invalidId = "invalid-user"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(invalidId) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(invalidId) } returns null
 
                     // Failed attempts should be logged
                     val role = userService.getRole(invalidId)
@@ -595,7 +595,7 @@ class OwaspSecurityTest :
                     val newUser =
                         User(
                             userId = "user-new",
-                            externalIdentifer = "auth0|new",
+                            externalIdentifier = "auth0|new",
                             role = "USER",
                         )
 
@@ -612,10 +612,10 @@ class OwaspSecurityTest :
                 runTest {
                     val userAttemptingEscalation = "auth0|escalate"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(userAttemptingEscalation) } returns
+                    coEvery { userRepository.getUserByExternalIdentifier(userAttemptingEscalation) } returns
                         User(
                             userId = "user-escalate",
-                            externalIdentifer = userAttemptingEscalation,
+                            externalIdentifier = userAttemptingEscalation,
                             role = "USER",
                         )
 
@@ -635,7 +635,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-long",
                             name = longString,
-                            externalIdentifer = "auth0|long",
+                            externalIdentifier = "auth0|long",
                             role = "USER",
                         )
 
@@ -652,7 +652,7 @@ class OwaspSecurityTest :
                 runTest {
                     val nullByteAttack = "user\u0000admin"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(nullByteAttack) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(nullByteAttack) } returns null
 
                     val result = userService.getUserByExternalId(nullByteAttack)
 
@@ -667,7 +667,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-format",
                             name = formatStringAttack,
-                            externalIdentifer = "auth0|format",
+                            externalIdentifier = "auth0|format",
                             role = "USER",
                         )
 
@@ -686,7 +686,7 @@ class OwaspSecurityTest :
                         User(
                             userId = "user-path",
                             name = pathTraversal,
-                            externalIdentifer = "auth0|path",
+                            externalIdentifier = "auth0|path",
                             role = "USER",
                         )
 
@@ -703,7 +703,7 @@ class OwaspSecurityTest :
                 runTest {
                     val crlfInjection = "user\r\nHost: evil.com"
 
-                    coEvery { userRepository.getUserByExternalIdentifer(crlfInjection) } returns null
+                    coEvery { userRepository.getUserByExternalIdentifier(crlfInjection) } returns null
 
                     val result = userService.getUserByExternalId(crlfInjection)
 

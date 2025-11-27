@@ -105,7 +105,7 @@ class UserListener(
                     customer.vorname,
                     customer.nachname,
                     customer.name,
-                    customer.externalIdentifer,
+                    customer.externalIdentifier,
                     customer.mail,
                     customer.role,
                 )

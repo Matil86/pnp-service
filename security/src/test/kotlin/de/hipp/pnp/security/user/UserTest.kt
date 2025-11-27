@@ -29,7 +29,7 @@ class UserTest :
                         vorname = "John",
                         nachname = "Doe",
                         name = "John Doe",
-                        externalIdentifer = "auth0|123456",
+                        externalIdentifier = "auth0|123456",
                         mail = "john@example.com",
                         role = "USER",
                     )
@@ -38,7 +38,7 @@ class UserTest :
                 user.vorname shouldBe "John"
                 user.nachname shouldBe "Doe"
                 user.name shouldBe "John Doe"
-                user.externalIdentifer shouldBe "auth0|123456"
+                user.externalIdentifier shouldBe "auth0|123456"
                 user.mail shouldBe "john@example.com"
                 user.role shouldBe "USER"
             }
@@ -50,7 +50,7 @@ class UserTest :
                 user.vorname shouldBe null
                 user.nachname shouldBe null
                 user.name shouldBe null
-                user.externalIdentifer shouldBe null
+                user.externalIdentifier shouldBe null
                 user.mail shouldBe null
                 user.role shouldBe null
             }
@@ -62,7 +62,7 @@ class UserTest :
                         vorname = null,
                         nachname = null,
                         name = null,
-                        externalIdentifer = null,
+                        externalIdentifier = null,
                         mail = null,
                         role = null,
                     )
@@ -79,7 +79,7 @@ class UserTest :
                         vorname = "",
                         nachname = "",
                         name = "",
-                        externalIdentifer = "",
+                        externalIdentifier = "",
                         mail = "",
                         role = "",
                     )
@@ -111,7 +111,7 @@ class UserTest :
                 user.vorname shouldBe null
                 user.nachname shouldBe null
                 user.name shouldBe null
-                user.externalIdentifer shouldBe null
+                user.externalIdentifier shouldBe null
                 user.mail shouldBe null
                 user.role shouldBe null
             }
@@ -456,50 +456,50 @@ class UserTest :
                 val user =
                     User(
                         userId = "user-auth0",
-                        externalIdentifer = "auth0|123456789",
+                        externalIdentifier = "auth0|123456789",
                     )
 
-                user.externalIdentifer shouldBe "auth0|123456789"
+                user.externalIdentifier shouldBe "auth0|123456789"
             }
 
             test("should handle Google OAuth format") {
                 val user =
                     User(
                         userId = "user-google",
-                        externalIdentifer = "google-oauth2|123456789",
+                        externalIdentifier = "google-oauth2|123456789",
                     )
 
-                user.externalIdentifer shouldBe "google-oauth2|123456789"
+                user.externalIdentifier shouldBe "google-oauth2|123456789"
             }
 
             test("should handle Firebase format") {
                 val user =
                     User(
                         userId = "user-firebase",
-                        externalIdentifer = "firebase|abc123def456",
+                        externalIdentifier = "firebase|abc123def456",
                     )
 
-                user.externalIdentifer shouldBe "firebase|abc123def456"
+                user.externalIdentifier shouldBe "firebase|abc123def456"
             }
 
             test("should handle empty external identifier") {
                 val user =
                     User(
                         userId = "user-empty-ext",
-                        externalIdentifer = "",
+                        externalIdentifier = "",
                     )
 
-                user.externalIdentifer shouldBe ""
+                user.externalIdentifier shouldBe ""
             }
 
             test("should handle null external identifier") {
                 val user =
                     User(
                         userId = "user-null-ext",
-                        externalIdentifer = null,
+                        externalIdentifier = null,
                     )
 
-                user.externalIdentifer shouldBe null
+                user.externalIdentifier shouldBe null
             }
         }
 
@@ -541,9 +541,9 @@ class UserTest :
 
             test("should allow updating external identifier") {
                 val user = User(userId = "user-update")
-                user.externalIdentifer = "auth0|updated"
+                user.externalIdentifier = "auth0|updated"
 
-                user.externalIdentifer shouldBe "auth0|updated"
+                user.externalIdentifier shouldBe "auth0|updated"
             }
 
             test("should allow updating userId") {

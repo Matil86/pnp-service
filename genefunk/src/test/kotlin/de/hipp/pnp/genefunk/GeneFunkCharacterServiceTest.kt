@@ -678,7 +678,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Admin",
                         nachname = "User",
                         name = "Admin User",
-                        externalIdentifer = "admin123",
+                        externalIdentifier = "admin123",
                         mail = "admin@test.com",
                         role = "admin",
                     )
@@ -719,7 +719,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Tony",
                         nachname = "Stark",
                         name = "Tony Stark",
-                        externalIdentifer = "user123",
+                        externalIdentifier = "user123",
                         mail = "tony@starkindustries.com",
                         role = "user",
                     )
@@ -755,7 +755,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Admin",
                         nachname = "User",
                         name = "Admin User",
-                        externalIdentifer = "admin123",
+                        externalIdentifier = "admin123",
                         mail = "admin@test.com",
                         role = "ADMIN", // Uppercase
                     )
@@ -793,7 +793,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Admin",
                         nachname = "User",
                         name = "Admin User",
-                        externalIdentifer = "admin123",
+                        externalIdentifier = "admin123",
                         mail = "admin@test.com",
                         role = "admin",
                     )
@@ -834,7 +834,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Peter",
                         nachname = "Parker",
                         name = "Peter Parker",
-                        externalIdentifer = "user123",
+                        externalIdentifier = "user123",
                         mail = "peter@parker.com",
                         role = "user",
                     )
@@ -876,7 +876,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Clark",
                         nachname = "Kent",
                         name = "Clark Kent",
-                        externalIdentifer = "user456",
+                        externalIdentifier = "user456",
                         mail = "clark@kent.com",
                         role = "user",
                     )
@@ -911,7 +911,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Test",
                         nachname = "User",
                         name = "Test User",
-                        externalIdentifer = "user123",
+                        externalIdentifier = "user123",
                         mail = "test@user.com",
                         role = "user",
                     )
@@ -948,7 +948,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Admin",
                         nachname = "User",
                         name = "Admin User",
-                        externalIdentifer = "admin123",
+                        externalIdentifier = "admin123",
                         mail = "admin@test.com",
                         role = "admin",
                     )
@@ -982,7 +982,7 @@ class GeneFunkCharacterServiceTest :
                         vorname = "Admin",
                         nachname = "User",
                         name = "Admin User",
-                        externalIdentifer = "admin123",
+                        externalIdentifier = "admin123",
                         mail = "admin@test.com",
                         role = "admin",
                     )

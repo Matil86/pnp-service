@@ -69,7 +69,7 @@ class SecurityConfigurationTest :
                     vorname = "Son",
                     nachname = "Goku",
                     name = "Son Goku",
-                    externalIdentifer = "goku123",
+                    externalIdentifier = "goku123",
                     mail = "goku@dbz.com",
                     role = null,
                 )
@@ -99,7 +99,7 @@ class SecurityConfigurationTest :
                     vorname = "Tony",
                     nachname = "Stark",
                     name = "Tony Stark",
-                    externalIdentifer = "tony123",
+                    externalIdentifier = "tony123",
                     mail = "tony@stark.com",
                     role = "ADMIN",
                 )
@@ -132,7 +132,7 @@ class SecurityConfigurationTest :
                     vorname = "Peter",
                     nachname = "Parker",
                     name = "Peter Parker",
-                    externalIdentifer = "peter123",
+                    externalIdentifier = "peter123",
                     mail = "peter@parker.com",
                     role = "USER",
                 )
@@ -174,7 +174,7 @@ class SecurityConfigurationTest :
                     vorname = "Bruce",
                     nachname = "Wayne",
                     name = "Bruce Wayne",
-                    externalIdentifer = "bruce123",
+                    externalIdentifier = "bruce123",
                     mail = "bruce@wayne.com",
                     role = "ADMIN",
                 )
@@ -266,7 +266,7 @@ class SecurityConfigurationTest :
                     vorname = "",
                     nachname = "",
                     name = "",
-                    externalIdentifer = "naruto123",
+                    externalIdentifier = "naruto123",
                     mail = "naruto@konoha.com",
                     role = null,
                 )
@@ -330,7 +330,7 @@ class SecurityConfigurationTest :
                     vorname = "Pikachu",
                     nachname = "",
                     name = "Pikachu",
-                    externalIdentifer = "pikachu123",
+                    externalIdentifier = "pikachu123",
                     mail = "pikachu@pokemon.com",
                     role = null,
                 )
@@ -382,7 +382,7 @@ class SecurityConfigurationTest :
                     vorname = "Thomas",
                     nachname = "Anderson",
                     name = "Neo",
-                    externalIdentifer = "neo123",
+                    externalIdentifier = "neo123",
                     mail = "neo@matrix.com",
                     role = "ADMIN",
                 )

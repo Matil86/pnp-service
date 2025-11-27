@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
  * @property vorname First name (German: Vorname)
  * @property nachname Last name (German: Nachname)
  * @property name Full display name
- * @property externalIdentifer External identifier (e.g., from OAuth provider)
+ * @property externalIdentifier External identifier (e.g., from OAuth provider)
  * @property mail Email address - must be valid format
  * @property role User role - must be "USER" or "ADMIN"
  */
@@ -27,7 +27,7 @@ data class Customer(
     @field:Size(max = 200, message = "Name must not exceed 200 characters")
     var name: String? = null,
     @field:Size(max = 255, message = "External identifier must not exceed 255 characters")
-    val externalIdentifer: String? = null,
+    val externalIdentifier: String? = null,
     @field:Email(message = "Email must be a valid email address")
     @field:NotBlank(message = "Email must not be blank")
     @field:Size(max = 255, message = "Email must not exceed 255 characters")

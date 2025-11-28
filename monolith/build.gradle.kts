@@ -79,7 +79,7 @@ dependencies {
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 
     // Observability: Structured Logging
-    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
+    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     // Observability: AOP for Performance Monitoring
     // Spring Boot 4.0: Renamed from spring-boot-starter-aop to spring-boot-starter-aspectj

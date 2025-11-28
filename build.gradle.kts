@@ -195,10 +195,10 @@ subprojects {
         }
         testImplementation("org.springframework.boot:spring-boot-test")
         testImplementation("io.mockk:mockk:1.13.8")
-        testImplementation("io.kotest:kotest-framework-engine:5.7.2")
-        testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
-        testImplementation("io.kotest:kotest-assertions-core:5.7.2")
-        testImplementation("io.kotest:kotest-assertions-json:5.7.2")
+        testImplementation("io.kotest:kotest-framework-engine:6.0.5")
+        testImplementation("io.kotest:kotest-runner-junit5:6.0.5")
+        testImplementation("io.kotest:kotest-assertions-core:6.0.5")
+        testImplementation("io.kotest:kotest-assertions-json:6.0.5")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
         testImplementation("org.junit.platform:junit-platform-engine")
 

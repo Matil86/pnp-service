@@ -182,7 +182,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-amqp")
         implementation("org.springframework.boot:spring-boot-configuration-processor")
         implementation("io.github.oshai:kotlin-logging-jvm:7.0.12")
-        implementation("io.projectreactor:reactor-core:3.7.9")
+        implementation("io.projectreactor:reactor-core:3.8.0")
         implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0-RC")
         runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:2.3.0-RC")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")

@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.spring") version "2.3.0-RC" apply false
     kotlin("plugin.allopen") version "2.3.0-RC" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "12.0.3" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "14.0.1" apply false
     id("org.owasp.dependencycheck") version "9.0.9"
     id("org.sonarqube") version "4.4.1.3373"
     jacoco

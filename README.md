@@ -26,7 +26,7 @@ A comprehensive service for pen and paper (PnP) role-playing games, providing ch
 
 ## Project Overview
 
-The PnP Service is designed to provide character generation and management tools for tabletop role-playing games. The project has evolved from a distributed microservices architecture to a **modular monolith** for improved performance and operational simplicity.
+The PnP Service is designed to provide character generation and management tools for tabletop role-playing games. The project supports **dual architecture deployment**: both a **modular monolith** (recommended) and **microservices** architecture, providing flexibility for different operational needs.
 
 ### Key Features
 
@@ -40,7 +40,7 @@ The PnP Service is designed to provide character generation and management tools
 ### Current Status
 
 - **100% Kotlin codebase** (74 Kotlin files, 0 Java files)
-- **Monolith architecture** (consolidated from 4 microservices)
+- **Dual architecture support**: Monolith (recommended) + Microservices (available)
 - **Test coverage**: 0% → 90%+ (in progress)
 - **Production deployment**: Google Cloud Run
 
@@ -61,17 +61,27 @@ The PnP Service uses a **modular monolith architecture** with distinct Gradle mo
 
 ### Modules
 
+#### Core Library Modules
 | Module | Purpose | Dependencies |
 |--------|---------|-------------|
 | **api** | Common interfaces and DTOs | None |
 | **base** | Core utilities and 5e rules | api |
-| **data** | Data persistence (JPA) | api, base |
-| **security** | OAuth2 & Firebase auth | api, base |
-| **genefunk** | GeneFunk game system | api, base, data |
-| **monolith** | Deployment artifact | data, security, genefunk |
+| **data** | Data persistence (legacy) | api, base |
+| **security** | OAuth2 & Firebase auth with Firestore | api, base |
+| **genefunk** | GeneFunk game system with Firestore | api, base |
 
-**Deprecated modules** (legacy microservices):
-- `character-generator-starter`, `data-starter`, `security-starter`, `genefunk-starter`
+#### Deployment Options (Dual Architecture Support)
+
+**Option 1: Monolith** (recommended for simplicity):
+- **monolith** - All-in-one deployment artifact (data, security, genefunk)
+
+**Option 2: Microservices** (available for flexibility):
+- **character-generator-starter** - Standalone character generator service
+- **data-starter** - Standalone data service
+- **security-starter** - Standalone security service
+- **genefunk-starter** - Standalone GeneFunk service
+
+Both architectures are maintained and fully functional, allowing deployment flexibility based on operational needs.
 
 For detailed architecture documentation, see:
 - [Architecture Guide](docs/architecture/ARCHITECTURE.md)
@@ -92,19 +102,18 @@ For detailed architecture documentation, see:
 ### Key Dependencies
 
 - **Spring Boot Starter Web**: REST API
-- **Spring Boot Starter Data JPA**: Database persistence
 - **Spring Boot Starter OAuth2 Resource Server**: JWT authentication
 - **Spring Boot Starter AMQP**: RabbitMQ messaging
 - **Spring Boot Actuator**: Health checks and metrics
 - **SpringDoc OpenAPI**: 3.0.0 (Swagger UI)
-- **Firebase Admin SDK** 9.5.0: Firebase authentication
+- **Firebase Admin SDK** 9.7.0: Firebase authentication & Firestore database
 - **Kotest** 5.7.2: Kotlin testing framework
 - **MockK** 1.13.8: Kotlin mocking library
 - **kotlin-logging** 7.0.12: Structured logging
 
 ### Infrastructure
 
-- **Database**: H2 (in-memory, migrating to Cloud SQL)
+- **Database**: Google Cloud Firestore (NoSQL)
 - **Message Queue**: RabbitMQ
 - **Authentication**: Google OAuth2 + Firebase
 - **Deployment**: Google Cloud Run
@@ -744,12 +753,14 @@ See [Deployment Guide](docs/architecture/DEPLOYMENT.md) for comprehensive deploy
 
 #### Local Development
 ```bash
-SPRING_PROFILES_ACTIVE=local,h2-database
+SPRING_PROFILES_ACTIVE=local
+# Firestore credentials required (see Firebase setup above)
 ```
 
 #### Production
 ```bash
 SPRING_PROFILES_ACTIVE=production
+# Firestore and OAuth2 credentials required
 ```
 
 ### Monitoring
@@ -880,11 +891,12 @@ Import the pre-built dashboard from `docs/observability/grafana-dashboard.json` 
 - [x] Complete Swagger documentation
 - [x] Architecture documentation
 - [x] Implement observability stack
+- [x] Migrate from H2 to Google Cloud Firestore
 - [ ] Complete test coverage (90%+)
 
 ### Next Sprint
-- [ ] Migrate to persistent database (PostgreSQL)
 - [ ] Remove duplicate REST controllers
+- [ ] Data migration tools for Firestore
 
 ### Future Enhancements
 - [ ] Complete GeneFunk content

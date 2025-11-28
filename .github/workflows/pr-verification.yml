@@ -1,0 +1,359 @@
+# ============================================================================
+# Pull Request Verification Workflow
+# ============================================================================
+# Purpose: Validates all pull requests by running the complete test suite
+# Trigger: Automatically runs on PR open, sync, and reopen events
+# Command: Executes './gradlew clean test' with comprehensive reporting
+#
+# Features:
+# - Multi-branch support (main, develop, feature branches)
+# - Test report artifacts on failure
+# - PR status comments with test summary
+# - Gradle caching for faster builds
+# - JaCoCo coverage reporting
+# - Parallel test execution (configured in build.gradle.kts)
+#
+# Project: pnp-service (Kotlin 2.3.0-RC, Java 25, Spring Boot 4)
+# Architecture: Multi-module Gradle project
+# Test Framework: Kotest with JUnit Platform
+# ============================================================================
+
+name: Pull Request Verification
+
+# Prevent multiple workflow runs for the same ref from running simultaneously
+# Cancel in-progress runs when new commits are pushed
+concurrency:
+  group: pr-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+# Trigger on all pull request events to these branches
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+      - 'feat/**'
+      - 'fix/**'
+      - 'release/**'
+      - 'hotfix/**'
+
+# Minimal required permissions (principle of least privilege)
+permissions:
+  contents: read           # Read repository contents
+  pull-requests: write     # Post comments on PRs
+  checks: write           # Update check runs
+
+jobs:
+  # ========================================================================
+  # Job: Test Suite Execution
+  # ========================================================================
+  # Executes the full test suite with JaCoCo coverage analysis
+  # Uploads artifacts on failure for debugging
+  # Posts results summary to PR
+  # ========================================================================
+  test:
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # Prevent runaway builds
+
+    steps:
+      # ----------------------------------------------------------------------
+      # Step 1: Checkout Source Code
+      # ----------------------------------------------------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+
+      # ----------------------------------------------------------------------
+      # Step 2: Set up Java 25 with Gradle Caching
+      # ----------------------------------------------------------------------
+      # Using Amazon Corretto 25 (matches project configuration)
+      # Gradle caching significantly speeds up builds
+      # ----------------------------------------------------------------------
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '25'
+          cache: 'gradle'
+
+      # ----------------------------------------------------------------------
+      # Step 3: Ensure Gradle Wrapper is Executable
+      # ----------------------------------------------------------------------
+      # Required for environments where file permissions are not preserved
+      # ----------------------------------------------------------------------
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # ----------------------------------------------------------------------
+      # Step 4: Validate Gradle Wrapper
+      # ----------------------------------------------------------------------
+      # Security best practice: verify wrapper hasn't been tampered with
+      # ----------------------------------------------------------------------
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      # ----------------------------------------------------------------------
+      # Step 5: Run Full Test Suite
+      # ----------------------------------------------------------------------
+      # Executes: ./gradlew clean test
+      # - Cleans previous build artifacts
+      # - Runs all tests in all modules
+      # - Generates JaCoCo coverage reports
+      # - Parallel execution configured in build.gradle.kts (maxParallelForks)
+      # ----------------------------------------------------------------------
+      - name: Run tests with coverage
+        run: ./gradlew clean test jacocoTestReport --no-daemon --stacktrace
+        env:
+          # Environment variables for test optimization
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2g -Dorg.gradle.daemon=false"
+
+      # ----------------------------------------------------------------------
+      # Step 6: Generate Test Summary
+      # ----------------------------------------------------------------------
+      # Parse test results and create summary for easy viewing
+      # ----------------------------------------------------------------------
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Count test results across all modules
+          TOTAL_TESTS=0
+          PASSED_TESTS=0
+          FAILED_TESTS=0
+          SKIPPED_TESTS=0
+
+          # Find all TEST-*.xml files in build/test-results
+          for file in $(find . -path "*/build/test-results/test/TEST-*.xml" 2>/dev/null); do
+            if [ -f "$file" ]; then
+              TESTS=$(grep -oP 'tests="\K[^"]+' "$file" | head -1 || echo "0")
+              FAILURES=$(grep -oP 'failures="\K[^"]+' "$file" | head -1 || echo "0")
+              SKIPPED=$(grep -oP 'skipped="\K[^"]+' "$file" | head -1 || echo "0")
+
+              TOTAL_TESTS=$((TOTAL_TESTS + TESTS))
+              FAILED_TESTS=$((FAILED_TESTS + FAILURES))
+              SKIPPED_TESTS=$((SKIPPED_TESTS + SKIPPED))
+            fi
+          done
+
+          PASSED_TESTS=$((TOTAL_TESTS - FAILED_TESTS - SKIPPED_TESTS))
+
+          echo "| Metric | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Tests | $TOTAL_TESTS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Passed | ✅ $PASSED_TESTS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Failed | ❌ $FAILED_TESTS |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skipped | ⏭️ $SKIPPED_TESTS |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Add coverage summary if available
+          if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
+            echo "### Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "JaCoCo coverage reports generated. See artifacts for details." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # ----------------------------------------------------------------------
+      # Step 7: Upload Test Reports on Failure
+      # ----------------------------------------------------------------------
+      # When tests fail, upload detailed reports for debugging
+      # Includes both HTML reports and XML results
+      # ----------------------------------------------------------------------
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ github.run_number }}
+          path: |
+            **/build/reports/tests/
+            **/build/test-results/
+          retention-days: 7
+          if-no-files-found: warn
+
+      # ----------------------------------------------------------------------
+      # Step 8: Upload Coverage Reports
+      # ----------------------------------------------------------------------
+      # Always upload JaCoCo coverage reports for analysis
+      # Useful for tracking coverage trends over time
+      # ----------------------------------------------------------------------
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ github.run_number }}
+          path: |
+            **/build/reports/jacoco/
+          retention-days: 14
+          if-no-files-found: warn
+
+      # ----------------------------------------------------------------------
+      # Step 9: Comment on PR with Test Results
+      # ----------------------------------------------------------------------
+      # Posts a summary comment on the PR with test results
+      # Updates existing comment if workflow runs again
+      # ----------------------------------------------------------------------
+      - name: Comment on PR with results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Parse test results from XML files
+            let totalTests = 0;
+            let passedTests = 0;
+            let failedTests = 0;
+            let skippedTests = 0;
+
+            // Function to recursively find test result files
+            function findTestResults(dir) {
+              const files = [];
+              try {
+                const entries = fs.readdirSync(dir, { withFileTypes: true });
+                for (const entry of entries) {
+                  const fullPath = path.join(dir, entry.name);
+                  if (entry.isDirectory()) {
+                    files.push(...findTestResults(fullPath));
+                  } else if (entry.name.startsWith('TEST-') && entry.name.endsWith('.xml')) {
+                    files.push(fullPath);
+                  }
+                }
+              } catch (e) {
+                // Ignore errors for missing directories
+              }
+              return files;
+            }
+
+            // Find all test result XML files
+            const testResultFiles = findTestResults('.');
+
+            for (const file of testResultFiles) {
+              try {
+                const content = fs.readFileSync(file, 'utf8');
+                const testsMatch = content.match(/tests="(\d+)"/);
+                const failuresMatch = content.match(/failures="(\d+)"/);
+                const skippedMatch = content.match(/skipped="(\d+)"/);
+
+                if (testsMatch) totalTests += parseInt(testsMatch[1]);
+                if (failuresMatch) failedTests += parseInt(failuresMatch[1]);
+                if (skippedMatch) skippedTests += parseInt(skippedMatch[1]);
+              } catch (e) {
+                console.log(`Error reading ${file}: ${e.message}`);
+              }
+            }
+
+            passedTests = totalTests - failedTests - skippedTests;
+
+            // Determine status
+            const status = failedTests === 0 ? '✅ PASSED' : '❌ FAILED';
+            const emoji = failedTests === 0 ? '✅' : '❌';
+
+            // Create comment body
+            const commentBody = `## ${emoji} Pull Request Verification Results
+
+            **Status:** ${status}
+            **Workflow Run:** [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})
+
+            ### Test Results
+
+            | Metric | Count |
+            |--------|-------|
+            | Total Tests | ${totalTests} |
+            | Passed | ✅ ${passedTests} |
+            | Failed | ❌ ${failedTests} |
+            | Skipped | ⏭️ ${skippedTests} |
+
+            ${failedTests > 0 ? '⚠️ **Test failures detected!** Please review the [test reports]('+context.payload.repository.html_url+'/actions/runs/'+context.runId+') for details.' : ''}
+
+            ### Coverage
+
+            JaCoCo coverage reports are available in the workflow artifacts.
+
+            ${failedTests === 0 ? '✨ All tests passed! Great work!' : ''}
+
+            ---
+            *Generated by [S.C.R.U.M. Agents](https://github.com/${context.repo.owner}/${context.repo.repo}) PR Verification Workflow*
+            `;
+
+            // Find existing comment from this workflow
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('Pull Request Verification Results')
+            );
+
+            // Update existing comment or create new one
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: commentBody
+              });
+            }
+
+      # ----------------------------------------------------------------------
+      # Step 10: Fail Workflow if Tests Failed
+      # ----------------------------------------------------------------------
+      # Ensures the workflow status reflects test results
+      # ----------------------------------------------------------------------
+      - name: Check test results
+        if: always()
+        run: |
+          if [ -d "build/test-results/test" ]; then
+            # Check for test failures
+            FAILURES=$(find . -path "*/build/test-results/test/TEST-*.xml" -exec grep -l 'failures="[1-9]' {} \; | wc -l)
+            if [ $FAILURES -gt 0 ]; then
+              echo "❌ Tests failed in one or more modules"
+              exit 1
+            else
+              echo "✅ All tests passed successfully"
+            fi
+          else
+            echo "⚠️ No test results found"
+            exit 1
+          fi
+
+  # ========================================================================
+  # Job: Code Quality Checks (Optional - Future Enhancement)
+  # ========================================================================
+  # This job can be uncommented when code quality tools are stable
+  # Currently, Detekt is disabled due to Kotlin 2.3.0-RC compatibility
+  # ========================================================================
+  # code-quality:
+  #   name: Code Quality Analysis
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up JDK 25
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'corretto'
+  #         java-version: '25'
+  #         cache: 'gradle'
+  #
+  #     - name: Run ktlint
+  #       run: ./gradlew ktlintCheck
+  #
+  #     - name: Run detekt
+  #       run: ./gradlew detekt

@@ -51,10 +51,12 @@ abstract class BaseProducer<T>(
         try {
             val response: String? = template.convertSendAndReceive(mapper.writeValueAsString(message))?.toString()
             responseObject =
-                mapper.readValue(
-                    response,
-                    object : TypeReference<DefaultMessage<T>>() {},
-                )
+                response?.let {
+                    mapper.readValue(
+                        response,
+                        object : TypeReference<DefaultMessage<T>>() {},
+                    )
+                }
         } catch (e: JsonProcessingException) {
             log.error("couldn't send message: {}", message, e)
         }

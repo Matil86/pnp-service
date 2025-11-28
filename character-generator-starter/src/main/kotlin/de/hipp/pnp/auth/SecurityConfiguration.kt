@@ -124,7 +124,6 @@ open class SecurityConfiguration(
         // Extract roles from the JWT token
         jwtConverter.setJwtGrantedAuthoritiesConverter { jwt ->
             log.debug("Converting JWT to authorities: {}", jwt)
-            if (jwt == null) return@setJwtGrantedAuthoritiesConverter null
             val authorities = grantedAuthoritiesConverter.convert(jwt)
             val userId = jwt.claims["sub"] as? String
 

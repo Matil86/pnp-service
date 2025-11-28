@@ -9,7 +9,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7" apply false
     kotlin("jvm") version "2.3.0-RC" apply false
     kotlin("plugin.spring") version "2.3.0-RC" apply false
-    kotlin("plugin.jpa") version "2.3.0-RC" apply false
     kotlin("plugin.allopen") version "2.3.0-RC" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.0.3" apply false

@@ -149,7 +149,7 @@ direnv allow .
 ./gradlew :monolith:bootRun
 
 # Run with specific profiles
-./gradlew :monolith:bootRun --args='--spring.profiles.active=local,h2-database'
+./gradlew :monolith:bootRun --args='--spring.profiles.active=local,logging'
 
 # Run with debug enabled (port 5005)
 ./gradlew :monolith:bootRun --debug-jvm
@@ -646,7 +646,7 @@ gcloud run deploy character-generator-service \
 
 #### Development
 ```bash
-SPRING_PROFILES_ACTIVE=local,h2-database,logging
+SPRING_PROFILES_ACTIVE=local,logging
 RABBITMQ_HOST=localhost
 ```
 
@@ -913,10 +913,6 @@ docker stats pnp-service
 ```bash
 # Check application metrics
 curl http://localhost:8080/actuator/metrics/http.server.requests
-
-# Analyze slow queries (if applicable)
-# Enable Hibernate statistics
-export SPRING_JPA_PROPERTIES_HIBERNATE_GENERATE_STATISTICS=true
 
 # Increase concurrency (Cloud Run)
 gcloud run services update character-generator-service \

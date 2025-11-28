@@ -69,7 +69,7 @@ spring:
   application:
     name: pnp-character-generator
   profiles:
-    include: rabbitmq,h2-database,logging,genefunk-crb-locale, genefunk-crb,oauth
+    include: rabbitmq,logging,genefunk-crb-locale, genefunk-crb,oauth
 
 server:
   port: ${SERVER_PORT:0}

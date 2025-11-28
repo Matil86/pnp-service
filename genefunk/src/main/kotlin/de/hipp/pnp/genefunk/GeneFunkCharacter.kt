@@ -8,20 +8,9 @@ import de.hipp.pnp.api.fivee.abstracts.BaseCharacterClass
 import de.hipp.pnp.base.constants.AttributeConstants
 import de.hipp.pnp.base.entity.InventoryItem
 import de.hipp.pnp.base.fivee.Attribute5e
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToMany
-import jakarta.persistence.ManyToOne
 
-@Entity
 @JsonSerialize
 class GeneFunkCharacter : BaseCharacter() {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null
 
     override var firstName: String? = null
@@ -39,12 +28,10 @@ class GeneFunkCharacter : BaseCharacter() {
     var wisdom: Attribute5e? = null
     var charisma: Attribute5e? = null
 
-    @ManyToOne
     var genome: GeneFunkGenome? = null
 
     var money = 0
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     var inventory: MutableList<InventoryItem> = mutableListOf()
     var proficientSkills: MutableList<String> = mutableListOf()
 

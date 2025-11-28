@@ -1,7 +1,6 @@
 plugins {
     id("org.springframework.boot")
     kotlin("plugin.spring")
-    kotlin("plugin.jpa")
     kotlin("plugin.allopen")
 }
 

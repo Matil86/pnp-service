@@ -61,7 +61,6 @@ The project consists of 10 Gradle modules organized into distinct layers:
 - `Attribute5e`: 5e attribute system
 - `Feature5e`: 5e feature system
 - `BaseProducer`: RabbitMQ producer base class
-- Converters for JPA persistence
 - Common constants and DTOs
 
 **Dependencies**: api
@@ -69,14 +68,11 @@ The project consists of 10 Gradle modules organized into distinct layers:
 #### 3. data
 **Purpose**: Data persistence and management
 **Key Components**:
-- JPA repositories
 - Entity models
-- H2 in-memory database configuration
 - Localization properties and management
+- Data access services
 
 **Dependencies**: api, base
-
-**Technology**: Spring Data JPA, H2 Database
 
 #### 4. security
 **Purpose**: Authentication and authorization
@@ -146,7 +142,6 @@ The project consists of 10 Gradle modules organized into distinct layers:
 - `application.yaml`: Main configuration
 - `application-oauth.yml`: OAuth2 settings
 - `application-rabbitmq.yaml`: RabbitMQ configuration
-- `application-h2-database.properties`: H2 database settings
 - `application-logging.yml`: Logging configuration
 - `application-genefunk-crb.yaml`: GeneFunk core rulebook data
 - `application-genefunk-crb-locale.yaml`: GeneFunk localization
@@ -168,7 +163,6 @@ The project consists of 10 Gradle modules organized into distinct layers:
 |-----------|---------|
 | Spring Boot Starter Web | REST API development |
 | Spring Boot Starter AMQP | RabbitMQ integration |
-| Spring Boot Starter Data JPA | Database persistence |
 | Spring Boot Starter OAuth2 Resource Server | OAuth2 authentication |
 | Spring Boot Starter Actuator | Health checks and metrics |
 | Spring Boot Configuration Processor | Configuration metadata |
@@ -185,8 +179,6 @@ The project consists of 10 Gradle modules organized into distinct layers:
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| **H2 Database** | (Spring Boot managed) | In-memory development database |
-| **Spring Data JPA** | (Spring Boot managed) | Data access layer |
 | **Jackson** | (Spring Boot managed) | JSON serialization |
 | **Jackson JSR310** | (Spring Boot managed) | Java 8 date/time support |
 
@@ -371,7 +363,6 @@ The project consists of 10 Gradle modules organized into distinct layers:
 ```
 
 #### 4. User Management
-- Users stored in H2 database (User entity)
 - User events published to RabbitMQ
 - Firebase UID as primary identifier
 - Role-based access control (ROLE_USER, ROLE_ADMIN)

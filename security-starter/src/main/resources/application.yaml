@@ -2,4 +2,4 @@ server:
   port: ${SERVER_PORT:0}
 spring:
   profiles:
-    include: rabbitmq,h2-database
+    include: rabbitmq

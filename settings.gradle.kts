@@ -1,6 +1,6 @@
 rootProject.name = "pnp-service"
 
-// Active modules
+// Active modules - supporting both monolith and microservice architectures
 include(
     "api",
     "base",
@@ -8,11 +8,9 @@ include(
     "genefunk",
     "monolith",
     "security",
-    "character-generator-starter"
+    "character-generator-starter",
+    // Microservice starter modules (restored for dual architecture support)
+    "data-starter",
+    "genefunk-starter",
+    "security-starter"
 )
-
-// Deprecated microservice starter modules removed (replaced by monolith):
-// - data-starter (replaced by monolith)
-// - genefunk-starter (replaced by monolith)
-// - security-starter (replaced by monolith)
-// See ADR 0002: Monolith Consolidation for details

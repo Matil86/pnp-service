@@ -821,7 +821,7 @@ class GeneFunkCharacterServiceTest :
                 val classService = mockk<GeneFunkClassService>()
                 val userInfoProducer = mockk<UserInfoProducer>()
 
-                val character: GeneFunkCharacter? =
+                val character: GeneFunkCharacter =
                     GeneFunkCharacter().apply {
                         id = 1
                         firstName = "Spider-Man"
@@ -838,7 +838,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "peter@parker.com",
                         role = "user",
                     )
-                every { repository.findById(1) } returns Optional.ofNullable(character)
+                every { repository.findById(1) } returns character
                 every { repository.deleteById(1) } returns Unit
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
@@ -863,7 +863,7 @@ class GeneFunkCharacterServiceTest :
                 val classService = mockk<GeneFunkClassService>()
                 val userInfoProducer = mockk<UserInfoProducer>()
 
-                val character: GeneFunkCharacter? =
+                val character: GeneFunkCharacter =
                     GeneFunkCharacter().apply {
                         id = 1
                         firstName = "Batman"
@@ -880,7 +880,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "clark@kent.com",
                         role = "user",
                     )
-                every { repository.findById(1) } returns Optional.ofNullable(character)
+                every { repository.findById(1) } returns character
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
                 val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)
@@ -915,7 +915,7 @@ class GeneFunkCharacterServiceTest :
                         mail = "test@user.com",
                         role = "user",
                     )
-                every { repository.findById(999) } returns Optional.empty<GeneFunkCharacter>()
+                every { repository.findById(999) } returns null
 
                 val characterNamesProperties = mockk<CharacterNamesProperties>(relaxed = true)
                 val meterRegistry = mockk<io.micrometer.core.instrument.MeterRegistry>(relaxed = true)
